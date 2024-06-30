@@ -1,6 +1,8 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { BASE_URL } from "../../config";
+import { AiOutlineLeft } from "react-icons/ai";
+import { HiOutlineMail, HiOutlineLockClosed } from "react-icons/hi";
 
 function SignIn2() {
   const [emailAddress, setEmailAddress] = useState("");
@@ -70,84 +72,105 @@ function SignIn2() {
   };
 
   return (
-    <div className="flex justify-center items-center flex-col bg-white w-full">
-      <div className="flex w-[60%] md:w-[40%] flex-col bg-[#086108] rounded-2xl px-6 my-4 py-3 text-[#e4b50b]">
-        <p
-          ref={errRef}
-          className={errMsg ? "errmsg" : "offscreen"}
-          aria-live="assertive"
-        >
-          {errMsg}
-        </p>
-        <form
-          onSubmit={handleSubmit}
-          className="bg-white p-8 rounded shadow-md"
-        >
-          <h2 className="text-2xl font-bold mb-4">Sign In</h2>
-          <div className="mb-4">
-            <label htmlFor="identifier" className="block text-gray-700">
-              Email Address
-            </label>
-            <input
-              type="text"
-              id="identifier"
-              value={emailAddress}
-              onChange={(e) => setEmailAddress(e.target.value)}
-              className="block w-full px-4 py-2 border rounded mt-1"
-              required
-            />
-          </div>
-          <div className="mb-4">
-            <label htmlFor="password" className="block text-gray-700">
-              Password
-            </label>
-            <input
-              type="password"
-              id="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="block w-full px-4 py-2 border rounded mt-1"
-              required
-            />
-          </div>
-
-          <div className="mb-4 block text-gray-700">
-            <label htmlFor="otp">One Time Password O.T.P.</label>
-            <input
-              ref={otpRef}
-              type="text"
-              id="otp"
-              value={otp}
-              onChange={(e) => setOtp(e.target.value)}
-              className="block w-full px-4 py-2 border rounded mt-1"
-              required
-            />
-          </div>
-
-          <button
-            type="submit"
-            className="w-full bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"
+    <div>
+      <div className="flex items-center mx-[70px] mb-[10px] mt-3 justify-start gap-2">
+        <Link to="/SignIn" className="flex items-center">
+          <AiOutlineLeft className="w-4 h-4" />
+          <p className="text-[#0C0C0C] text-[15px] ">back</p>
+        </Link>
+      </div>
+      <div className="flex justify-center items-center flex-col bg-white w-full">
+        <div className="flex w-[60%] md:w-[40%] flex-col  rounded-2xl px-6 my-4 py-3 ">
+          <p
+            ref={errRef}
+            className={errMsg ? "errmsg" : "offscreen"}
+            aria-live="assertive"
           >
-            Verify OTP
-          </button>
-          <div className="mt-4 text-sm text-center text-[#e4b50b]">
-            <Link
-              to="/forgot-password"
-              className="text-blue-500 hover:underline"
-            >
-              Forgot Password?
-            </Link>
-          </div>
-          <p className="mt-2 text-sm text-center text-black">
-            Don't have an account?
-            <Link
-              to="/Register"
-              className="text-blue-500 visited:text-red-500 z-50 hover:underline ml-2"
-            >
-              Sign Up Here
-            </Link>
+            {errMsg}
           </p>
-        </form>
+          <form
+            onSubmit={handleSubmit}
+            className="bg-white p-8 rounded shadow-md"
+          >
+            <h2 className="text-2xl font-bold text-[#013299]  mb-2">Sign In</h2>
+            <div className="mb-4">
+              <label htmlFor="identifier" className="block text-gray-700">
+                Email Address
+              </label>
+              <div className="relative flex items-center ">
+                {emailAddress === "" && (
+                  <HiOutlineMail className="absolute left-3 w-5 h-5 text-[#0C0C0C]/50" />
+                )}
+                <input
+                  type="text"
+                  id="identifier"
+                  value={emailAddress}
+                  placeholder="Enter Your Email"
+                  onChange={(e) => setEmailAddress(e.target.value)}
+                  className="block w-full px-4 py-2 placeholder:pl-10  rounded mt-1 focus-within:text-gray-600 placeholder:text-[#0C0C0C]/50 text-[#0C0C0C]/50 p-2 pr-3 border-2 border-[#0C0C0C]/5"
+                  required
+                />
+              </div>
+            </div>
+            <div className="mb-2">
+              <label htmlFor="password" className="block text-gray-700">
+                Password
+              </label>
+              <div className="relative flex items-center ">
+                {password === "" && (
+                  <HiOutlineLockClosed className="absolute left-3 w-5 h-5 text-[#0C0C0C]/50" />
+                )}
+                <input
+                  type="password"
+                  id="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="Enter Your Password"
+                  className="block w-full px-4 py-2 focus:outline-none placeholder:pl-10 placeholder:text-[#0C0C0C]/50 text-[#0C0C0C] p-2 pr-3 border-2 border-[#0C0C0C]/5 rounded mt-1"
+                  required
+                />
+              </div>
+            </div>
+
+            <div className="mb-2 block text-gray-700">
+              <label htmlFor="otp">One Time Password O.T.P.</label>
+              <input
+                ref={otpRef}
+                type="password"
+                id="otp"
+                value={otp}
+                onChange={(e) => setOtp(e.target.value)}
+                className="block w-full px-4 py-2 focus:outline-none placeholder:pl-10 placeholder:text-[#0C0C0C]/50 text-[#0C0C0C] p-2 pr-3 border-2 border-[#0C0C0C]/5 rounded mt-1"
+                required
+              />
+            </div>
+            <div className="mt-4 text-sm text-start text-[#0C0C0C]">
+              Forgot Password?
+              <Link
+                to="/forgot-password"
+                className="text-[#013299] hover:underline"
+              >
+                Click Here
+              </Link>
+            </div>
+            <button
+              type="submit"
+              className="w-full bg-[#013299] text-white py-2 px-4 rounded-lg hover:bg-[#2b50a0]"
+            >
+              Verify OTP
+            </button>
+
+            <p className="mt-2 text-sm text-end text-black">
+              Don't have an account?
+              <Link
+                to="/Register"
+                className="text-[#013299] z-50 hover:underline ml-2"
+              >
+                Sign Up
+              </Link>
+            </p>
+          </form>
+        </div>
       </div>
     </div>
   );

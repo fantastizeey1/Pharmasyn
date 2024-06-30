@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { FaCheckCircle } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 import { ClipLoader } from "react-spinners";
+import { IoThumbsUpOutline } from "react-icons/io5";
 
 function Success2() {
   const navigate = useNavigate();
@@ -19,16 +20,16 @@ function Success2() {
   return (
     <div className="flex w-[60%] md:w-[40%] justify-center items-center h-[50%]  flex-col bg-[#086108] rounded-2xl px-6 my-4 py-3 text-[#e4b50b] mx-auto">
       {/* Animate the icon */}
-      <ClipLoader
+      {/* <ClipLoader
         visible="true"
         height={96}
         width={96}
         strokeWidth={5}
         className="m-5"
-      />
+      /> */}
 
       <div className="animate-pulse">
-        <FaCheckCircle />
+        <IoThumbsUpOutline />
       </div>
       <h1 className="p-3">Signed in Successfully</h1>
       <p className="text-center">

@@ -29,12 +29,12 @@ function Success() {
         className="m-5"
       />
 
-      <h1 className="p-3">Success!</h1>
+      <h1 className="p-3">Account created successfully!!</h1>
       <p className="text-center">
-        Proceeding to Sign In page...
-        <br />
-        If not redirected, <Link to="/SignIn">click here</Link>.
+        Welcome aboard! Start your success journey with Pharmasynthesis!{" "}
+        <Link to="/SignIn">click here</Link>.
       </p>
+      <button>Let's Start</button>
     </div>
   );
 }
