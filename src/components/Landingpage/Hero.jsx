@@ -4,7 +4,10 @@ import vector from "/Vector.svg";
 import searchIcon from "/searchicon.svg";
 const Hero = () => {
   return (
-    <section className="mx-[150px] h-[455px] flex flex-1 justify-center items-center mb-[122px]">
+    <section
+      id="Home"
+      className="mx-[150px] h-[455px] flex flex-1 justify-center items-center mb-[122px]"
+    >
       <div className="w-[50%] ">
         <h1 className="font-bold text-[62px] leading-tight mb-[28px]">
           Your Health, <br />

@@ -4,7 +4,7 @@ import bg from "/bgb.svg";
 
 const Discoverus = () => {
   return (
-    <section className="bg-[#94e7fc79] py-10 mt-[200px]">
+    <section id="About" className="bg-[#94e7fc79] py-10 mt-[200px]">
       <h2 className="font-bold text-[40px] text-center mb-10">
         Discover Pharmasynthesis
       </h2>

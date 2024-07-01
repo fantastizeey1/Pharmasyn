@@ -36,7 +36,7 @@ const Featuredproducts = () => {
   ];
 
   return (
-    <section className="mx-[150px] mt-[140px]">
+    <section id="Services" className="mx-[150px] mt-[140px]">
       <h2 className="font-bold text-[40px] text-center mb-[120px]">
         Featured Products
       </h2>

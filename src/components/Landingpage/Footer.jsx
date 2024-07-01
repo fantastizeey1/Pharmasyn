@@ -8,7 +8,7 @@ import chat from "/chat.svg";
 import Btn from "./Btn";
 const Footer = () => {
   return (
-    <footer className="bg-[#013299] text-white  h-[732px] py-10">
+    <footer id="Contact" className="bg-[#013299] text-white  h-[732px] py-10">
       <div className="container mx-auto  px-[130px] flex justify-start items-start gap-12 mt-10   border-white">
         <div className="w-[50%]">
           <div className="flex gap-3 justify-start items-center mb-6">
