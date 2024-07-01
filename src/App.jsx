@@ -14,6 +14,7 @@ import Home from "./components/Landingpage/Home";
 import Forgotpassword from "./components/signIn/Forgotpassword";
 import Forgotpassword2 from "./components/signIn/Forgotpassword2";
 import ChangePassword from "./components/signIn/ChangePassword";
+import * as Sentry from "@sentry/react";
 
 function App() {
   return (
@@ -40,4 +41,4 @@ function App() {
   );
 }
 
-export default App;
+export default Sentry.withProfiler(App);
