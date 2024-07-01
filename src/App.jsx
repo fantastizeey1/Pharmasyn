@@ -11,6 +11,8 @@ import RegisterPersonel from "./components/register/RegisterPersonel";
 import SignIn2 from "./components/signIn/signin2";
 import Dashboard from "./components/Dash/Dashboard";
 import Home from "./components/Landingpage/Home";
+import Forgotpassword from "./components/signIn/Forgotpassword";
+import Forgotpassword2 from "./components/signIn/Forgotpassword2";
 
 function App() {
   return (
@@ -28,7 +30,8 @@ function App() {
         <Route path="/Signin-Success" element={<Success2 />} />
         <Route path="/Dashboard/*" element={<Dashboard />} />
         {/* <Route path="/Dashboard/users" element={<Users />} /> */}
-
+        <Route path="/Forgotpassword" element={<Forgotpassword />} />
+        <Route path="/Forgotpassword2" element={<Forgotpassword2 />} />
         {/* Add more routes as needed */}
       </Routes>
     </Router>

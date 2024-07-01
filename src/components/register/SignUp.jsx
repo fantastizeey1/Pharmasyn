@@ -61,12 +61,7 @@ function SignUpSelector() {
   return (
     <section className="mx-[150px]">
       <Header2 />
-      <div className="flex justify-end items-center gap-5  mb-[80px]">
-        <p className="text-[20px]">Already have an account?</p>
-        <a href="/signin" className="text-[#013299] font-bold text-[20px]">
-          Login
-        </a>
-      </div>
+
       <div className="flex flex-col justify-start mx-auto items-start w-[625px]">
         <div className="flex flex-col justify-start items-start mb-[28px]">
           <h2 className="text-[25px] font-bold mb-2 text-center">Join Us!</h2>

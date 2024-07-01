@@ -57,13 +57,19 @@ function SignIn() {
 
   return (
     <div>
-      <div className="flex items-center mx-[70px] mb-[50px] mt-6 justify-start gap-2">
-        <img
-          src={logo}
-          alt="Pharmasynthesis Logo"
-          className="w-[45px] h-[45px]"
-        />
-        <p className="text-[#0C0C0C] text-[30px] font-bold">Pharmasynthesis</p>
+      <div className="flex items-center mx-[70px] mb-[50px] mt-6 cursor-pointer justify-start gap-2">
+        <Link to="/">
+          <img
+            src={logo}
+            alt="Pharmasynthesis Logo"
+            className="w-[55px] h-[55px]"
+          />
+        </Link>
+        <Link to="/">
+          <p className="text-[#0C0C0C] text-[36.55px] cursor-pointer font-bold">
+            Pharmasynthesis
+          </p>
+        </Link>
       </div>
       <div className="flex justify-center items-center flex-col bg-white w-full">
         <div className="flex w-[60%] md:w-[40%] flex-col  rounded-2xl px-6 my-4 py-3 ">

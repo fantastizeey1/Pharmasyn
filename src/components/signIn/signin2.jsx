@@ -133,10 +133,10 @@ function SignIn2() {
             </div>
 
             <div className="mb-2 block text-gray-700">
-              <label htmlFor="otp">One Time Password O.T.P.</label>
+              <label htmlFor="otp">Enter Code</label>
               <input
                 ref={otpRef}
-                type="password"
+                type="number"
                 id="otp"
                 value={otp}
                 onChange={(e) => setOtp(e.target.value)}
@@ -163,7 +163,7 @@ function SignIn2() {
             <p className="mt-2 text-sm text-end text-black">
               Don't have an account?
               <Link
-                to="/Register"
+                to="/SignUp"
                 className="text-[#013299] z-50 hover:underline ml-2"
               >
                 Sign Up
