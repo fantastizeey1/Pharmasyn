@@ -132,7 +132,7 @@ function SignIn2() {
               </div>
             </div>
 
-            <div className="mb-2 block text-gray-700">
+            <div className="mb-2 block text-[#0C0C0C]/50">
               <label htmlFor="otp">Enter Code</label>
               <input
                 ref={otpRef}

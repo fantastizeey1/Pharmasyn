@@ -13,6 +13,7 @@ import Dashboard from "./components/Dash/Dashboard";
 import Home from "./components/Landingpage/Home";
 import Forgotpassword from "./components/signIn/Forgotpassword";
 import Forgotpassword2 from "./components/signIn/Forgotpassword2";
+import ChangePassword from "./components/signIn/ChangePassword";
 
 function App() {
   return (
@@ -32,6 +33,7 @@ function App() {
         {/* <Route path="/Dashboard/users" element={<Users />} /> */}
         <Route path="/Forgotpassword" element={<Forgotpassword />} />
         <Route path="/Forgotpassword2" element={<Forgotpassword2 />} />
+        <Route path="/ChangePassword" element={<ChangePassword />} />
         {/* Add more routes as needed */}
       </Routes>
     </Router>
