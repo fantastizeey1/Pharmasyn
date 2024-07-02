@@ -208,7 +208,7 @@ function Register() {
                 name="userType"
                 onChange={handleUserTypeChange}
                 value={userType}
-                className="rounded-lg text-[#0C0C0C] p-2 border-2 border-[#0C0C0C]/50 placeholder:text-[#0C0C0C]/50"
+                className="rounded-lg text-[#0C0C0C] p-2 border-2 border-[#0C0C0C]/50 placeholder:text-[#0C0C0C]/50 placeholder:text-[14px]"
               >
                 <option value={1}>Pharmaceutical Company</option>
                 <option value={2}>Wholesale Pharmacy</option>
@@ -224,7 +224,7 @@ function Register() {
               </label>
               <input
                 type="text"
-                className="rounded-lg text-[#0C0C0C] p-2 border-2 border-[#0C0C0C]/50 placeholder:text-[#0C0C0C]/50"
+                className="rounded-lg text-[#0C0C0C] p-2 border-2 border-[#0C0C0C]/50 placeholder:text-[#0C0C0C]/50 placeholder:text-[14px] "
                 ref={userRef}
                 onChange={(e) => setUser(e.target.value)} // Update the user state
                 required
@@ -243,7 +243,7 @@ function Register() {
                 type="email"
                 name=""
                 id="email"
-                className="rounded-lg text-[#0C0C0C] p-2 border-2 border-[#0C0C0C]/50 placeholder:text-[#0C0C0C]/50"
+                className="rounded-lg text-[#0C0C0C] p-2 border-2 border-[#0C0C0C]/50 placeholder:text-[#0C0C0C]/50 placeholder:text-[14px]"
                 autoComplete="on"
                 onChange={(e) => setEmail(e.target.value)}
                 required
@@ -276,7 +276,7 @@ function Register() {
                 type="tel"
                 name=""
                 id="phoneNumber"
-                className="rounded-lg text-[#0C0C0C] p-2 border-2 border-[#0C0C0C]/50 placeholder:text-[#0C0C0C]/50"
+                className="rounded-lg text-[#0C0C0C] p-2 border-2 border-[#0C0C0C]/50 placeholder:text-[#0C0C0C]/50 placeholder:text-[14px]"
                 placeholder="Enter Phone Number"
                 autoComplete="off"
                 onChange={(e) => setPhone(e.target.value)}
@@ -307,7 +307,7 @@ function Register() {
                 onChange={handleAddressChange}
                 value={address}
                 placeholder="Enter Street address"
-                className="rounded-lg text-[#0C0C0C] p-2 border-2 border-[#0C0C0C]/50 placeholder:text-[#0C0C0C]/50"
+                className="rounded-lg text-[#0C0C0C] p-2 border-2 border-[#0C0C0C]/50 placeholder:text-[#0C0C0C]/50 placeholder:text-[14px]"
                 required
               ></textarea>
 
@@ -319,7 +319,7 @@ function Register() {
                 id="city"
                 name="city"
                 placeholder="City"
-                className="rounded-lg text-[#0C0C0C] p-2 border-2 border-[#0C0C0C]/50 placeholder:text-[#0C0C0C]/50"
+                className="rounded-lg text-[#0C0C0C] p-2 border-2 border-[#0C0C0C]/50 placeholder:text-[#0C0C0C]/50 placeholder:text-[14px]"
                 required
               />
 
@@ -377,7 +377,7 @@ function Register() {
               </label>
               <input
                 type="text"
-                className="rounded-lg text-[#0C0C0C] p-1 border-2 border-[#0C0C0C]/50 placeholder:text-[#0C0C0C]/50"
+                className="rounded-lg text-[#0C0C0C] p-1 border-2 border-[#0C0C0C]/50 placeholder:text-[#0C0C0C]/50 placeholder:text-[14px]"
                 id="country"
                 name="country"
                 placeholder="Enter Country"
@@ -403,7 +403,7 @@ function Register() {
                 aria-describedby="pwdnote"
                 onFocus={() => setPwdFocus(true)}
                 onBlur={() => setPwdFocus(false)}
-                className="rounded-lg text-[#0C0C0C] p-1 border-2 border-[#0C0C0C]/50 placeholder:text-[#0C0C0C]/50"
+                className="rounded-lg text-[#0C0C0C] p-1 border-2 border-[#0C0C0C]/50 placeholder:text-[#0C0C0C]/50 placeholder:text-[14px]"
               />
               <p
                 id="pwdnote"
@@ -441,7 +441,7 @@ function Register() {
                 aria-describedby="confirmnote"
                 onFocus={() => setMatchFocus(true)}
                 onBlur={() => setMatchFocus(false)}
-                className="rounded-lg text-[#0C0C0C] p-1 border-2 border-[#0C0C0C]/50 placeholder:text-[#0C0C0C]/50"
+                className="rounded-lg text-[#0C0C0C] p-1 border-2 border-[#0C0C0C]/50 placeholder:text-[#0C0C0C]/50 placeholder:text-[14px]"
               />
               <p
                 id="confirmnote"
