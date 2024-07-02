@@ -15,6 +15,7 @@ import Forgotpassword from "./components/signIn/Forgotpassword";
 import Forgotpassword2 from "./components/signIn/Forgotpassword2";
 import ChangePassword from "./components/signIn/ChangePassword";
 import * as Sentry from "@sentry/react";
+import Register2 from "./components/register/Register2";
 
 function App() {
   return (
@@ -22,9 +23,10 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/Register" element={<Register />} />
-        <Route path="/RegisterPhamComp" element={<RegisterPhamComp />} />
+        <Route path="/Register2" element={<Register2 />} />
+        {/* <Route path="/RegisterPhamComp" element={<RegisterPhamComp />} />
         <Route path="/Register/Pharmacy" element={<Register2phamarcy />} />
-        <Route path="/Register/personel" element={<RegisterPersonel />} />
+        <Route path="/Register/personel" element={<RegisterPersonel />} /> */}
         <Route path="/Success" element={<Success />} />
         <Route path="/SignUp" element={<SignUp />} />
         <Route path="/SignIn" element={<SignIn />} />

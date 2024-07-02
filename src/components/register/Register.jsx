@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { FaUserCheck, FaCircleInfo } from "react-icons/fa6";
 import { FaUserTimes, FaCheckCircle } from "react-icons/fa";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import "/src/index.css";
 import { BASE_URL } from "../../config";
 import RegisterPhamComp from "./Register2PhamComp";
@@ -16,8 +16,6 @@ function Register() {
   const errRef = useRef();
 
   const [user, setUser] = useState("");
-
-  const [userType, setUserType] = useState("1");
 
   const [address, setAddress] = useState("");
 
@@ -42,16 +40,31 @@ function Register() {
 
   const [userId, setUserId] = useState(null); // Initialize userId with null or an initial value
 
-  // Convert userType to a number using parseInt
-  const userTypeNumber = parseInt(userType, 10);
-
+  const location = useLocation();
+  const accountType = location.state?.accountType || "default";
   const navigate = useNavigate();
 
+  // Initialize userType based on accountType from location state
+  const [userType, setUserType] = useState(() => {
+    switch (accountType) {
+      case "pharmaceuticalCompany":
+        return "1";
+      case "wholesalePharmacy":
+        return "2";
+      case "retailPharmacy":
+        return "3";
+      case "hospitalPharmacy":
+        return "4";
+      case "doctor":
+        return "5";
+      case "pharmacist":
+        return "6";
+      default:
+        return "1";
+    }
+  });
+
   const validateForm = () => {
-    console.log(validEmail);
-    console.log(validPwd);
-    console.log(validMatch);
-    console.log(validPhone);
     return validEmail && validPwd && validMatch && validPhone;
   };
 
@@ -63,31 +76,34 @@ function Register() {
 
   useEffect(() => {
     const result = emailRegex.test(email);
-    console.log(result);
-    console.log(email);
+
     setValidEmail(result);
   }, [email]);
 
   useEffect(() => {
     const result = phoneRegex.test(phone);
-    console.log(result);
-    console.log(phone);
+
     setValidPhone(result);
   }, [phone]);
 
   useEffect(() => {
     const result = passwordRegex.test(pwd);
-    console.log(result);
-    console.log(pwd);
+
     setValidPwd(result);
     const match = pwd === matchPwd;
     setValidMatch(match);
   }, [pwd, matchPwd]);
 
   // Event handler to capture user type selection
+  // const handleUserTypeChange = (e) => {
+  //   setUserType(parseInt(e.target.value, 10));
+  // };
   const handleUserTypeChange = (e) => {
-    setUserType(parseInt(e.target.value, 10));
+    setUserType(e.target.value);
   };
+
+  // Convert userType to a number using parseInt
+  const userTypeNumber = parseInt(userType, 10);
 
   const handleAddressChange = (e) => {
     setAddress(e.target.value);

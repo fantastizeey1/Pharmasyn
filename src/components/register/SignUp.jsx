@@ -32,13 +32,13 @@ const buttonData = {
     {
       type: "retailPharmacy",
       title: "Retail/Community Pharmacy",
-      description: "For personal use, this is for you.",
+      description: "Operate a pharmacy, this is for you.",
       icon: retail,
     },
     {
       type: "pharmacist",
       title: "Pharmacist",
-      description: "Operate a pharmacy, this is for you.",
+      description: "For personal use, this is for you.",
       icon: Pharma,
     },
     {

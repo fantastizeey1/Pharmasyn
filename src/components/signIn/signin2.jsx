@@ -94,7 +94,7 @@ function SignIn2() {
           >
             <h2 className="text-2xl font-bold text-[#013299]  mb-2">Sign In</h2>
             <div className="mb-4">
-              <label htmlFor="identifier" className="block text-gray-700">
+              <label htmlFor="identifier" className="block text-[#0C0C0C]/50">
                 Email Address
               </label>
               <div className="relative flex items-center ">
@@ -113,7 +113,7 @@ function SignIn2() {
               </div>
             </div>
             <div className="mb-2">
-              <label htmlFor="password" className="block text-gray-700">
+              <label htmlFor="password" className="block text-[#0C0C0C]/50">
                 Password
               </label>
               <div className="relative flex items-center ">
@@ -133,7 +133,9 @@ function SignIn2() {
             </div>
 
             <div className="mb-2 block text-[#0C0C0C]/50">
-              <label htmlFor="otp">Enter Code</label>
+              <label htmlFor="otp" className="block text-[#0C0C0C]/70">
+                Enter Code
+              </label>
               <input
                 ref={otpRef}
                 type="number"
