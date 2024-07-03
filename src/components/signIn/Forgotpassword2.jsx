@@ -1,11 +1,14 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { AiOutlineLeft } from "react-icons/ai";
+import { BASE_URL } from "../../config";
 
 const Forgotpassword2 = () => {
   const [otp, setOtp] = useState("");
   const [errMsg, setErrMsg] = useState("");
   const [emailAddress, setEmailAddress] = useState("");
+  const [userId, setUserId] = useState("string");
+  const [channel, setChannel] = useState("string");
   const errRef = useRef();
   const otpRef = useRef();
   const navigate = useNavigate();
@@ -17,18 +20,49 @@ const Forgotpassword2 = () => {
     }
   }, [location]);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Handle submit logic here
+
     if (otp === "") {
       setErrMsg("Authentication code is required");
       errRef.current.focus();
-    } else {
-      // Submit form
+      return;
+    }
+
+    try {
+      const formData = {
+        emailAddress: emailAddress,
+        userId: userId,
+        otp: otp,
+        channel: channel,
+      };
+
+      const response = await fetch(`${BASE_URL}/api/Otp/VerifyOtp`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        console.error("Failed to Sign In:", errorData.responseMessage);
+        setErrMsg(
+          `Failed to SignIn user: ${
+            errorData.responseMessage || response.statusText
+          }`
+        );
+        return;
+      }
+
       console.log("Form submitted with OTP", otp);
       navigate("/ChangePassword", {
         state: { email: emailAddress, otp: otp },
       });
+    } catch (error) {
+      console.error("Error:", error);
+      setErrMsg("An error occurred while verifying the OTP.");
     }
   };
 

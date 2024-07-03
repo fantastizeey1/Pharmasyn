@@ -1,10 +1,23 @@
 import React, { useState, useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import FilterBar from "./FilterBar";
 import Users from "./Users";
 import Inventory from "./Inventory";
 import Profile from "./Profile";
 import Invoice from "./Invoice";
+
 function Dashboard() {
+  const navigate = useNavigate();
+  const [selectedComponent, setSelectedComponent] = useState("Users");
+
+  useEffect(() => {
+    // Check if the user is logged in
+    const token = localStorage.getItem("authToken"); // Adjust this to your actual token key
+    if (!token) {
+      navigate("/SignIn"); // Navigate to sign-in if not logged in
+    }
+  }, [navigate]);
+
   const categories = [
     { label: "All", value: "All" },
     { label: "Prescription Drugs", value: "Prescription Drugs" },
@@ -22,7 +35,6 @@ function Dashboard() {
   const handleComponentChange = (component) => {
     setSelectedComponent(component);
   };
-  const [selectedComponent, setSelectedComponent] = useState("Users");
 
   return (
     <div>
