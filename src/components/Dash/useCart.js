@@ -180,10 +180,10 @@ const useCart = (userId) => {
       const selectedCartItems = selectedItems.map((index) => cart[index]);
       const checkoutPayload = {
         cartId,
-        items: selectedCartItems.map((item) => ({
-          inventoryId: item.inventoryId,
-          quantity: item.quantity,
-        })),
+        // items: selectedCartItems.map((item) => ({
+        //   inventoryId: item.inventoryId,
+        //   quantity: item.quantity,
+        // })),
       };
 
       try {
