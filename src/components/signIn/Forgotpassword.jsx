@@ -1,22 +1,55 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { AiOutlineLeft } from "react-icons/ai";
 import { HiOutlineMail } from "react-icons/hi";
+import { BASE_URL } from "../../config";
 
 const Forgotpassword = () => {
   const [emailAddress, setEmailAddress] = useState("");
   const [errMsg, setErrMsg] = useState("");
   const errRef = useRef();
+  const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Handle submit logic here
+
     if (emailAddress === "") {
       setErrMsg("Email address is required");
       errRef.current.focus();
-    } else {
-      // Submit form
-      console.log("Form submitted", emailAddress);
+      return;
+    }
+
+    try {
+      const response = await fetch(
+        `${BASE_URL}/api/Otp/GetOtp?emailAddress=${emailAddress}`,
+        {
+          method: "GET",
+          headers: {
+            "ngrok-skip-browser-warning": "69420",
+          },
+        }
+      );
+
+      console.log("Response:", response);
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        console.error("Failed to get OTP:", errorData.responseMessage);
+        setErrMsg(
+          `Failed to get OTP: ${
+            errorData.responseMessage || response.statusText
+          }`
+        );
+        return;
+      }
+
+      // Redirect to the success page
+      navigate("/Forgotpassword2", {
+        state: { email: emailAddress },
+      });
+    } catch (error) {
+      console.error("Error getting OTP:", error);
+      setErrMsg("An error occurred while processing your request.");
     }
   };
 
@@ -28,8 +61,8 @@ const Forgotpassword = () => {
           <p className="text-[#0C0C0C] text-[15px] ">Back to login</p>
         </Link>
       </div>
-      <div className="flex justify-center items-center  flex-col bg-white w-full">
-        <div className="flex w-[60%] md:w-[50%] flex-col shadow-lg rounded-2xl px-6 my-4 py-3 ">
+      <div className="flex justify-center items-center flex-col bg-white w-full">
+        <div className="flex w-[60%] md:w-[50%] flex-col shadow-lg rounded-2xl px-6 my-4 py-3">
           <p
             ref={errRef}
             className={errMsg ? "errmsg" : "offscreen"}
@@ -37,7 +70,7 @@ const Forgotpassword = () => {
           >
             {errMsg}
           </p>
-          <form onSubmit={handleSubmit} className="bg-white p-8 rounded ">
+          <form onSubmit={handleSubmit} className="bg-white p-8 rounded">
             <h2 className="text-[30px] font-bold text-[#0C0C0C] mb-2">
               Forgot your password?
             </h2>
@@ -52,7 +85,7 @@ const Forgotpassword = () => {
               >
                 Email
               </label>
-              <div className="relative flex  items-center ">
+              <div className="relative flex items-center">
                 {emailAddress === "" && (
                   <HiOutlineMail className="absolute left-3 w-5 h-5 text-[#0C0C0C]/50" />
                 )}
@@ -62,7 +95,7 @@ const Forgotpassword = () => {
                   value={emailAddress}
                   placeholder="Enter Your Email"
                   onChange={(e) => setEmailAddress(e.target.value)}
-                  className="block w-full px-4 py-2 placeholder:pl-10 rounded mt-1 focus-within:text-[#0C0C0C]/50 placeholder:text-[#0C0C0C]/50 text-[#0C0C0C]/50 p-2 pr-3 border-2  border-[#0C0C0C]/50"
+                  className="block w-full px-4 py-2 placeholder:pl-10 rounded mt-1 focus-within:text-[#0C0C0C]/50 placeholder:text-[#0C0C0C]/50 text-[#0C0C0C]/50 p-2 pr-3 border-2 border-[#0C0C0C]/50"
                   required
                 />
               </div>

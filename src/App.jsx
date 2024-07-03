@@ -16,6 +16,7 @@ import Forgotpassword2 from "./components/signIn/Forgotpassword2";
 import ChangePassword from "./components/signIn/ChangePassword";
 import * as Sentry from "@sentry/react";
 import Register2 from "./components/register/Register2";
+import Success3 from "./components/signIn/Success3";
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
         <Route path="/Register/Pharmacy" element={<Register2phamarcy />} />
         <Route path="/Register/personel" element={<RegisterPersonel />} /> */}
         <Route path="/Success" element={<Success />} />
+        <Route path="/PasswordSuccess" element={<Success3 />} />
         <Route path="/SignUp" element={<SignUp />} />
         <Route path="/SignIn" element={<SignIn />} />
         <Route path="/SignIn2" element={<SignIn2 />} />

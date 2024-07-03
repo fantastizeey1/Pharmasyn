@@ -1,12 +1,21 @@
-import React, { useState, useRef } from "react";
-import { Link } from "react-router-dom";
+import React, { useState, useRef, useEffect } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { AiOutlineLeft } from "react-icons/ai";
 
 const Forgotpassword2 = () => {
   const [otp, setOtp] = useState("");
   const [errMsg, setErrMsg] = useState("");
+  const [emailAddress, setEmailAddress] = useState("");
   const errRef = useRef();
   const otpRef = useRef();
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  useEffect(() => {
+    if (location.state && location.state.email) {
+      setEmailAddress(location.state.email);
+    }
+  }, [location]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -17,6 +26,9 @@ const Forgotpassword2 = () => {
     } else {
       // Submit form
       console.log("Form submitted with OTP", otp);
+      navigate("/ChangePassword", {
+        state: { email: emailAddress, otp: otp },
+      });
     }
   };
 

@@ -1,32 +1,77 @@
-import React, { useState, useRef } from "react";
-import { AiOutlineLeft } from "react-icons/ai";
+import React, { useState, useEffect, useRef } from "react";
+
 import { HiOutlineLockClosed } from "react-icons/hi";
 import { FaCircleInfo } from "react-icons/fa6";
-import { Link } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import logo from "/logo.jpg";
 
 const ChangePassword = () => {
+  const [emailAddress, setEmailAddress] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [otp, setOtp] = useState("");
   const [validPwd, setValidPwd] = useState(false);
   const [validMatch, setValidMatch] = useState(false);
   const [pwdFocus, setPwdFocus] = useState(false);
   const [matchFocus, setMatchFocus] = useState(false);
+  const [errMsg, setErrMsg] = useState("");
   const errRef = useRef();
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  useEffect(() => {
+    if (location.state && location.state.email) {
+      setEmailAddress(location.state.email);
+    }
+    if (location.state && location.state.otp) {
+      setOtp(location.state.otp);
+    }
+  }, [location]);
+
+  const handleSignIn = async () => {
+    try {
+      const formData = {
+        emailAddress: emailAddress,
+        password: password,
+        confirmPassword: confirmPassword,
+        otp: otp,
+      };
+
+      const response = await fetch(`${BASE_URL}/api/Login/PasswordReset`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        console.error("Failed to Sign In:", errorData.responseMessage);
+        setErrMsg(
+          `Failed to SignIn user: ${
+            errorData.responseMessage || response.statusText
+          }`
+        );
+        return;
+      }
+
+      navigate("/PasswordSuccess");
+    } catch (error) {
+      console.error("Error authenticating user:", error);
+      setErrMsg("An error occurred while processing your request.");
+    }
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Handle submit logic here
     if (password !== confirmPassword) {
       setErrMsg("Passwords do not match");
       errRef.current.focus();
     } else {
-      // Submit form
-      console.log("Form submitted with new password", password);
+      handleSignIn();
     }
   };
-
-  const errMsg = password !== confirmPassword ? "Passwords do not match" : "";
 
   return (
     <div>
@@ -54,12 +99,18 @@ const ChangePassword = () => {
               Your previous password has been reset. Please set a new <br />
               password for your account.
             </p>
-
+            <p
+              ref={errRef}
+              className={errMsg ? "errmsg" : "offscreen"}
+              aria-live="assertive"
+            >
+              {errMsg}
+            </p>
             <div className="mb-2">
               <label htmlFor="password" className="block text-gray-700">
                 Create Password
               </label>
-              <div className="relative flex items-center  ">
+              <div className="relative flex items-center">
                 {password === "" && (
                   <HiOutlineLockClosed className="absolute left-3 w-5 h-5 text-[#0C0C0C]/50" />
                 )}
@@ -107,7 +158,7 @@ const ChangePassword = () => {
               >
                 Re-enter Password
               </label>
-              <div className="relative flex items-center ">
+              <div className="relative flex items-center">
                 {confirmPassword === "" && (
                   <HiOutlineLockClosed className="absolute left-3 w-5 h-5 text-[#0C0C0C]/50" />
                 )}
@@ -130,7 +181,7 @@ const ChangePassword = () => {
               </div>
               <p
                 id="confirmnote"
-                className={`flex flex-row gap-1  bg-[#352323] p-1 ${
+                className={`flex flex-row gap-1 bg-[#352323] p-1 ${
                   matchFocus && !validMatch ? "instructions" : "offscreen"
                 }`}
               >
