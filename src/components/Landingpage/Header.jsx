@@ -34,12 +34,14 @@ const Header = () => {
           >
             Log in
           </Link>
-          <button
-            className="ml-[36px] text-[14px] font-bold text-white bg-[#013299] rounded-3xl hover:scale-110 py-3 px-6 mt-0"
-            aria-label="Sign Up"
-          >
-            <Link to="/SignUp">Sign Up</Link>
-          </button>
+          <Link to="/SignUp">
+            <button
+              className="ml-[36px] text-[14px] font-bold text-white bg-[#013299] rounded-3xl hover:scale-110 py-3 px-6 mt-0"
+              aria-label="Sign Up"
+            >
+              Sign Up
+            </button>
+          </Link>
         </nav>
       </div>
     </header>
