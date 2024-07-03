@@ -57,7 +57,7 @@ const Slider = ({ slides = [] }) => {
   }
 
   return (
-    <section className="relative  ml-[150px] overflow-hidden h-[350px] mb-[100px]">
+    <section className="relative  md:ml-[150px] overflow-hidden h-[350px] mb-5 md:mb-[100px]">
       <div
         className="flex  transition-transform duration-500"
         style={{ transform: `translateX(-${currentSlide * 350}px)` }}

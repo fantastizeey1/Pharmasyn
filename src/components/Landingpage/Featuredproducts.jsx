@@ -36,11 +36,11 @@ const Featuredproducts = () => {
   ];
 
   return (
-    <section id="Services" className="mx-[150px] mt-[140px]">
-      <h2 className="font-bold text-[40px] text-center mb-[120px]">
+    <section id="Services" className="mx-[15px] md:mx-[150px] mt-[140px]">
+      <h2 className="font-bold md:text-[40px] text-center mb-[120px]">
         Featured Products
       </h2>
-      <div className="grid grid-cols-3 gap-x-4 gap-y-[130px]">
+      <div className="md:grid md:grid-cols-3 md:gap-x-4 md:gap-y-[130px]">
         {products.map((product, index) => (
           <div
             key={index}
