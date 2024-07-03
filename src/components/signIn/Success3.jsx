@@ -38,7 +38,7 @@ function Success3() {
           Password Changed successfully!!
         </h1>
         <p className="text-center text-[24px] text-[#0C0C0C]/50">
-          Now lets go back to{" "}
+          Now lets go back to test our new password
           <Link to="/SignIn">
             <button className="w-full mt-[50px] text-white bg-[#013299]">
               Sign in

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-
+import { BASE_URL } from "../../config";
 import { HiOutlineLockClosed } from "react-icons/hi";
 import { FaCircleInfo } from "react-icons/fa6";
 import { Link, useNavigate, useLocation } from "react-router-dom";
