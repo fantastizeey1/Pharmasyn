@@ -12,7 +12,7 @@ function Dashboard() {
 
   useEffect(() => {
     // Check if the user is logged in
-    const token = localStorage.getItem("authToken"); // Adjust this to your actual token key
+    const token = sessionStorage.getItem("access_token"); // Adjust this to your actual token key
     if (!token) {
       navigate("/SignIn"); // Navigate to sign-in if not logged in
     }
