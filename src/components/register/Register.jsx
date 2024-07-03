@@ -169,14 +169,15 @@ function Register() {
       setSuccess(true);
       console.log("Success state set to true"); // Add logging statement
 
+      navigate("/Register2");
       // Conditionally navigate based on user type
-      if (userType === "1") {
-        navigate(`/RegisterPhamComp?userType=${userTypeNumber}`);
-      } else if (userType === "2" || userType === "3" || userType === "4") {
-        navigate(`/Register/Pharmacy?userType=${userTypeNumber}`);
-      } else {
-        navigate(`/Register/personel?userType=${userTypeNumber}`);
-      }
+      // if (userType === "1") {
+      //   navigate(`/RegisterPhamComp?userType=${userTypeNumber}`);
+      // } else if (userType === "2" || userType === "3" || userType === "4") {
+      //   navigate(`/Register/Pharmacy?userType=${userTypeNumber}`);
+      // } else {
+      //   navigate(`/Register/personel?userType=${userTypeNumber}`);
+      // }
     } catch (error) {
       // Handle network errors or other exceptions
       console.error("Error registering user: net i think", error);
