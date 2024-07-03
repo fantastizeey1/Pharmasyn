@@ -192,7 +192,7 @@ const useCart = (userId) => {
           throw new Error("No access token found in session storage");
         }
 
-        const url = `${BASE_URL}/api/Cart/Checkout`;
+        const url = `${BASE_URL}/api/Order/CreateOrder`;
         const response = await fetch(url, {
           method: "POST",
           headers: {
