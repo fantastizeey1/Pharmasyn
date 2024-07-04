@@ -1,2 +1,2 @@
 // config.js
-export const BASE_URL = "https://dab7-102-88-33-107.ngrok-free.app";
+export const BASE_URL = "https://cac7-102-89-32-143.ngrok-free.app";
