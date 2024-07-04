@@ -160,10 +160,9 @@ function Register() {
       // If successful response from backend
       const responseData = await response.json();
       const userId = responseData.userId; // Assuming the user ID is returned in the response
-
-      // Save the user ID to state or local storage
-      setUserId(userId); // Assuming you have a state variable for the user ID
-      localStorage.setItem("userId", userId); // Save user ID to local storage
+      localStorage.setItem("userId", responseData.userId);
+      localStorage.setItem("userType", parseInt(formData.userType, 10));
+      console.log(userType);
 
       // If successful response from backend
       setSuccess(true);

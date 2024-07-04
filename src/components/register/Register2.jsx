@@ -16,7 +16,7 @@ const Register2 = () => {
   const searchParams = new URLSearchParams(location.search);
   const accountType = searchParams.get("accountType");
 
-  const [userType, setUserType] = useState(() => {
+  const getUserType = (accountType) => {
     switch (accountType) {
       case "pharmaceuticalCompany":
         return "1";
@@ -33,7 +33,16 @@ const Register2 = () => {
       default:
         return "1";
     }
-  });
+  };
+
+  const [userType, setUserType] = useState("");
+
+  useEffect(() => {
+    const userTypeFromAccountType = getUserType(accountType);
+    setUserType(userTypeFromAccountType);
+    localStorage.setItem("userTypeNumber", userTypeFromAccountType);
+    console.log("Setting userType from accountType:", userTypeFromAccountType);
+  }, [accountType]);
 
   const handleFileUpload = (e, setBase64File) => {
     const uploadedFile = e.target.files[0];
@@ -53,20 +62,28 @@ const Register2 = () => {
     e.preventDefault();
 
     const userId = localStorage.getItem("userId");
+    const userTypeNumber = localStorage.getItem("userTypeNumber");
+
+    console.log("userId:", userId);
+    console.log("userTypeNumber:", userTypeNumber);
 
     const requestData = {
       userId: userId,
-      userType: userType,
+      // userType: userTypeNumber,
       cac: cacFileBase64,
       companyPharmacyLicense:
-        userType === "1" || userType === "2" ? phmLicenseFileBase64 : "",
+        userTypeNumber === "1" || userTypeNumber === "2"
+          ? phmLicenseFileBase64
+          : "",
       premiseLicense: premiseFileBase64,
-      hospitalPharmacyLicense: userType === "4" ? phmLicenseFileBase64 : "",
-      mdcnLicense: userType === "5" ? licenseBase64 : "",
-      workIdCard: userType === "5" ? idCardBase64 : "",
-      individualPharmacyLicense: userType === "6" ? licenseBase64 : "",
+      hospitalPharmacyLicense:
+        userTypeNumber === "4" ? phmLicenseFileBase64 : "",
+      mdcnLicense: userTypeNumber === "5" ? licenseBase64 : "",
+      workIdCard: userTypeNumber === "5" ? idCardBase64 : "",
+      individualPharmacyLicense: userTypeNumber === "6" ? licenseBase64 : "",
     };
-    console.log(requestData);
+
+    console.log("requestData:", requestData);
 
     try {
       const response = await fetch(`${BASE_URL}/api/Registration/StepTwo`, {
@@ -77,11 +94,8 @@ const Register2 = () => {
         body: JSON.stringify(requestData),
       });
 
-      console.log("Response:", response);
-
       if (!response.ok) {
         const errorData = await response.json();
-        console.error("Failed to register user:", errorData.responseMessage);
         setErrMsg(
           `Failed to register user: ${
             errorData.responseMessage || response.statusText
@@ -90,10 +104,8 @@ const Register2 = () => {
         return;
       }
 
-      console.log("User registered successfully!");
       navigate("/success");
     } catch (error) {
-      console.error("Error registering user:", error);
       setErrMsg("An error occurred while processing your request.");
     }
   };
@@ -125,7 +137,7 @@ const Register2 = () => {
           </p>
           <form
             onSubmit={handleStage2Submit}
-            className="flex flex-col bg-white  rounded "
+            className="flex flex-col bg-white rounded"
           >
             {["1", "2", "3", "4"].includes(userType) && (
               <>
