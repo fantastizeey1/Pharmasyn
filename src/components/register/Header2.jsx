@@ -6,6 +6,7 @@ const Header2 = () => {
   return (
     <header className=" h-[85px] pt-6 flex flex-1 items-center justify-between mb-[50px]">
       <div className="flex items-center cursor-pointer justify-start gap-2">
+        {/* <Image */}
         <Link to="/">
           <img
             src={logo}
