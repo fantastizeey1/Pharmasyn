@@ -6,7 +6,6 @@ import Btn from "../Landingpage/Btn";
 import useCart from "../Dash/useCart";
 
 const Cart = ({ userId }) => {
-  // State to check if the cart is empty
   const [isCartEmpty, setIsCartEmpty] = useState(true);
   const { cart, setCart, updateCart, error, handleCheckout } = useCart(userId);
   const [selectedItems, setSelectedItems] = useState([]);
@@ -21,9 +20,10 @@ const Cart = ({ userId }) => {
         }, 0)
         .toFixed(2);
       setTotal(totalAmount);
+      setIsCartEmpty(cart.length === 0);
     };
     calculateTotal();
-    console.log("Cart updated in Cart2 component:", cart);
+    console.log("Cart updated in Cart component:", cart);
   }, [cart]);
 
   const handleIncrease = (index) => {
@@ -61,7 +61,7 @@ const Cart = ({ userId }) => {
   return (
     <div>
       <Dashheader />
-      {/* {isCartEmpty ? (
+      {isCartEmpty ? (
         <div className="flex justify-center items-center flex-col maybe">
           <img
             src="/cartempty.png"
@@ -72,121 +72,71 @@ const Cart = ({ userId }) => {
           <Btn
             title="Shop"
             linkpath="/Shop"
-            className=" w-[800px] h-[90px] flex justify-center items-center px-2 text-[30px]"
+            className="w-[800px] h-[90px] flex justify-center items-center px-2 text-[30px]"
           />
         </div>
       ) : (
-        <div className="flex justify-start items-center flex-col">
-          <h2 className="font-bold mb-[60px]">Cart Items</h2>
-        </div>
-      )} */}
-
-      <div>
-        <h2 className="border-b-2 border-black pl-[70px] pb-[30px]">
-          MY CARTS
-        </h2>
-        <div className="mx-[70px] mt-10 flex justify-between items-start ">
-          <div className="flex-1 flex flex-row justify-start flex-wrap gap-4 pt-10 items-center">
-            <div className="flex w-[600px] flex-row gap-2 justify-start items-center p-7 shadow-xl rounded-xl">
-              <img
-                src="/baconil.svg"
-                alt=""
-                className="w-[80px] h-[80px] mr-10"
-              />
-              <div>
-                <h5 className="font-bold text-[24px]">
-                  Emzor paracetamol 1000 capsules
-                </h5>
-                <p className="mb-3 text-[14px]">₦ 900.00</p>
-                <div className="border-2 border-black w-32 h-12 flex justify-around items-center">
-                  <button className=" " onClick={() => handleDecrease(index)}>
-                    <p className="text-[35px] -mt-6">-</p>
-                  </button>
-                  <span className="text-[35px]">1</span>
-                  <button className=" " onClick={() => handleIncrease(index)}>
-                    <p className="text-[32px] -mt-4">+</p>
+        <div>
+          <h2 className="border-b-2 border-black pl-[70px] pb-[30px] font-bold text-[30px]">
+            MY CART
+          </h2>
+          <div className="mx-[70px] mt-10 flex justify-between items-start ">
+            <div className="flex-1 flex flex-row justify-start flex-wrap gap-4 pt-10 items-center">
+              {cart.map((item, index) => (
+                <div
+                  key={index}
+                  className="flex w-[600px] flex-row gap-2 justify-start items-center p-7 shadow-xl rounded-xl"
+                >
+                  <img
+                    src={item.img}
+                    alt={item.name}
+                    className="w-[80px] h-[80px] mr-10"
+                  />
+                  <div>
+                    <h5 className="font-bold text-[24px]">{item.name}</h5>
+                    <p className="mb-3 text-[14px]">₦ {item.price}</p>
+                    <div className="border-2 border-black w-32 h-12 flex justify-around items-center">
+                      <button
+                        className=" "
+                        onClick={() => handleDecrease(index)}
+                      >
+                        <p className="text-[35px] -mt-6">-</p>
+                      </button>
+                      <span className="text-[35px]">{item.quantity}</span>
+                      <button
+                        className=" "
+                        onClick={() => handleIncrease(index)}
+                      >
+                        <p className="text-[32px] -mt-4">+</p>
+                      </button>
+                    </div>
+                  </div>
+                  <button
+                    onClick={() => handleDelete(index)}
+                    className="ml-auto text-red-500"
+                  >
+                    Remove
                   </button>
                 </div>
-              </div>
+              ))}
             </div>
-            <div className="flex w-[600px] flex-row gap-2 justify-start items-center p-7 shadow-xl rounded-xl">
-              <img
-                src="/baconil.svg"
-                alt=""
-                className="w-[80px] h-[80px] mr-10"
-              />
-              <div>
-                <h5 className="font-bold text-[24px]">
-                  Emzor paracetamol 1000 capsules
-                </h5>
-                <p className="mb-3 text-[14px]">₦ 900.00</p>
-                <div className="border-2 border-black w-32 h-12 flex justify-around items-center">
-                  <button className=" " onClick={() => handleDecrease(index)}>
-                    <p className="text-[35px] -mt-6">-</p>
-                  </button>
-                  <span className="text-[35px]">1</span>
-                  <button className=" " onClick={() => handleIncrease(index)}>
-                    <p className="text-[32px] -mt-4">+</p>
-                  </button>
-                </div>
+            <div className="shadow-xl p-7 pt-10 w-[400px] rounded-xl">
+              <div className="flex justify-between items-center mb-4">
+                <p className="text-[16px] text-[#0C0C0C]/90">Total</p>
+                <p className="text-[16px] text-[#0C0C0C]/90">₦{total}</p>
               </div>
-            </div>
-            <div className="flex w-[600px] flex-row gap-2 justify-start items-center p-7 shadow-xl rounded-xl">
-              <img
-                src="/baconil.svg"
-                alt=""
-                className="w-[80px] h-[80px] mr-10"
+              <p className="text-[16px] text-[#0C0C0C]/90">
+                Taxes and shipping calculated at checkout
+              </p>
+              <Btn
+                title="Checkout"
+                linkpath="/Shop"
+                className="w-full h-[60px] flex justify-center items-center mt-8 px-2 text-[22px]"
               />
-              <div>
-                <h5 className="font-bold text-[24px]">
-                  Emzor paracetamol 1000 capsules
-                </h5>
-                <p className="mb-3 text-[14px]">₦ 900.00</p>
-                <div className="border-2 border-black w-32 h-12 flex justify-around items-center">
-                  <button className=" " onClick={() => handleDecrease(index)}>
-                    <p className="text-[35px] -mt-6">-</p>
-                  </button>
-                  <span className="text-[35px]">1</span>
-                  <button className=" " onClick={() => handleIncrease(index)}>
-                    <p className="text-[32px] -mt-4">+</p>
-                  </button>
-                </div>
-              </div>
-            </div>
-            <div className="flex w-[600px] flex-row gap-2 justify-start items-center p-7 shadow-xl rounded-xl">
-              <img
-                src="/baconil.svg"
-                alt=""
-                className="w-[80px] h-[80px] mr-10"
-              />
-              <div>
-                <h5 className="font-bold text-[24px]">
-                  Emzor paracetamol 1000 capsules
-                </h5>
-                <p className="mb-3 text-[14px]">₦ 900.00</p>
-                <div className="border-2 border-black w-32 h-12 flex justify-around items-center">
-                  <button className=" " onClick={() => handleDecrease(index)}>
-                    <p className="text-[35px] -mt-6">-</p>
-                  </button>
-                  <span className="text-[35px]">1</span>
-                  <button className=" " onClick={() => handleIncrease(index)}>
-                    <p className="text-[32px] -mt-4">+</p>
-                  </button>
-                </div>
-              </div>
             </div>
           </div>
-          <div className="shadow-xl p-7 pt-10 w-[400px] h-[200px] rounded-xl">
-            <p className="text-[16px] text-[#0C0C0C]/90">
-              Total <span className="text-end">$900</span>
-            </p>
-            <p className="text-[16px] text-[#0C0C0C]/90">
-              {" "}
-              Taxes and shipping calculated at checkout{" "}
-            </p>
-          </div>
         </div>
-      </div>
+      )}
       <Discoverus />
       <Footer />
     </div>
