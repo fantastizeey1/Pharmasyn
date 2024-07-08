@@ -32,29 +32,29 @@ export const slidesData = [
 ];
 
 const Slider = ({ slides = [] }) => {
-  const [currentSlide, setCurrentSlide] = useState(0);
-  const [direction, setDirection] = useState(1); // 1 for forward, -1 for backward
+  // const [currentSlide, setCurrentSlide] = useState(0);
+  // const [direction, setDirection] = useState(1); // 1 for forward, -1 for backward
 
-  useEffect(() => {
-    if (slides.length === 0) return;
+  // useEffect(() => {
+  //   if (slides.length === 0) return;
 
-    const slideInterval = setInterval(() => {
-      setCurrentSlide((prevSlide) => {
-        const nextSlide = prevSlide + direction;
-        if (nextSlide >= slides.length || nextSlide < 0) {
-          setDirection(-direction); // Reverse direction
-          return prevSlide; // Stay on the current slide
-        }
-        return nextSlide;
-      });
-    }, 3000);
+  //   const slideInterval = setInterval(() => {
+  //     setCurrentSlide((prevSlide) => {
+  //       const nextSlide = prevSlide + direction;
+  //       if (nextSlide >= slides.length || nextSlide < 0) {
+  //         setDirection(-direction); // Reverse direction
+  //         return prevSlide; // Stay on the current slide
+  //       }
+  //       return nextSlide;
+  //     });
+  //   }, 3000);
 
-    return () => clearInterval(slideInterval);
-  }, [direction, slides.length]);
+  //   return () => clearInterval(slideInterval);
+  // }, [direction, slides.length]);
 
-  if (slides.length === 0) {
-    return <div>No slides available</div>;
-  }
+  // if (slides.length === 0) {
+  //   return <div>No slides available</div>;
+  // }
 
   return (
     <section className="relative  md:ml-[150px] overflow-hidden h-[350px] mb-5 md:mb-[100px]">
@@ -72,7 +72,7 @@ const Slider = ({ slides = [] }) => {
               <p className="text-[#0c0c0c] mb-[37px]">{slide.description}</p>
               <Btn
                 title="Shop Now"
-                linkpath="/#"
+                linkpath="/shop"
                 icon={rightarrow}
                 className="absolute w-[150px] bottom-[19px] left-[36px] px-2 text-[14px]"
               />

@@ -17,6 +17,9 @@ import ChangePassword from "./components/signIn/ChangePassword";
 import * as Sentry from "@sentry/react";
 import Register2 from "./components/register/Register2";
 import Success3 from "./components/signIn/Success3";
+import Dashboard2 from "./components/Newdash/Dashboard2";
+import Shop from "./components/Newdash/Shop";
+import Cart from "./components/Newdash/Cart";
 
 function App() {
   return (
@@ -39,6 +42,9 @@ function App() {
         <Route path="/Forgotpassword" element={<Forgotpassword />} />
         <Route path="/Forgotpassword2" element={<Forgotpassword2 />} />
         <Route path="/ChangePassword" element={<ChangePassword />} />
+        <Route path="/NewDash" element={<Dashboard2 />} />
+        <Route path="/Shop" element={<Shop />} />
+        <Route path="/Cart" element={<Cart />} />
         {/* Add more routes as needed */}
       </Routes>
     </Router>

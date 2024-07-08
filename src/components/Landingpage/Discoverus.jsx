@@ -16,7 +16,7 @@ const Discoverus = () => {
           <img src={bg} alt="bacground" className="absolute inset-0" />
           <p className="font-semibold mb-12">Need medications?</p>
           <Btn
-            title="Vist Invenory"
+            title="Vist Inventory"
             linkpath="/#"
             className="rounded-full py-5 text-[16px] px-16"
           />

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import useCart from "./useCart"; // Adjust this path if necessary
 
-function Cart2({ isCartOpen, toggleCart, userId }) {
+function Cart2({ userId }) {
   const { cart, setCart, updateCart, error, handleCheckout } = useCart(userId);
   const [selectedItems, setSelectedItems] = useState([]);
   const [total, setTotal] = useState(0);
@@ -53,109 +53,73 @@ function Cart2({ isCartOpen, toggleCart, userId }) {
   };
 
   return (
-    <div>
-      <div
-        className="fixed top-4 right-4 bg-gradient-to-r from-purple-500 to-blue-500 text-white p-4 rounded-full shadow-lg cursor-pointer hover:shadow-xl transition-shadow duration-300"
-        onClick={toggleCart}
-      >
-        <span className="text-2xl">🛒</span>
-        <span className="ml-2 text-xl">{cart.length}</span>
-      </div>
-      {isCartOpen && (
-        <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-70 flex items-center justify-center transition-opacity duration-300">
-          <div className="bg-gradient-to-r from-gray-800 to-gray-900 p-6 rounded-lg shadow-2xl w-1/3 h-[88vh] overflow-x-hidden overflow-y-auto">
-            <div className="border-b border-gray-700 pb-2 flex flex-1 justify-around items-center mb-1">
-              <h3 className="text-2xl text-white">Your Cart</h3>
-              {cart.length > 0 && (
-                <button className=" w-10 ml-8" onClick={() => setCart([])}>
-                  <img
-                    src="/trash.svg"
-                    alt=""
-                    className="w-5 hover:scale-125"
-                  />
-                </button>
-              )}
+    <div className="min-h-screen bg-gray-100 flex flex-col items-center justify-center p-6">
+      <div className="bg-white shadow-md rounded-lg p-6 w-full max-w-4xl">
+        <h2 className="text-2xl font-bold mb-6">My Cart</h2>
+        {cart.length === 0 ? (
+          <div className="text-center">
+            <img
+              src="/path/to/empty-cart-image.png" // Update the path to the image
+              alt="Empty cart"
+              className="w-32 h-32 mx-auto mb-4"
+            />
+            <p className="text-gray-500">Your cart is empty.</p>
+            <button
+              onClick={() => (window.location.href = "/shop")}
+              className="mt-6 bg-blue-500 text-white py-2 px-4 rounded-lg"
+            >
+              Shop
+            </button>
+          </div>
+        ) : (
+          <div>
+            <ul className="space-y-4">
+              {cart.map((item, index) => (
+                <li
+                  key={index}
+                  className="flex justify-between items-center bg-gray-200 p-4 rounded-lg"
+                >
+                  <div className="flex flex-col">
+                    <p className="font-bold">{item.productName}</p>
+                    <p className="text-gray-600">
+                      {item.quantity} x ${item.price}
+                    </p>
+                  </div>
+                  <div className="flex items-center space-x-4">
+                    <button
+                      onClick={() => handleIncrease(index)}
+                      className="bg-green-500 text-white px-2 py-1 rounded"
+                    >
+                      +
+                    </button>
+                    <button
+                      onClick={() => handleDecrease(index)}
+                      className="bg-red-500 text-white px-2 py-1 rounded"
+                    >
+                      -
+                    </button>
+                    <button
+                      onClick={() => handleDelete(index)}
+                      className="bg-red-500 text-white px-2 py-1 rounded"
+                    >
+                      🗑️
+                    </button>
+                  </div>
+                </li>
+              ))}
+            </ul>
+            <div className="mt-6 text-right">
+              <p className="text-xl font-bold">Total: ${total}</p>
               <button
-                className=" w-9 flex justify-center items-center mx-auto bg-red-500 hover:bg-red-700 text-white rounded-lg transition-colors duration-300"
-                onClick={toggleCart}
+                onClick={() => handleCheckout(selectedItems)}
+                className="mt-4 bg-blue-500 text-white py-2 px-6 rounded-lg"
               >
-                &#10006;
+                Checkout
               </button>
             </div>
-            {cart.length === 0 ? (
-              <p className="text-gray-400">No items in cart.</p>
-            ) : (
-              <div className="">
-                <ul className="space-y-2">
-                  {cart.map((item, index) => (
-                    <li
-                      key={index}
-                      className="flex flex-1 justify-between items-center bg-gray-700 p-3 rounded-lg"
-                    >
-                      <div className="flex-1 flex flex-row justify-between items-center">
-                        <div className="flex flex-1 flex-col justify-start items-start">
-                          <div className="flex flex-row gap-2 justify-center items-center">
-                            <p className="text-white">{item.productName}</p>
-                            <p className="text-gray-400 text-[12px]">
-                              {item.quantity}
-                            </p>
-                          </div>
-                          <div className="">
-                            {item.price && (
-                              <div className="text-white font-bold">
-                                ${item.price}
-                              </div>
-                            )}
-                          </div>
-                        </div>
-                        <div className="flex justify-center items-center gap-3">
-                          <div className="flex flex-col justify-center items-center gap-2 -mt-6">
-                            <button
-                              className="w-6 h-6 mt-0 text-white"
-                              onClick={() => handleIncrease(index)}
-                            >
-                              +
-                            </button>
-                            <button
-                              className="text-white w-3 h-3 mt-0"
-                              onClick={() => handleDecrease(index)}
-                            >
-                              -
-                            </button>
-                          </div>
-                          <button
-                            className=""
-                            onClick={() => handleDelete(index)}
-                          >
-                            <img
-                              src="/trash.svg"
-                              alt=""
-                              className="w-5 hover:scale-125"
-                            />
-                          </button>
-                        </div>
-                      </div>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            )}
-            {cart.length > 0 && (
-              <>
-                <div className="text-white text-xl mt-4">
-                  Total: <span className="ml-36">${total}</span>
-                </div>
-                <button
-                  className="mt-6 w-2/3 bg-green-500 hover:bg-green-700 flex justify-center items-center mx-auto text-[15px] text-white py-3 rounded-lg transition-colors duration-300"
-                  onClick={() => handleCheckout(selectedItems)}
-                >
-                  Proceed to Checkout
-                </button>
-              </>
-            )}
           </div>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 }

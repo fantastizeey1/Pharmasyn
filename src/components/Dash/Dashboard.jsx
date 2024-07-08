@@ -5,6 +5,7 @@ import Users from "./Users";
 import Inventory from "./Inventory";
 import Profile from "./Profile";
 import Invoice from "./Invoice";
+import Dashheader from "./Dashheader";
 
 function Dashboard() {
   const navigate = useNavigate();
@@ -38,7 +39,8 @@ function Dashboard() {
 
   return (
     <div>
-      <div className="bg-dash-backg w-full h-screen bg-cover flex justify-center items-center">
+      <Dashheader />
+      <div className=" w-full h-screen bg-cover flex justify-center flex-col items-center">
         <div className="bg-white  h-[90vh] w-[90vw] flex justify-center rounded-lg overflow-hidden">
           <div className="w-[5%] h-full bg-blue-500"></div>
           <div className="w-[15%] h-full bg-white flex justify-between p-2 text-black items-start flex-col">
