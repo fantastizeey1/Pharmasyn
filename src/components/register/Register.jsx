@@ -200,7 +200,7 @@ function Register() {
               For the purpose of account regulation, your details are required.
             </p>
             <form action="" onSubmit={handleSubmit}>
-              <label htmlFor="userType" className="mb-2">
+              {/* <label htmlFor="userType" className="mb-2">
                 Choose your user type:
               </label>
               <select
@@ -214,10 +214,10 @@ function Register() {
                 <option value={2}>Wholesale Pharmacy</option>
                 <option value={3}>Retail Pharmacy</option>
                 <option value={4}>Hospital Pharmacy</option>{" "}
-                {/* Corrected typo */}
-                <option value={5}>Doctor</option> {/* Capitalized */}
-                <option value={6}>Pharmacist</option> {/* Capitalized */}
-              </select>
+                
+                <option value={5}>Doctor</option> 
+                <option value={6}>Pharmacist</option> 
+              </select> */}
 
               <label htmlFor="name" className="mb-2">
                 Full Name:
