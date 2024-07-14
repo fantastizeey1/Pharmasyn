@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import useCart from "./useCart"; // Adjust this path if necessary
 
-function Cart2({ userId }) {
+function Cart2({ isCartOpen, toggleCart, userId }) {
   const { cart, setCart, updateCart, error, handleCheckout } = useCart(userId);
   const [selectedItems, setSelectedItems] = useState([]);
   const [total, setTotal] = useState(0);

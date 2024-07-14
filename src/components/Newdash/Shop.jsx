@@ -3,7 +3,7 @@ import Dashheader from "./Dashheader";
 import Btn from "../Landingpage/Btn";
 import Discoverus from "../Landingpage/Discoverus";
 import Footer from "../Landingpage/Footer";
-import debounce from "lodash/debounce";
+import debounce from "lodash.debounce";
 import { BASE_URL } from "../../config";
 
 const Shop = () => {
