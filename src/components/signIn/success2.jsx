@@ -12,7 +12,7 @@ function Success2() {
   // Redirect to Dashboard page after 5 seconds
   useEffect(() => {
     const timeout = setTimeout(() => {
-      navigate("/Dashboard");
+      navigate("/Shop");
     }, 5000);
 
     // Clear the timeout if the component unmounts before the timeout is reached

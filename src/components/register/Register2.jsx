@@ -12,9 +12,7 @@ const Register2 = () => {
   const [errMsg, setErrMsg] = useState("");
   const navigate = useNavigate();
   const location = useLocation();
-
-  const searchParams = new URLSearchParams(location.search);
-  const accountType = searchParams.get("accountType");
+  const accountType = location.state?.accountType || "default";
 
   const getUserType = (accountType) => {
     switch (accountType) {
@@ -35,14 +33,14 @@ const Register2 = () => {
     }
   };
 
-  const [userType, setUserType] = useState("");
-
   useEffect(() => {
     const userTypeFromAccountType = getUserType(accountType);
     setUserType(userTypeFromAccountType);
     localStorage.setItem("userTypeNumber", userTypeFromAccountType);
     console.log("Setting userType from accountType:", userTypeFromAccountType);
   }, [accountType]);
+
+  const [userType, setUserType] = useState(() => getUserType(accountType));
 
   const handleFileUpload = (e, setBase64File) => {
     const uploadedFile = e.target.files[0];
@@ -69,7 +67,6 @@ const Register2 = () => {
 
     const requestData = {
       userId: userId,
-      // userType: userTypeNumber,
       cac: cacFileBase64,
       companyPharmacyLicense:
         userTypeNumber === "1" || userTypeNumber === "2"

@@ -17,7 +17,11 @@ const Inventory = () => {
   const [alertMessage, setAlertMessage] = useState(null);
   const [isCartEmpty, setIsCartEmpty] = useState(true); // New state to track if cart is empty
 
-  const userId = "027ecdef96ef4e8fae8318a0bdf03e3b245305095306"; // Example userId, replace with actual logic to get the current user's ID
+  const userId = localStorage.getItem("userId");
+  const userTypeNumber = localStorage.getItem("userTypeNumber");
+
+  console.log("userId:", userId);
+  console.log("userTypeNumber:", userTypeNumber);
 
   const debouncedSearch = useCallback(
     debounce((query) => {
