@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import logo from "/logo.jpg";
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import { AiOutlineMenu, AiOutlineClose } from "react-icons/ai";
 
 const Header = () => {
@@ -9,10 +9,10 @@ const Header = () => {
     setNav(!nav);
   };
 
-  const navLinks = ["Home", "About Us", "Services", "Contact Us"];
+  const navLinks = ["Home", "About Us", "Shop", "Contact Us"];
 
   return (
-    <header className="mx-[15px] md:mx-[150px] h-[85px] py-6 mb-4">
+    <header className="mx-[15px] md:mx-[80px] xl:mx-[150px] h-[85px] py-6 mb-4">
       <div className="flex  justify-between items-center w-full">
         <div className="flex items-center gap-2">
           <img
@@ -26,16 +26,35 @@ const Header = () => {
         </div>
         <div className="flex justify-between items-end">
           <nav className="hidden md:flex flex-1 justify-end items-center w-[70%]">
-            {navLinks.map((text, index) => (
-              <a
-                key={index}
-                href={`#${text.replace(" ", "")}`}
-                className="ml-[36px] text-[14px] font-bold hover:scale-110"
-                aria-label={`Go to ${text}`}
-              >
-                {text}
-              </a>
-            ))}
+            <a
+              href="#Hero"
+              className="ml-[36px] text-[14px] font-bold cursor-pointer hover:scale-110"
+              aria-label=""
+            >
+              Home
+            </a>
+            <a
+              href="#"
+              className="ml-[36px] text-[14px] font-bold cursor-pointer hover:scale-110"
+              aria-label=""
+            >
+              About Us
+            </a>
+            <NavLink
+              to="/Shop"
+              className="ml-[36px] text-[14px] font-bold hover:scale-110"
+              aria-label=""
+            >
+              Shop
+            </NavLink>
+            <a
+              href="#Contact"
+              className="ml-[36px] text-[14px] font-bold cursor-pointer hover:scale-110"
+              aria-label=""
+            >
+              Contact Us
+            </a>
+
             <Link
               to="/SignIn"
               className="ml-[36px] text-[14px] font-bold hover:scale-110"
@@ -71,17 +90,39 @@ const Header = () => {
           </div>
           {nav && (
             <div className="fixed w-[80%] h-[40%] bg-white right-14 top-20 rounded-lg flex flex-col justify-center items-start z-20">
-              {navLinks.map((text, index) => (
-                <a
-                  key={index}
-                  href={`#${text.replace(" ", "")}`}
-                  className="mb-[16px] text-[14px] font-bold hover:scale-110"
-                  onClick={handleNav}
-                  aria-label={`Go to ${text}`}
-                >
-                  {text}
-                </a>
-              ))}
+              <a
+                href="#"
+                className="mb-[16px] text-[14px] font-bold hover:scale-110"
+                onClick={handleNav}
+                aria-label="Home"
+              >
+                Home
+              </a>
+              <a
+                href="#About"
+                className="mb-[16px] text-[14px] font-bold hover:scale-110"
+                onClick={handleNav}
+                aria-label="About Us"
+              >
+                About Us
+              </a>
+              <Link
+                to="/Shop"
+                className="mb-[16px] text-[14px] font-bold hover:scale-110"
+                onClick={handleNav}
+                aria-label="shop"
+              >
+                Shop
+              </Link>
+              <a
+                href="#Contact"
+                className="mb-[16px] text-[14px] font-bold hover:scale-110"
+                onClick={handleNav}
+                aria-label="Contact Us"
+              >
+                Contact Us
+              </a>
+
               <Link
                 to="/SignIn"
                 className="mb-[16px]  text-[14px] font-bold hover:scale-110"

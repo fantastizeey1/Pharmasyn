@@ -1,10 +1,10 @@
 import React from "react";
-import Dashheader from "./Dashheader";
+import Sidenav from "./Sidenav";
 
 const Dashboard2 = () => {
   return (
     <div>
-      <Dashheader />
+      <Sidenav />
     </div>
   );
 };

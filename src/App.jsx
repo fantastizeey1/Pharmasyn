@@ -20,6 +20,8 @@ import Success3 from "./components/signIn/Success3";
 import Dashboard2 from "./components/Newdash/Dashboard2";
 import Shop from "./components/Newdash/Shop";
 import Cart from "./components/Newdash/Cart";
+import Inventory from "./components/Newdash/Inventory";
+import Order from "./components/Newdash/Order";
 
 function App() {
   return (
@@ -45,6 +47,9 @@ function App() {
         <Route path="/NewDash" element={<Dashboard2 />} />
         <Route path="/Shop" element={<Shop />} />
         <Route path="/Cart" element={<Cart />} />
+        <Route path="/Inventory" element={<Inventory />} />
+        <Route path="/Orders" element={<Order />} />
+
         {/* Add more routes as needed */}
       </Routes>
     </Router>

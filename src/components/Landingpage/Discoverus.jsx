@@ -9,7 +9,7 @@ const Discoverus = () => {
         Discover Pharmasynthesis
       </h2>
       <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-16 rounded-xl">
-        <div className="bg-blue-200 p-6 rounded-3xl shadow-lg mx-auto  flex justify-center items-center flex-col relative w-[350px]  h-[240px] ">
+        <div className="bg-blue-200 p-6 rounded-3xl shadow-lg mx-auto  flex justify-center items-center flex-col relative   w-[300px] h-[200px] xl:w-[330px] xl:h-[220px] ">
           <img src={bg} alt="bacground" className="absolute inset-0" />
           <img src={bg} alt="bacground" className="absolute inset-0" />
           <img src={bg} alt="bacground" className="absolute inset-0" />
@@ -21,7 +21,7 @@ const Discoverus = () => {
             className="rounded-full py-5 text-[16px] px-16"
           />
         </div>
-        <div className="bg-blue-200 p-6 rounded-3xl shadow-lg flex mx-auto justify-center items-center flex-col relative w-[350px] h-[240px]">
+        <div className="bg-blue-200 p-6 rounded-3xl shadow-lg flex mx-auto justify-center items-center flex-col relative w-[300px] h-[200px] xl:w-[330px] xl:h-[220px]">
           <img src={bg} alt="bacground" className="absolute inset-0" />
           <img src={bg} alt="bacground" className="absolute inset-0" />
           <img src={bg} alt="bacground" className="absolute inset-0" />
@@ -33,7 +33,7 @@ const Discoverus = () => {
             className="rounded-full py-5 text-[16px] px-16"
           />
         </div>
-        <div className="bg-blue-200 p-6 rounded-3xl shadow-lg mx-auto flex justify-center items-center flex-col relative w-[350px] h-[240px]">
+        <div className="bg-blue-200 p-6 rounded-3xl shadow-lg mx-auto flex justify-center items-center flex-col relative w-[300px] h-[200px] xl:w-[330px] xl:h-[220px]">
           <img src={bg} alt="bacground" className="absolute inset-0" />
           <img src={bg} alt="bacground" className="absolute inset-0" />
           <img src={bg} alt="bacground" className="absolute inset-0" />

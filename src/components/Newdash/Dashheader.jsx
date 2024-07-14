@@ -12,7 +12,7 @@ const Dashheader = ({ cartItemCount }) => {
   };
 
   return (
-    <header className="mx-[70px] py-3">
+    <header className="xl:mx-[70px] md:mx-[40px] mx-[15px] py-3">
       <div className="flex justify-between items-center">
         <Link to="/">
           <div className="flex items-center gap-2">

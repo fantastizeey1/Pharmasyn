@@ -13,7 +13,7 @@ const Footer = () => {
       className="bg-[#013299] text-white  md:h-[732px] py-1 md:py-10"
     >
       <div className="flex flex-col gap-3 justify-start">
-        <div className="container mx-auto px-[15px]  md:px-[130px] flex justify-start items-start gap-4 md:gap-12 mt-4 md:mt-10   border-white">
+        <div className="container mx-auto px-[15px]  md:px-[70px] xl:px-[130px] flex justify-start items-start gap-4 md:gap-12 mt-4 md:mt-10   border-white">
           <div className="w-[65%] md:w-[50%]">
             <div className="flex gap-3 justify-start items-center mb-3 md:mb-6">
               <img

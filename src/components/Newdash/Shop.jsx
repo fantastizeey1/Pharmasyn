@@ -51,11 +51,11 @@ const Shop = () => {
             </label>
           </form>
         </div> */}
-        <div className="md:grid md:grid-cols-3 md:gap-x-4 md:gap-y-[130px]">
+        <div className="md:grid md:grid-cols-3 md:gap-x-4 lg:gap-x-16 md:gap-y-[130px]">
           {productz.map((product, index) => (
             <div
               key={index}
-              className="shadow-xl w-[300px] rounded-lg h-[408px] ml-[30px] flex-1 flex-wrap flex justify-center items-center flex-col"
+              className="shadow-xl xl:w-[300px] md:w-[270px] rounded-lg md: h-[380px] xl:h-[408px] ml-[30px] flex-1 flex-wrap flex justify-center items-center flex-col"
             >
               <img
                 src={product.img}

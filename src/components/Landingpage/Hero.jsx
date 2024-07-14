@@ -6,7 +6,7 @@ const Hero = () => {
   return (
     <section
       id="Home"
-      className="mx-[15px] md:mx-[40px] lg:mx-[150px] h-[100vh-7vh] md:h-[455px] flex flex-1 justify-center items-center flex-col-reverse md:flex-row mb-4 lg:mb-[122px]"
+      className="mx-[15px] md:mx-[60px] xl:mx-[150px] h-[100vh-7vh] md:h-[455px] flex flex-1 justify-center items-center flex-col-reverse md:flex-row mb-4 lg:mb-[122px]"
     >
       <div className=" w-full md:w-[50%] ">
         <h1 className="font-bold text-[26px] lg:text-[62px] leading-tight mb-3 md:mb-[28px] ">
@@ -36,7 +36,7 @@ const Hero = () => {
           alt="splash"
           className="absolute inset-0 md:max-h-[444px] max-w-[] "
         />
-        <img src={hero} alt="hero" className="  md:h-[450px] " />
+        <img src={hero} alt="hero" className="  md:h-[380px] xl:h-[440px]" />
       </div>
     </section>
   );

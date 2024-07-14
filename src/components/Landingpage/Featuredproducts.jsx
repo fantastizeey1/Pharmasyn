@@ -36,20 +36,23 @@ const Featuredproducts = () => {
   ];
 
   return (
-    <section id="Services" className="mx-[15px] md:mx-[150px] mt-[140px]">
+    <section
+      id="Services"
+      className="mx-[15px] md:mx-[60px] xl:mx-[120px] mt-[140px]"
+    >
       <h2 className="font-bold md:text-[40px] text-center mb-[120px]">
         Featured Products
       </h2>
-      <div className="md:grid md:grid-cols-3 md:gap-x-4 md:gap-y-[130px]">
+      <div className="md:grid md:grid-cols-3 md:gap-x-4 xl:gap-x-16 md:gap-y-[80px] xl:gap-y-[130px]">
         {products.map((product, index) => (
           <div
             key={index}
-            className="shadow-xl w-[350px] rounded-lg h-[408px] ml-[30px] flex-1 flex-wrap flex justify-center items-center flex-col"
+            className="shadow-xl w-[300px] xl:w-[330px] rounded-lg h-[350px] xl:h-[390px] ml-[30px] flex-1 flex-wrap  flex justify-center items-center flex-col"
           >
             <img
               src={product.img}
               alt={product.name}
-              className="w-[220px] h-[220px]"
+              className="w-[150px] h-[150px] xl:w-[200px] xl:h-[200px]"
             />
             <h3 className="text-[25px] font-medium mb-1">{product.name}</h3>
             <p className="text-[24px] font-normal mb-3">{product.price}</p>
