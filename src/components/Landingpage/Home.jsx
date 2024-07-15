@@ -9,7 +9,7 @@ import Slider, { slidesData } from "./Slider";
 
 const Home = () => {
   return (
-    <div>
+    <div className="mx-auto xl:w-[99%]">
       <Header />
       <Hero />
       <Slider slides={slidesData} />

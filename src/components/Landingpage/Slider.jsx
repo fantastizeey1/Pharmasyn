@@ -33,23 +33,25 @@ export const slidesData = [
 
 const Slider = ({ slides = slidesData }) => {
   return (
-    <section className="relative md:mx-auto xl:ml-[120px] mt-9 md:overflow-hidden md:h-[350px] mb-5 md:mb-[100px]">
+    <section className="relative md:mx-auto mt-9 md:overflow-hidden md:h-[350px] mb-5 md:mb-[100px]">
       <div className="flex  justify-center items-center md:flex-row flex-col gap-5 ">
         {slides.map((slide, index) => (
           <div
             key={index}
-            className="w-[250px] h-[300px] xl:w-[280px] xl:h-[280px]  flex-shrink-0"
+            className="w-[250px] h-[300px] xl:w-[280px] xl:h-[280px] 2xl:w-[370px] 2xl:h-[350px]  flex-shrink-0"
           >
-            <div className="xl:px-[36px] md:px-[16px] pb-[18px] pt-[50px] bg-white shadow-xl rounded-lg relative h-full">
-              <h3 className="text-[18px] font-bold mb-[13px]">{slide.title}</h3>
-              <p className="text-[#0c0c0c] text-[14px] mb-[37px]">
+            <div className="2xl:px-[40px] xl:px-[36px] md:px-[16px] pb-[18px] pt-[50px] bg-white shadow-xl rounded-lg relative h-full">
+              <h3 className="text-[18px] 2xl:text-[25px] font-bold mb-[13px]">
+                {slide.title}
+              </h3>
+              <p className="text-[#0c0c0c] text-[14px] 2xl:text-[20px] mb-[37px]">
                 {slide.description}
               </p>
               <Btn
                 title="Shop Now"
                 linkpath="/shop"
                 icon={rightarrow}
-                className="absolute w-[150px] bottom-[19px] left-[16px] xl:left-[36px] px-2 text-[14px]"
+                className="absolute 2xl:w-[200px] 2xl:text-[20px] w-[150px] bottom-[19px] left-[16px] xl:left-[36px] 2xl:left-[40px] px-2 text-[14px]"
               />
             </div>
           </div>
