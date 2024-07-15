@@ -20,7 +20,7 @@ const Header = () => {
             alt="Pharmasynthesis Logo"
             className="w-[40px] h-[40px] 2xl:w-[80px] 2xl:h-[80px]"
           />
-          <p className="text-[#0C0C0C] text-[16px] 2xl:text-[34px] font-bold">
+          <p className="text-[#0C0C0C] text-[16px] 2xl:text-[26px] font-bold">
             Pharmasynthesis
           </p>
         </div>
@@ -28,28 +28,28 @@ const Header = () => {
           <nav className="hidden md:flex flex-1 justify-end items-center w-[70%]">
             <a
               href="#Hero"
-              className="ml-[36px] text-[14px] 2xl:text-[28px] 2xl:ml-[50px] font-bold cursor-pointer hover:scale-110"
+              className="ml-[36px] text-[14px] 2xl:text-[22px] 2xl:ml-[6%] font-bold cursor-pointer hover:scale-110"
               aria-label=""
             >
               Home
             </a>
             <a
               href="#"
-              className="ml-[36px] text-[14px] 2xl:text-[28px] 2xl:ml-[50px] font-bold cursor-pointer hover:scale-110"
+              className="ml-[36px] text-[14px] 2xl:text-[22px] 2xl:ml-[6%] font-bold cursor-pointer hover:scale-110"
               aria-label=""
             >
               About Us
             </a>
             <NavLink
               to="/Shop"
-              className="ml-[36px] text-[14px] 2xl:text-[28px] 2xl:ml-[50px] font-bold hover:scale-110"
+              className="ml-[36px] text-[14px] 2xl:text-[22px] 2xl:ml-[36px] font-bold hover:scale-110"
               aria-label=""
             >
               Shop
             </NavLink>
             <a
               href="#Contact"
-              className="ml-[36px] text-[14px] 2xl:text-[28px] 2xl:ml-[50px] font-bold cursor-pointer hover:scale-110"
+              className="ml-[36px] text-[14px] 2xl:text-[22px] 2xl:ml-[6%] font-bold cursor-pointer hover:scale-110"
               aria-label=""
             >
               Contact Us
@@ -57,14 +57,14 @@ const Header = () => {
 
             <Link
               to="/SignIn"
-              className="ml-[36px] text-[14px] 2xl:text-[28px] 2xl:ml-[50px] font-bold hover:scale-110"
+              className="ml-[36px] text-[14px] 2xl:text-[22px] 2xl:ml-[6%] font-bold hover:scale-110"
               aria-label="Log in"
             >
               Log in
             </Link>
             <Link to="/SignUp">
               <button
-                className="ml-[36px] text-[14px] font-bold text-white bg-[#013299] rounded-3xl hover:scale-110 py-3 px-6 mt-0 2xl:text-[28px] 2xl:ml-[50px] 2xl:py-5 2xl:px-9 2xl:rounded-[60px]"
+                className="ml-[36px] text-[14px] font-bold text-white bg-[#013299] rounded-3xl hover:scale-110 py-3 px-6 mt-0 2xl:text-[22px] 2xl:ml-[36px] 2xl:py-5 2xl:px-8 2xl:rounded-[60px]"
                 aria-label="Sign Up"
               >
                 Sign Up
