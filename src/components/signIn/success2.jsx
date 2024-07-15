@@ -41,7 +41,7 @@ function Success2() {
         <p className="text-center text-[24px] text-[#0C0C0C]/50">
           Redirecting to your Dashboard page... If you are not automatically
           redirected,
-          <Link to="/Dashboard">
+          <Link to="/Shop">
             <button className="w-full mt-[50px] text-white bg-[#013299]">
               click here
             </button>

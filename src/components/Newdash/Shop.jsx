@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 import Dashheader from "./Dashheader";
-import Btn from "../Landingpage/Btn";
+
 import Discoverus from "../Landingpage/Discoverus";
 import Footer from "../Landingpage/Footer";
 import debounce from "lodash.debounce";
@@ -22,11 +22,11 @@ const Shop = () => {
 
   const defaultImageUrl = "/suii.jpg"; // Replace with your default image URL
 
-  const userId = localStorage.getItem("userId");
-  const userTypeNumber = localStorage.getItem("userTypeNumber");
+  // const userId = localStorage.getItem("userId");
+  // const userTypeNumber = localStorage.getItem("userTypeNumber");
 
-  console.log("userId:", userId);
-  console.log("userTypeNumber:", userTypeNumber);
+  // console.log("userId:", userId);
+  // console.log("userTypeNumber:", userTypeNumber);
 
   const debouncedSearch = useCallback(
     debounce((query) => {
@@ -147,6 +147,17 @@ const Shop = () => {
         throw new Error("No access token found in session storage");
       }
 
+      const cartData = {
+        carts: [
+          {
+            inventoryId: inventory.id,
+            quantity: inventory.quantity,
+            productName: inventory.inventoryName,
+            status: true,
+          },
+        ],
+      };
+
       const url = `${BASE_URL}/api/Cart/AddToCart`;
 
       const response = await fetch(url, {
@@ -156,18 +167,9 @@ const Shop = () => {
           "ngrok-skip-browser-warning": "69420",
           Authorization: `Bearer ${bearerToken}`,
         },
-        body: JSON.stringify({
-          carts: [
-            {
-              userId: userId,
-              inventoryId: inventory.id,
-              quantity: 1,
-              status: true,
-            },
-          ],
-        }),
+        body: JSON.stringify(cartData),
       });
-
+      console.log(cartData);
       if (!response.ok) {
         const responseBody = await response.text();
         throw new Error(
@@ -202,7 +204,7 @@ const Shop = () => {
       const url = `${BASE_URL}/api/Cart/UpdateCart`;
 
       const response = await fetch(url, {
-        method: "POST",
+        method: "PUT",
         headers: {
           "Content-Type": "application/json",
           "ngrok-skip-browser-warning": "69420",
@@ -213,9 +215,8 @@ const Shop = () => {
           cartCommand: "add",
           carts: [
             {
-              userId: userId,
               inventoryId: inventory.id,
-              quantity: 1,
+              quantity: inventory.quantity,
               productName: inventory.inventoryName,
               status: true,
             },
@@ -279,16 +280,18 @@ const Shop = () => {
                 {/* Make sure the property matches your API
                 response */}
               </p>
+              <p className="text-[24px] font-normal mb-3">{product.quantity}</p>
 
               <button
                 className="bg-blue-500 hover:bg-blue-700 text-white text-[12px] font-bold py-2 px-4 rounded"
-                onClick={() => {
-                  if (isCartEmpty) {
-                    addToCart(product, index);
-                  } else {
-                    updateCart(product, index);
-                  }
-                }}
+                onClick={() => addToCart(product, index)}
+                // onClick={() => {
+                //   if (isCartEmpty) {
+                //     addToCart(product, index);
+                //   } else {
+                //     updateCart(product, index);
+                //   }
+                // }}
               >
                 Add To Cart
               </button>

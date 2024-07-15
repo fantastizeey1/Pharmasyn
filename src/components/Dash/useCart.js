@@ -17,7 +17,7 @@ const useCart = (userId) => {
         throw new Error("No access token found in session storage");
       }
 
-      const url = `${BASE_URL}/api/Cart/GetCart`;
+      const url = `${BASE_URL}/api/Cart/GetCart?isCustomer=true`;
       const response = await fetch(url, {
         method: "GET",
         headers: {
@@ -37,8 +37,9 @@ const useCart = (userId) => {
       const responseData = await response.json();
       if (responseData) {
         console.log("Fetched cart data:", responseData);
-        setCart(responseData.cartDetails || []);
+        setCart(responseData.cartResponse || []);
         setCartId(responseData.cartId);
+        console.log(cartId);
       }
     } catch (error) {
       console.error("Error fetching cart data:", error);

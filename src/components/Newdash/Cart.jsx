@@ -5,23 +5,27 @@ import Footer from "../Landingpage/Footer";
 import Btn from "../Landingpage/Btn";
 import useCart from "../Dash/useCart";
 
-const Cart = ({ userId }) => {
+const Cart = ({}) => {
   const [isCartEmpty, setIsCartEmpty] = useState(true);
-  const { cart, setCart, updateCart, error, handleCheckout } = useCart(userId);
+  const { cart, setCart, updateCart, error, handleCheckout } = useCart();
   const [selectedItems, setSelectedItems] = useState([]);
   const [total, setTotal] = useState(0);
 
+  const calculateTotal = () => {
+    const totalAmount = cart
+      .reduce((total, cartItem) => {
+        const itemTotal = cartItem.cartDetails.reduce((itemTotal, item) => {
+          const price = parseFloat(item.unitPrice);
+          return itemTotal + item.quantity * (price || 0);
+        }, 0);
+        return total + itemTotal;
+      }, 0)
+      .toFixed(2);
+    setTotal(totalAmount);
+    setIsCartEmpty(cart.length === 0);
+  };
+
   useEffect(() => {
-    const calculateTotal = () => {
-      const totalAmount = cart
-        .reduce((total, item) => {
-          const price = parseFloat(item.price);
-          return total + item.quantity * (price || 0);
-        }, 0)
-        .toFixed(2);
-      setTotal(totalAmount);
-      setIsCartEmpty(cart.length === 0);
-    };
     calculateTotal();
     console.log("Cart updated in Cart component:", cart);
   }, [cart]);
@@ -58,6 +62,10 @@ const Cart = ({ userId }) => {
     });
   };
 
+  const handleCheckoutClick = () => {
+    handleCheckout(selectedItems);
+  };
+
   return (
     <div>
       <Dashheader />
@@ -82,44 +90,49 @@ const Cart = ({ userId }) => {
           </h2>
           <div className="mx-[70px] mt-10 flex justify-between items-start ">
             <div className="flex-1 flex flex-row justify-start flex-wrap gap-4 pt-10 items-center">
-              {cart.map((item, index) => (
-                <div
-                  key={index}
-                  className="flex w-[600px] flex-row gap-2 justify-start items-center p-7 shadow-xl rounded-xl"
-                >
-                  <img
-                    src={item.img}
-                    alt={item.name}
-                    className="w-[80px] h-[80px] mr-10"
-                  />
-                  <div>
-                    <h5 className="font-bold text-[24px]">{item.name}</h5>
-                    <p className="mb-3 text-[14px]">₦ {item.price}</p>
-                    <div className="border-2 border-black w-32 h-12 flex justify-around items-center">
-                      <button
-                        className=" "
-                        onClick={() => handleDecrease(index)}
-                      >
-                        <p className="text-[35px] -mt-6">-</p>
-                      </button>
-                      <span className="text-[35px]">{item.quantity}</span>
-                      <button
-                        className=" "
-                        onClick={() => handleIncrease(index)}
-                      >
-                        <p className="text-[32px] -mt-4">+</p>
-                      </button>
-                    </div>
-                  </div>
-                  <button
-                    onClick={() => handleDelete(index)}
-                    className="ml-auto text-red-500"
+              {cart.map((cartItem) =>
+                cartItem.cartDetails.map((item, index) => (
+                  <div
+                    key={index}
+                    className="flex w-[600px] flex-row gap-2 justify-start items-center p-7 shadow-xl rounded-xl"
                   >
-                    Remove
-                  </button>
-                </div>
-              ))}
+                    <img
+                      src={item.img || "/suii.jpg"} // Default image if none provided
+                      alt={item.productName}
+                      className="w-[80px] h-[80px] mr-10"
+                    />
+                    <div>
+                      <h5 className="font-bold text-[24px]">
+                        {item.productName}
+                      </h5>
+                      <p className="mb-3 text-[14px]">₦ {item.unitPrice}</p>
+                      <div className="border-2 border-black w-32 h-12 flex justify-around items-center">
+                        <button
+                          className=" "
+                          onClick={() => handleDecrease(index)}
+                        >
+                          <p className="text-[35px] -mt-6">-</p>
+                        </button>
+                        <span className="text-[35px]">{item.quantity}</span>
+                        <button
+                          className=" "
+                          onClick={() => handleIncrease(index)}
+                        >
+                          <p className="text-[32px] -mt-4">+</p>
+                        </button>
+                      </div>
+                    </div>
+                    <button
+                      onClick={() => handleDelete(index)}
+                      className="ml-auto text-red-500"
+                    >
+                      Remove
+                    </button>
+                  </div>
+                ))
+              )}
             </div>
+
             <div className="shadow-xl p-7 pt-10 w-[400px] rounded-xl">
               <div className="flex justify-between items-center mb-4">
                 <p className="text-[16px] text-[#0C0C0C]/90">Total</p>
@@ -130,8 +143,9 @@ const Cart = ({ userId }) => {
               </p>
               <Btn
                 title="Checkout"
-                linkpath="/Shop"
+                linkpath="#"
                 className="w-full h-[60px] flex justify-center items-center mt-8 px-2 text-[22px]"
+                onClick={handleCheckoutClick}
               />
             </div>
           </div>
