@@ -6,6 +6,7 @@ import { NavLink, Link, useLocation } from "react-router-dom";
 import logo from "/logo.jpg";
 import { Button } from "../ui/button";
 import Table from "./Table";
+import { IoIosNotificationsOutline } from "react-icons/io";
 
 const Status = () => {
   const [data, setData] = useState([]);
@@ -291,20 +292,10 @@ const Status = () => {
               </NavLink>
             </div>
 
-            <div className="flex items-center">
-              <img
-                src="/profile.png"
-                alt="profile icon"
-                className="mr-[15px]"
-              />
-              <div>
-                <h3>Obi Stephanie</h3>
-                <p className="text-[12px]">obistephanae@gmail.com</p>
-              </div>
-            </div>
+            <div className="flex items-center"></div>
           </div>
         </div>
-        <div className="flex-grow fixed top-0 left-[250px] right-0 bg-white h-[80px] w-[calc(100%-230px)] flex justify-center items-center shadow-lg m-2 p-10">
+        <div className="flex-grow fixed top-0 left-[250px] right-0 bg-white h-[100px] w-[calc(100%-230px)] flex justify-between items-center shadow-lg m-2 p-10">
           <div
             action="search"
             className="border flex items-center p-1 border-[#F0F1F3]"
@@ -314,9 +305,17 @@ const Status = () => {
             </button>
             <input
               type="text"
-              placeholder="Search product, supplier, Status"
+              placeholder="Search product, supplier, order"
               name="search"
               className="placeholder:text-[14px] placeholder:text-[#0C0C0C]/50"
+            />
+          </div>
+          <div className="flex justify-center items-center">
+            <IoIosNotificationsOutline />
+            <img
+              src="/profile.png"
+              alt="profile icon"
+              className="ml-[15px] mr-5"
             />
           </div>
         </div>
