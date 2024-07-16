@@ -7,7 +7,7 @@ import logo from "/logo.jpg";
 import { Button } from "../ui/button";
 import Table from "./Table";
 
-const Order = () => {
+const Status = () => {
   const [data, setData] = useState([]);
   const hasData = (data, key) =>
     data.some((item) => item[key] !== undefined && item[key] !== null);
@@ -31,7 +31,7 @@ const Order = () => {
         Customer: "Pete Davison",
         Quantity: "43 packs",
         Product: "Paracetamol 10mg",
-        Availability: ["Accept", "Cancel"],
+        Status: "pending",
       },
       {
         id: "2",
@@ -40,7 +40,7 @@ const Order = () => {
         Customer: "Anna Smith",
         Quantity: "20 packs",
         Product: "Ibuprofen 200mg",
-        Availability: ["Accept", "Cancel"],
+        Status: "pending",
       },
       {
         id: "3",
@@ -49,7 +49,7 @@ const Order = () => {
         Customer: "John Doe",
         Quantity: "15 packs",
         Product: "Aspirin 100mg",
-        Availability: ["Accept", "Cancel"],
+        Status: "pending",
       },
       {
         id: "4",
@@ -58,7 +58,7 @@ const Order = () => {
         Customer: "Jane Roe",
         Quantity: "30 packs",
         Product: "Vitamin C 500mg",
-        Availability: ["Accept", "Cancel"],
+        Status: "pending",
       },
       {
         id: "5",
@@ -67,7 +67,7 @@ const Order = () => {
         Customer: "Alice Johnson",
         Quantity: "25 packs",
         Product: "Amoxicillin 250mg",
-        Availability: ["Accept", "Cancel"],
+        Status: "pending",
       },
       {
         id: "6",
@@ -76,7 +76,7 @@ const Order = () => {
         Customer: "Bob Brown",
         Quantity: "10 packs",
         Product: "Metformin 500mg",
-        Availability: ["Accept", "Cancel"],
+        Status: "pending",
       },
       {
         id: "7",
@@ -85,7 +85,7 @@ const Order = () => {
         Customer: "Charlie Green",
         Quantity: "50 packs",
         Product: "Lisinopril 10mg",
-        Availability: ["Accept", "Cancel"],
+        Status: "pending",
       },
       {
         id: "8",
@@ -94,7 +94,7 @@ const Order = () => {
         Customer: "Diana White",
         Quantity: "35 packs",
         Product: "Atorvastatin 20mg",
-        Availability: ["Accept", "Cancel"],
+        Status: "pending",
       },
       {
         id: "9",
@@ -103,7 +103,7 @@ const Order = () => {
         Customer: "Eve Black",
         Quantity: "40 packs",
         Product: "Omeprazole 20mg",
-        Availability: ["Accept", "Cancel"],
+        Status: "pending",
       },
       {
         id: "10",
@@ -112,7 +112,7 @@ const Order = () => {
         Customer: "Frank Blue",
         Quantity: "45 packs",
         Product: "Simvastatin 40mg",
-        Availability: ["Accept", "Cancel"],
+        Status: "pending",
       },
       {
         id: "11",
@@ -121,7 +121,7 @@ const Order = () => {
         Customer: "Grace Yellow",
         Quantity: "60 packs",
         Product: "Levothyroxine 50mcg",
-        Availability: ["Accept", "Cancel"],
+        Status: "pending",
       },
       {
         id: "12",
@@ -130,7 +130,7 @@ const Order = () => {
         Customer: "Henry Orange",
         Quantity: "70 packs",
         Product: "Amlodipine 5mg",
-        Availability: ["Accept", "Cancel"],
+        Status: "pending",
       },
       {
         id: "13",
@@ -139,7 +139,7 @@ const Order = () => {
         Customer: "Ivy Purple",
         Quantity: "80 packs",
         Product: "Metoprolol 50mg",
-        Availability: ["Accept", "Cancel"],
+        Status: "pending",
       },
       {
         id: "14",
@@ -148,7 +148,7 @@ const Order = () => {
         Customer: "Jack Pink",
         Quantity: "90 packs",
         Product: "Losartan 50mg",
-        Availability: ["Accept", "Cancel"],
+        Status: "pending",
       },
       {
         id: "15",
@@ -157,7 +157,7 @@ const Order = () => {
         Customer: "Kara Red",
         Quantity: "100 packs",
         Product: "Hydrochlorothiazide 25mg",
-        Availability: ["Accept", "Cancel"],
+        Status: "pending",
       },
       {
         id: "16",
@@ -166,7 +166,7 @@ const Order = () => {
         Customer: "Liam Gray",
         Quantity: "110 packs",
         Product: "Gabapentin 300mg",
-        Availability: ["Accept", "Cancel"],
+        Status: "pending",
       },
       {
         id: "17",
@@ -175,7 +175,7 @@ const Order = () => {
         Customer: "Mia Silver",
         Quantity: "120 packs",
         Product: "Sertraline 50mg",
-        Availability: ["Accept", "Cancel"],
+        Status: "pending",
       },
       {
         id: "18",
@@ -184,7 +184,7 @@ const Order = () => {
         Customer: "Noah Gold",
         Quantity: "130 packs",
         Product: "Citalopram 20mg",
-        Availability: ["Accept", "Cancel"],
+        Status: "pending",
       },
       {
         id: "19",
@@ -193,7 +193,7 @@ const Order = () => {
         Customer: "Olivia Bronze",
         Quantity: "140 packs",
         Product: "Alprazolam 0.5mg",
-        Availability: ["Accept", "Cancel"],
+        Status: "pending",
       },
       {
         id: "20",
@@ -202,10 +202,8 @@ const Order = () => {
         Customer: "Paul Copper",
         Quantity: "150 packs",
         Product: "Clonazepam 1mg",
-        Availability: ["Accept", "Cancel"],
+        Status: "pending",
       },
-
-      // Add more data as needed
     ];
   }
 
@@ -216,6 +214,7 @@ const Order = () => {
     }
     return true; // For columns without accessorKey (e.g., select, actions)
   });
+
   return (
     <div>
       <div className="h-[100%] w-[100%] flex bg-[#7a7a7a]">
@@ -305,7 +304,7 @@ const Order = () => {
             </div>
           </div>
         </div>
-        <div className="flex-grow fixed top-0 left-[250px] right-0 bg-white h-[80px] w-[calc(100%-230px)] flex justify-center items-center shadow-lg m-2 pb-14 p-10">
+        <div className="flex-grow fixed top-0 left-[250px] right-0 bg-white h-[80px] w-[calc(100%-230px)] flex justify-center items-center shadow-lg m-2 p-10">
           <div
             action="search"
             className="border flex items-center p-1 border-[#F0F1F3]"
@@ -315,20 +314,14 @@ const Order = () => {
             </button>
             <input
               type="text"
-              placeholder="Search product, supplier, order"
+              placeholder="Search product, supplier, Status"
               name="search"
               className="placeholder:text-[14px] placeholder:text-[#0C0C0C]/50"
             />
           </div>
         </div>
-        <div className="fixed top-[95px] left-[250px] w-[calc(100%-250px)] h-[calc(100%-90px)]">
+        <div className="fixed top-[115px] left-[250px] w-[calc(100%-250px)] h-[calc(100%-110px)]">
           <div className="h-[100%] overflow-y-auto">
-            <div className="flex justify-between px-9 items-center ">
-              <h2 className="text-[20px] font-bold">Orders</h2>
-              <Link to="/Orders/status">
-                <Button className="bg-[#013299]">Status</Button>
-              </Link>
-            </div>
             <div className="container mx-auto py-10">
               <DataTable columns={columns} data={data} />
             </div>
@@ -339,4 +332,4 @@ const Order = () => {
   );
 };
 
-export default Order;
+export default Status;

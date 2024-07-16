@@ -22,6 +22,7 @@ import Shop from "./components/Newdash/Shop";
 import Cart from "./components/Newdash/Cart";
 import Inventory from "./components/Newdash/Inventory";
 import Order from "./components/Newdash/Order";
+import Status from "./components/Newdash/Status";
 
 function App() {
   return (
@@ -49,6 +50,7 @@ function App() {
         <Route path="/Cart" element={<Cart />} />
         <Route path="/Inventory" element={<Inventory />} />
         <Route path="/Orders" element={<Order />} />
+        <Route path="/Orders/Status" element={<Status />} />
 
         {/* Add more routes as needed */}
       </Routes>

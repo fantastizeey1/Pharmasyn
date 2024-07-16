@@ -103,7 +103,7 @@ const Forgotpassword = () => {
 
             <button
               type="submit"
-              className="w-full bg-[#013299] text-white py-2 px-4 text-[30px] rounded-lg hover:bg-[#2b50a0]"
+              className="w-full bg-[#013299]  text-white py-2 px-4 text-[30px] rounded-lg hover:bg-[#2b50a0]"
             >
               Submit
             </button>
