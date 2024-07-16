@@ -302,7 +302,7 @@ const Inventory = () => {
         <div className="fixed  py-4 inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
           <div className="bg-white rounded-lg h-[90%] overflow-y-auto p-6 w-[500px]">
             <h2 className="text-xl font-semibold mb-2">New Product</h2>
-            <div className="mb-2">
+            <div className="mb-2 flex justify-center items-center">
               <FileUploadWithPreview />
             </div>
             <div className="flex flex-col space-y-4">
