@@ -41,28 +41,14 @@ function Register() {
   const [userId, setUserId] = useState(null); // Initialize userId with null or an initial value
 
   const location = useLocation();
-  const accountType = location.state?.accountType || "default";
+  const userType = location.state?.userType || "1"; // Default to "1" if userType is not provided
+
   const navigate = useNavigate();
+  console.log(userType);
 
   // Initialize userType based on accountType from location state
-  const [userType, setUserType] = useState(() => {
-    switch (accountType) {
-      case "pharmaceuticalCompany":
-        return "1";
-      case "wholesalePharmacy":
-        return "2";
-      case "retailPharmacy":
-        return "3";
-      case "hospitalPharmacy":
-        return "4";
-      case "doctor":
-        return "5";
-      case "pharmacist":
-        return "6";
-      default:
-        return "1";
-    }
-  });
+
+  console.log(userType);
 
   const validateForm = () => {
     return validEmail && validPwd && validMatch && validPhone;
@@ -168,15 +154,7 @@ function Register() {
       setSuccess(true);
       console.log("Success state set to true"); // Add logging statement
 
-      navigate("/Register2");
-      // Conditionally navigate based on user type
-      // if (userType === "1") {
-      //   navigate(`/RegisterPhamComp?userType=${userTypeNumber}`);
-      // } else if (userType === "2" || userType === "3" || userType === "4") {
-      //   navigate(`/Register/Pharmacy?userType=${userTypeNumber}`);
-      // } else {
-      //   navigate(`/Register/personel?userType=${userTypeNumber}`);
-      // }
+      navigate("/register2", { state: { userType } }); // Pass userType as state
     } catch (error) {
       // Handle network errors or other exceptions
       console.error("Error registering user: net i think", error);

@@ -5,7 +5,7 @@ import logo from "/logo.jpg";
 import searchIcon from "/searchicon.svg";
 import cartIcon from "/cart.svg";
 
-const Dashheader = ({ cartItemCount }) => {
+const Dashheader = ({ cartCount }) => {
   const [nav, setNav] = useState(false);
   const handleNav = () => {
     setNav(!nav);
@@ -88,9 +88,9 @@ const Dashheader = ({ cartItemCount }) => {
               alt="cart"
               className="w-[24px] ml-4 h-[24px] hover:scale-110"
             />
-            {cartItemCount > 0 && (
+            {cartCount > 0 && (
               <span className="absolute top-[-5px] right-[-10px] bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
-                {cartItemCount}
+                {cartCount}
               </span>
             )}
           </Link>

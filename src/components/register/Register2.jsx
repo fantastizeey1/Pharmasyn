@@ -7,40 +7,13 @@ const Register2 = () => {
   const [cacFileBase64, setCacFileBase64] = useState("");
   const [phmLicenseFileBase64, setPhmLicenseFileBase64] = useState("");
   const [premiseFileBase64, setPremiseFileBase64] = useState("");
+  const [hefammaLicenseBase64, setHefammaLicenseBase64] = useState("");
   const [idCardBase64, setIdCardBase64] = useState("");
-  const [licenseBase64, setLicenseBase64] = useState("");
+  const [nmaLicenseBase64, setNmaLicenseBase64] = useState("");
   const [errMsg, setErrMsg] = useState("");
   const navigate = useNavigate();
   const location = useLocation();
-  const accountType = location.state?.accountType || "default";
-
-  const getUserType = (accountType) => {
-    switch (accountType) {
-      case "pharmaceuticalCompany":
-        return "1";
-      case "wholesalePharmacy":
-        return "2";
-      case "retailPharmacy":
-        return "3";
-      case "hospitalPharmacy":
-        return "4";
-      case "doctor":
-        return "5";
-      case "pharmacist":
-        return "6";
-      default:
-        return "1";
-    }
-  };
-
-  useEffect(() => {
-    const userTypeFromAccountType = getUserType(accountType);
-    setUserType(userTypeFromAccountType);
-    localStorage.setItem("userTypeNumber", userTypeFromAccountType);
-    console.log("Setting userType from accountType:", userTypeFromAccountType);
-  }, [accountType]);
-
-  const [userType, setUserType] = useState(() => getUserType(accountType));
+  const userType = location.state?.userType || "1"; // Default to "1" if userType is not provided
 
   const handleFileUpload = (e, setBase64File) => {
     const uploadedFile = e.target.files[0];
@@ -60,27 +33,23 @@ const Register2 = () => {
     e.preventDefault();
 
     const userId = localStorage.getItem("userId");
-    const userTypeNumber = localStorage.getItem("userTypeNumber");
-
-    console.log("userId:", userId);
-    console.log("userTypeNumber:", userTypeNumber);
 
     const requestData = {
       userId: userId,
-      cac: cacFileBase64,
-      companyPharmacyLicense:
-        userTypeNumber === "1" || userTypeNumber === "2"
-          ? phmLicenseFileBase64
-          : "",
-      premiseLicense: premiseFileBase64,
-      hospitalPharmacyLicense:
-        userTypeNumber === "4" ? phmLicenseFileBase64 : "",
-      mdcnLicense: userTypeNumber === "5" ? licenseBase64 : "",
-      workIdCard: userTypeNumber === "5" ? idCardBase64 : "",
-      individualPharmacyLicense: userTypeNumber === "6" ? licenseBase64 : "",
+      cac: ["1", "2", "3", "4"].includes(userType.toString())
+        ? cacFileBase64
+        : "",
+      companyPharmacyLicense: ["1", "2", "3", "4"].includes(userType.toString())
+        ? phmLicenseFileBase64
+        : "",
+      premiseLicense: ["1", "2", "3", "4"].includes(userType.toString())
+        ? premiseFileBase64
+        : "",
+      hefammaLicense: userType === 4 ? hefammaLicenseBase64 : "",
+      workIdCard: ["5", "6"].includes(userType.toString()) ? idCardBase64 : "",
+      nmaLicense: userType === 6 ? nmaLicenseBase64 : "",
+      individualPharmacyLicense: userType === 5 ? phmLicenseFileBase64 : "",
     };
-
-    console.log("requestData:", requestData);
 
     try {
       const response = await fetch(`${BASE_URL}/api/Registration/StepTwo`, {
@@ -136,7 +105,7 @@ const Register2 = () => {
             onSubmit={handleStage2Submit}
             className="flex flex-col bg-white rounded"
           >
-            {["1", "2", "3", "4"].includes(userType) && (
+            {["1", "2", "3", "4"].includes(userType.toString()) && (
               <>
                 <label
                   htmlFor="cacCertificate"
@@ -154,7 +123,7 @@ const Register2 = () => {
               </>
             )}
 
-            {["1", "2", "4"].includes(userType) && (
+            {["1", "2", "3", "4"].includes(userType.toString()) && (
               <>
                 <label
                   htmlFor="pharmacyLicense"
@@ -172,7 +141,7 @@ const Register2 = () => {
               </>
             )}
 
-            {["1", "2", "3", "4"].includes(userType) && (
+            {["1", "2", "3", "4"].includes(userType.toString()) && (
               <>
                 <label
                   htmlFor="premiseLicense"
@@ -190,10 +159,28 @@ const Register2 = () => {
               </>
             )}
 
-            {userType === "5" && (
+            {userType === 4 && (
+              <>
+                <label
+                  htmlFor="hefammaLicense"
+                  className="block text-[#0C0C0C]/70"
+                >
+                  Upload your company's HEFAMMA License:
+                </label>
+                <input
+                  type="file"
+                  id="hefammaLicense"
+                  accept=".pdf, image/jpeg, image/jpg, image/png"
+                  onChange={(e) => handleFileUpload(e, setHefammaLicenseBase64)}
+                  className="rounded-lg text-[#0C0C0C] p-2 border-2 border-[#0C0C0C]/50 placeholder:text-[#0C0C0C]/50"
+                />
+              </>
+            )}
+
+            {userType === 5 && (
               <>
                 <label htmlFor="idCard" className="block text-[#0C0C0C]/70">
-                  Upload your ID Card:
+                  Upload your ID Card of Current Workplace:
                 </label>
                 <input
                   type="file"
@@ -205,54 +192,62 @@ const Register2 = () => {
               </>
             )}
 
-            {userType === "5" && (
+            {userType === 5 && (
               <>
                 <label htmlFor="license" className="block text-[#0C0C0C]/70">
-                  Upload your MDCN or Pharmacy License:
+                  Upload your PCN License:
                 </label>
                 <input
                   type="file"
                   id="license"
                   accept=".pdf, image/jpeg, image/jpg, image/png"
-                  onChange={(e) => handleFileUpload(e, setLicenseBase64)}
+                  onChange={(e) => handleFileUpload(e, setPhmLicenseFileBase64)}
                   className="rounded-lg text-[#0C0C0C] p-2 border-2 border-[#0C0C0C]/50 placeholder:text-[#0C0C0C]/50"
                 />
               </>
             )}
 
-            {userType === "6" && (
+            {userType === 6 && (
               <>
-                <label htmlFor="license" className="block text-[#0C0C0C]/70">
-                  Upload your Pharmacy License:
+                <label htmlFor="nmaLicense" className="block text-[#0C0C0C]/70">
+                  Upload your NMA License:
                 </label>
                 <input
                   type="file"
-                  id="license"
+                  id="nmaLicense"
                   accept=".pdf, image/jpeg, image/jpg, image/png"
-                  onChange={(e) => handleFileUpload(e, setLicenseBase64)}
+                  onChange={(e) => handleFileUpload(e, setNmaLicenseBase64)}
                   className="rounded-lg text-[#0C0C0C] p-2 border-2 border-[#0C0C0C]/50 placeholder:text-[#0C0C0C]/50"
                 />
               </>
             )}
 
-            {errMsg && <p className="text-red-500">{errMsg}</p>}
+            {userType === 6 && (
+              <>
+                <label htmlFor="idCard" className="block text-[#0C0C0C]/70">
+                  Upload your ID Card of Current Workplace:
+                </label>
+                <input
+                  type="file"
+                  id="idCard"
+                  accept=".pdf, image/jpeg, image/jpg, image/png"
+                  onChange={(e) => handleFileUpload(e, setIdCardBase64)}
+                  className="rounded-lg text-[#0C0C0C] p-2 border-2 border-[#0C0C0C]/50 placeholder:text-[#0C0C0C]/50"
+                />
+              </>
+            )}
+
+            {errMsg && (
+              <p className="text-red-500 text-center text-sm">{errMsg}</p>
+            )}
 
             <button
               type="submit"
-              className="w-full bg-[#013299] text-white py-2 px-4 text-[30px] rounded-lg hover:bg-[#2b50a0]"
+              className="bg-[#0C0C0C] text-white py-2 px-4 rounded mt-4"
             >
-              Register Account
+              Complete Registration
             </button>
           </form>
-          <p className="mt-2 text-sm text-end text-black">
-            Already registered?
-            <Link
-              to="/SignIn"
-              className="text-[#013299] z-50 hover:underline ml-2"
-            >
-              Sign In
-            </Link>
-          </p>
         </div>
       </div>
     </div>

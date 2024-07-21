@@ -13,36 +13,42 @@ const buttonData = {
   buttons: [
     {
       type: "pharmaceuticalCompany",
+      userType: 1,
       title: "Pharmaceutical Company",
       description: "Own a pharmaceutical company, this is for you.",
       icon: pc,
     },
     {
       type: "wholesalePharmacy",
+      userType: 2,
       title: "Wholesale/Distributor",
       description: "Are you a distributor, this is for you.",
       icon: wd,
     },
     {
       type: "hospitalPharmacy",
+      userType: 4,
       title: "Hospital Pharmacy",
       description: "Operate a pharmacy in a hospital, this is for you.",
       icon: hp,
     },
     {
       type: "retailPharmacy",
+      userType: 3,
       title: "Retail/Community Pharmacy",
       description: "Operate a pharmacy, this is for you.",
       icon: retail,
     },
     {
       type: "pharmacist",
+      userType: 5,
       title: "Pharmacist",
       description: "For personal use, this is for you.",
       icon: Pharma,
     },
     {
       type: "doctor",
+      userType: 6,
       title: "Doctor",
       description:
         "Are you a doctor who's looking for where to get medications for patients, this is for you.",
@@ -54,8 +60,8 @@ const buttonData = {
 function SignUpSelector() {
   const navigate = useNavigate();
 
-  const handleSignUpClick = (accountType) => {
-    navigate("/Register", { state: { accountType } });
+  const handleSignUpClick = (userType) => {
+    navigate("/Register", { state: { userType } });
   };
 
   return (
@@ -74,7 +80,7 @@ function SignUpSelector() {
           {buttonData.buttons.map((button) => (
             <button
               key={button.type}
-              onClick={() => handleSignUpClick(button.type)}
+              onClick={() => handleSignUpClick(button.userType)}
               className="relative w-full h-[114px] shadow-xl text-black py-3 px-6 mb-2 rounded-lg transition duration-300 ease-in-out flex items-center hover:bg-[#d3ecf5] hover:border-[#013299] hover:border justify-start group"
             >
               <div className="px-3 py-2 rounded-full border-2 border-[#00CCFF] group-hover:bg-[#00CCFF] mr-3">

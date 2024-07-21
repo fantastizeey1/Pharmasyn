@@ -3,13 +3,13 @@ import { BASE_URL } from "../../config";
 
 const useCart = (userId) => {
   const [cart, setCart] = useState([]);
-  const [cartId, setCartId] = useState(null);
+  const [cartIds, setCartIds] = useState([]);
+  const [cartCount, setCartCount] = useState(0); // New state for cart count
   const [error, setError] = useState(null);
   const [alertMessage, setAlertMessage] = useState(null);
   const [loading, setLoading] = useState(false);
   const [checkoutError, setCheckoutError] = useState(null);
 
-  // Fetch cart data from the server
   const fetchCart = useCallback(async () => {
     try {
       const bearerToken = sessionStorage.getItem("access_token");
@@ -38,8 +38,13 @@ const useCart = (userId) => {
       if (responseData) {
         console.log("Fetched cart data:", responseData);
         setCart(responseData.cartResponse || []);
-        setCartId(responseData.cartId);
-        console.log(cartId);
+        setCartCount(responseData.cartCount || 0); // Set the cart count
+
+        const ids = responseData.cartResponse.map(
+          (cartItem) => cartItem.cartId
+        );
+        setCartIds(ids);
+        console.log("Cart IDs:", ids);
       }
     } catch (error) {
       console.error("Error fetching cart data:", error);
@@ -47,16 +52,14 @@ const useCart = (userId) => {
     }
   }, []);
 
-  // Fetch initial cart data on component mount
   useEffect(() => {
     fetchCart();
   }, [fetchCart]);
 
-  // Add item to the cart
   const addToCart = useCallback(
     async (inventory) => {
       try {
-        await fetchCart(); // Ensure cart is up to date
+        await fetchCart();
 
         const bearerToken = sessionStorage.getItem("access_token");
         if (!bearerToken) {
@@ -64,7 +67,7 @@ const useCart = (userId) => {
         }
 
         const cartAddPayload = {
-          cartId: cartId || undefined,
+          cartId: cartIds[0] || undefined,
           carts: {
             inventoryId: inventory.inventoryId,
             quantity: inventory.quantity,
@@ -99,18 +102,57 @@ const useCart = (userId) => {
           setCart(responseData.cartDetails || []);
           setAlertMessage("Item added to cart successfully!");
           setTimeout(() => {
-            setAlertMessage(null); // Clear the alert message after a certain duration
-          }, 3000); // 3000 milliseconds (3 seconds) in this example
+            setAlertMessage(null);
+          }, 3000);
         }
       } catch (error) {
         console.error("Error adding to cart:", error);
         setError(`An error occurred while adding to cart: ${error.message}`);
       }
     },
-    [cartId, fetchCart]
+    [cartIds, fetchCart]
   );
 
-  // Update cart item quantity
+  const handleEmptyCart = useCallback(async () => {
+    try {
+      const bearerToken = sessionStorage.getItem("access_token");
+      if (!bearerToken) {
+        throw new Error("No access token found in session storage");
+      }
+
+      const cartRemovePayload = {
+        cartId: cartIds[0],
+      };
+
+      const url = `${BASE_URL}/api/Cart/RemoveFromCart`;
+      const response = await fetch(url, {
+        method: "POST",
+        headers: {
+          "ngrok-skip-browser-warning": "69420",
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${bearerToken}`,
+        },
+        body: JSON.stringify(cartRemovePayload),
+      });
+
+      if (!response.ok) {
+        const responseBody = await response.text();
+        throw new Error(
+          `HTTP error! Status: ${response.status}, Response: ${responseBody}`
+        );
+      }
+
+      const responseData = await response.json();
+      if (responseData) {
+        console.log("Cart emptied successfully:", responseData);
+        setCart([]);
+      }
+    } catch (error) {
+      console.error("Error clearing cart:", error);
+      setError(`An error occurred while clearing the cart: ${error.message}`);
+    }
+  }, [cartIds]);
+
   const updateCart = useCallback(
     async (index, newQuantity) => {
       try {
@@ -129,7 +171,7 @@ const useCart = (userId) => {
         }
 
         const cartUpdatePayload = {
-          cartId: cartId || undefined,
+          cartId: cartIds[0] || undefined,
           carts: updatedCart.map((item) => ({
             inventoryId: item.inventoryId,
             quantity: item.quantity,
@@ -142,7 +184,7 @@ const useCart = (userId) => {
 
         const url = `${BASE_URL}/api/Cart/UpdateCart`;
         const response = await fetch(url, {
-          method: "POST",
+          method: "PUT",
           headers: {
             "ngrok-skip-browser-warning": "69420",
             "Content-Type": "application/json",
@@ -168,7 +210,7 @@ const useCart = (userId) => {
         setError(`An error occurred while updating the cart: ${error.message}`);
       }
     },
-    [cart, cartId]
+    [cart, cartIds]
   );
 
   const handleCheckout = useCallback(
@@ -180,11 +222,7 @@ const useCart = (userId) => {
 
       const selectedCartItems = selectedItems.map((index) => cart[index]);
       const checkoutPayload = {
-        cartId,
-        // items: selectedCartItems.map((item) => ({
-        //   inventoryId: item.inventoryId,
-        //   quantity: item.quantity,
-        // })),
+        cartId: cartIds[0],
       };
 
       try {
@@ -221,11 +259,12 @@ const useCart = (userId) => {
         setCheckoutError(`An error occurred during checkout: ${error.message}`);
       }
     },
-    [cart, cartId]
+    [cart, cartIds]
   );
 
   return {
     cart,
+    cartCount, // Return cartCount as well
     setCart,
     error,
     alertMessage,
@@ -235,6 +274,7 @@ const useCart = (userId) => {
     addToCart,
     updateCart,
     handleCheckout,
+    handleEmptyCart,
   };
 };
 

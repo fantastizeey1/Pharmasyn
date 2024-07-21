@@ -4,12 +4,22 @@ import Discoverus from "../Landingpage/Discoverus";
 import Footer from "../Landingpage/Footer";
 import Btn from "../Landingpage/Btn";
 import useCart from "../Dash/useCart";
+import { FiTrash } from "react-icons/fi";
 
-const Cart = ({}) => {
-  const [isCartEmpty, setIsCartEmpty] = useState(true);
-  const { cart, setCart, updateCart, error, handleCheckout } = useCart();
+const Cart = () => {
+  const {
+    cart,
+    cartCount,
+    fetchCart,
+    addToCart,
+    updateCart,
+    handleCheckout,
+    handleEmptyCart,
+  } = useCart();
+
   const [selectedItems, setSelectedItems] = useState([]);
   const [total, setTotal] = useState(0);
+  const [cartItemCount, setCartItemCount] = useState(0);
 
   const calculateTotal = () => {
     const totalAmount = cart
@@ -22,54 +32,70 @@ const Cart = ({}) => {
       }, 0)
       .toFixed(2);
     setTotal(totalAmount);
-    setIsCartEmpty(cart.length === 0);
+  };
+
+  const calculateItemCount = () => {
+    const itemCount = cart.reduce((total, cartItem) => {
+      return (
+        total +
+        cartItem.cartDetails.reduce(
+          (itemTotal, item) => itemTotal + item.quantity,
+          0
+        )
+      );
+    }, 0);
+    setCartItemCount(itemCount);
   };
 
   useEffect(() => {
     calculateTotal();
-    console.log("Cart updated in Cart component:", cart);
+    calculateItemCount();
   }, [cart]);
 
+  const handleQuantityChange = (index, newQuantity, command) => {
+    updateCart(index, newQuantity, command);
+  };
+
   const handleIncrease = (index) => {
-    updateCart(index, cart[index].quantity + 1);
+    const newQuantity = cart[index].quantity + 1;
+    handleQuantityChange(index, newQuantity, "add");
   };
 
   const handleDecrease = (index) => {
-    const item = cart[index];
-    if (item.quantity === 1) {
-      const shouldRemove = window.confirm(
-        "Decreasing the quantity to 0 will remove the item from the cart. Are you sure you want to continue?"
-      );
-      if (shouldRemove) {
-        updateCart(index, 0);
-      }
+    const newQuantity = cart[index].quantity - 1;
+    if (newQuantity <= 0) {
+      handleDelete(index);
     } else {
-      updateCart(index, item.quantity - 1);
+      handleQuantityChange(index, newQuantity, "subtract");
     }
   };
 
   const handleDelete = (index) => {
-    updateCart(index, 0);
+    updateCart(index, 0, "null");
   };
 
-  const handleCheckboxChange = (index) => {
-    setSelectedItems((prevSelected) => {
-      if (prevSelected.includes(index)) {
-        return prevSelected.filter((i) => i !== index);
-      } else {
-        return [...prevSelected, index];
-      }
-    });
+  const handleSelectItem = (index) => {
+    const newSelectedItems = [...selectedItems];
+    if (newSelectedItems.includes(index)) {
+      newSelectedItems.splice(newSelectedItems.indexOf(index), 1);
+    } else {
+      newSelectedItems.push(index);
+    }
+    setSelectedItems(newSelectedItems);
   };
 
-  const handleCheckoutClick = () => {
-    handleCheckout(selectedItems);
+  const handleCheckoutClick = async () => {
+    await handleCheckout(selectedItems);
+  };
+
+  const handleEmptyCartClick = async () => {
+    await handleEmptyCart(); // Use handleEmptyCart here
   };
 
   return (
     <div>
-      <Dashheader />
-      {isCartEmpty ? (
+      <Dashheader cartCount={cartCount} />
+      {cart.length === 0 ? (
         <div className="flex justify-center items-center flex-col maybe">
           <img
             src="/cartempty.png"
@@ -85,15 +111,21 @@ const Cart = ({}) => {
         </div>
       ) : (
         <div>
-          <h2 className="border-b-2 border-black pl-[70px] pb-[30px] font-bold text-[30px]">
-            MY CART
-          </h2>
+          <div className="flex justify-between">
+            <h2 className="border-b-2 border-black pl-[70px] pb-[30px] font-bold text-[30px]">
+              MY CART
+            </h2>
+            <button className=" w-5 h-5" onClick={handleEmptyCartClick}>
+              <FiTrash />
+            </button>
+          </div>
+
           <div className="mx-[70px] mt-10 flex justify-between items-start ">
             <div className="flex-1 flex flex-row justify-start flex-wrap gap-4 pt-10 items-center">
-              {cart.map((cartItem) =>
-                cartItem.cartDetails.map((item, index) => (
+              {cart.map((cartItem, cartIndex) =>
+                cartItem.cartDetails.map((item, itemIndex) => (
                   <div
-                    key={index}
+                    key={itemIndex}
                     className="flex w-[600px] flex-row gap-2 justify-start items-center p-7 shadow-xl rounded-xl"
                   >
                     <img
@@ -109,21 +141,21 @@ const Cart = ({}) => {
                       <div className="border-2 border-black w-32 h-12 flex justify-around items-center">
                         <button
                           className=" "
-                          onClick={() => handleDecrease(index)}
+                          onClick={() => handleDecrease(cartIndex)}
                         >
                           <p className="text-[35px] -mt-6">-</p>
                         </button>
                         <span className="text-[35px]">{item.quantity}</span>
                         <button
                           className=" "
-                          onClick={() => handleIncrease(index)}
+                          onClick={() => handleIncrease(cartIndex)}
                         >
                           <p className="text-[32px] -mt-4">+</p>
                         </button>
                       </div>
                     </div>
                     <button
-                      onClick={() => handleDelete(index)}
+                      onClick={() => handleDelete(cartIndex)}
                       className="ml-auto text-red-500"
                     >
                       Remove
