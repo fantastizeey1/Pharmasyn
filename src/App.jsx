@@ -6,7 +6,6 @@ import SignIn from "./components/signIn/signIn";
 import SignUp from "./components/register/SignUp";
 import Success2 from "./components/signIn/success2";
 import SignIn2 from "./components/signIn/signin2";
-import Dashboard from "./components/Dash/Dashboard";
 import Home from "./components/Landingpage/Home";
 import Forgotpassword from "./components/signIn/Forgotpassword";
 import Forgotpassword2 from "./components/signIn/Forgotpassword2";
