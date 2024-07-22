@@ -237,29 +237,71 @@ const Cart = () => {
     await handleEmptyCart();
   };
 
-  const handleDelete = async (index) => {
-    const itemToDelete = cart[index];
-    if (!itemToDelete || !itemToDelete.cartDetails) return;
-
+  const handleDelete = async (inventoryId) => {
+    console.log(`Attempting to delete item with inventoryId: ${inventoryId}`); // Debug log
     try {
+      const updatedCart = [...cart];
+      let itemToDelete = null;
+      let cartIndex = null;
+      let detailIndex = null;
+
+      // Find the item to delete
+      for (let i = 0; i < updatedCart.length; i++) {
+        const cartItem = updatedCart[i];
+        if (cartItem.cartDetails) {
+          for (let j = 0; j < cartItem.cartDetails.length; j++) {
+            if (cartItem.cartDetails[j].inventoryId === inventoryId) {
+              itemToDelete = cartItem.cartDetails[j];
+              cartIndex = i;
+              detailIndex = j;
+              break;
+            }
+          }
+        }
+        if (itemToDelete) break;
+      }
+
+      if (!itemToDelete) {
+        throw new Error("Item to delete not found.");
+      }
+
       const bearerToken = sessionStorage.getItem("access_token");
       if (!bearerToken) throw new Error("No access token found");
 
-      await axios.post(
-        `${BASE_URL}/api/Cart/RemoveFromCart`,
-        {
-          cartId: itemToDelete.cartId,
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${bearerToken}`,
-          },
-        }
-      );
+      // Remove the item from the cart
+      updatedCart[cartIndex].cartDetails.splice(detailIndex, 1);
 
-      setCart((prevCart) => prevCart.filter((_, i) => i !== index));
+      // If there are no more items in cartDetails, remove the cart item itself
+      if (updatedCart[cartIndex].cartDetails.length === 0) {
+        updatedCart.splice(cartIndex, 1);
+      }
+
+      console.log("Updated Cart:", JSON.stringify(updatedCart));
+
+      const payload = updatedCart.map((cartItem) => ({
+        cartId: cartItem.cartId,
+        cartCommand: null,
+        carts: cartItem.cartDetails.map((detail) => ({
+          inventoryId: detail.inventoryId,
+          quantity: detail.quantity,
+          productName: detail.productName,
+          status: true,
+        })),
+      }));
+
+      console.log("Payload:", JSON.stringify(payload));
+
+      await axios.put(`${BASE_URL}/api/Cart/UpdateCart`, payload, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${bearerToken}`,
+        },
+      });
+
+      console.log("Item removed successfully");
+      setCart(updatedCart);
     } catch (error) {
+      console.error(`Error removing item from cart: ${error.message}`); // Debug log
       setError(`Error removing item from cart: ${error.message}`);
     }
   };
@@ -326,7 +368,12 @@ const Cart = () => {
                       <p>{item.status}</p>
                     </div>
                     <button
-                      onClick={() => handleDelete(item.inventoryId)}
+                      onClick={() => {
+                        console.log(
+                          `Delete button clicked for inventoryId: ${item.inventoryId}`
+                        ); // Debug log
+                        handleDelete(item.inventoryId);
+                      }}
                       className="ml-auto text-red-500"
                     >
                       Remove
