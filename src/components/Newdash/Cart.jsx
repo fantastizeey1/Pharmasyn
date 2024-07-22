@@ -1,4 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
+import axios from "axios";
+import { BASE_URL } from "../../config";
 import Dashheader from "./Dashheader";
 import Discoverus from "../Landingpage/Discoverus";
 import Footer from "../Landingpage/Footer";
@@ -8,67 +10,223 @@ import { FiTrash } from "react-icons/fi";
 import useDebounce from "./UseDeounce";
 
 const Cart = () => {
-  const {
-    cart,
-    cartCount,
-    addToCart,
-    handleEmptyCart,
-    updateCart,
-    handleDelete,
-    handleCheckout,
-    alertMessage,
-    error,
-    loading,
-    checkoutError,
-  } = useCart();
-
-  const [selectedItems, setSelectedItems] = useState([]);
+  const { handleCheckout } = useCart();
+  const [cart, setCart] = useState([]);
+  const [cartIds, setCartIds] = useState([]);
+  const [cartCount, setCartCount] = useState(0);
+  const [error, setError] = useState(null);
   const [total, setTotal] = useState(0);
-  const [cartItemCount, setCartItemCount] = useState(0);
   const [quantity, setQuantity] = useState({});
+  const [selectedItems, setSelectedItems] = useState([]);
 
-  const calculateTotal = () => {
-    const totalAmount = cart
-      .reduce((total, cartItem) => {
-        const itemTotal = cartItem.cartDetails.reduce((itemTotal, item) => {
-          const price = parseFloat(item.unitPrice);
-          return itemTotal + item.quantity * (price || 0);
-        }, 0);
-        return total + itemTotal;
-      }, 0)
-      .toFixed(2);
-    setTotal(totalAmount);
-  };
+  const prevDebouncedQuantity = useRef({});
+
+  const fetchCart = useCallback(async () => {
+    try {
+      const bearerToken = sessionStorage.getItem("access_token");
+      if (!bearerToken) throw new Error("No access token found");
+
+      const response = await axios.get(
+        `${BASE_URL}/api/Cart/GetCart?isCustomer=true`,
+        {
+          headers: {
+            "ngrok-skip-browser-warning": "69420",
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${bearerToken}`,
+          },
+        }
+      );
+
+      setCart(response.data.cartResponse || []);
+      setCartCount(response.data.cartCount || 0);
+      setCartIds(response.data.cartResponse.map((item) => item.cartId));
+      sessionStorage.setItem("cartData", JSON.stringify(response.data));
+    } catch (error) {
+      setError(`Error fetching cart data: ${error.message}`);
+    }
+  }, []);
 
   useEffect(() => {
+    fetchCart();
+  }, [fetchCart]);
+
+  const handleEmptyCart = useCallback(async () => {
+    try {
+      const bearerToken = sessionStorage.getItem("access_token");
+      if (!bearerToken) throw new Error("No access token found");
+
+      await axios.post(
+        `${BASE_URL}/api/Cart/RemoveFromCart`,
+        {
+          cartId: cartIds[0],
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${bearerToken}`,
+          },
+        }
+      );
+
+      setCart([]);
+    } catch (error) {
+      setError(`Error clearing cart: ${error.message}`);
+    }
+  }, [cartIds]);
+
+  const handleQuantityChange = (inventoryId, newQuantity) => {
+    console.log(`Quantity changed: ${inventoryId}, ${newQuantity}`);
+    setQuantity((prev) => ({ ...prev, [inventoryId]: newQuantity }));
+  };
+
+  // Ensure the updateCart function and other related functions use the correct inventoryId
+  const updateCart = useCallback(
+    async (inventoryId, newQuantity) => {
+      try {
+        console.log(
+          `Updating cart: inventoryId=${inventoryId}, newQuantity=${newQuantity}`
+        );
+        const updatedCart = [...cart];
+        let itemToUpdate = null;
+        let cartIndex = null;
+        let detailIndex = null;
+
+        // Find the item to update
+        for (let i = 0; i < updatedCart.length; i++) {
+          const cartItem = updatedCart[i];
+          if (cartItem.cartDetails) {
+            for (let j = 0; j < cartItem.cartDetails.length; j++) {
+              if (cartItem.cartDetails[j].inventoryId === inventoryId) {
+                itemToUpdate = cartItem.cartDetails[j];
+                cartIndex = i;
+                detailIndex = j;
+                break;
+              }
+            }
+          }
+          if (itemToUpdate) break;
+        }
+
+        if (!itemToUpdate) {
+          throw new Error("Item to update not found.");
+        }
+
+        if (newQuantity <= 0) {
+          // Remove item if quantity is <= 0
+          updatedCart[cartIndex].cartDetails.splice(detailIndex, 1);
+        } else {
+          // Update item quantity
+          itemToUpdate.quantity = newQuantity;
+        }
+
+        console.log("Updated Cart:", JSON.stringify(updatedCart));
+
+        const bearerToken = sessionStorage.getItem("access_token");
+        if (!bearerToken) throw new Error("No access token found");
+
+        console.log(
+          "Payload:",
+          JSON.stringify([
+            {
+              cartId: updatedCart[cartIndex].cartId,
+              cartCommand: null,
+              carts: updatedCart[cartIndex].cartDetails.map((detail) => ({
+                inventoryId: detail.inventoryId,
+                quantity: detail.quantity,
+                productName: detail.productName,
+                status: true,
+              })),
+            },
+          ])
+        );
+
+        await axios.put(
+          `${BASE_URL}/api/Cart/UpdateCart`,
+          [
+            {
+              cartId: updatedCart[cartIndex].cartId,
+              cartCommand: null,
+              carts: updatedCart[cartIndex].cartDetails.map((detail) => ({
+                inventoryId: detail.inventoryId,
+                quantity: detail.quantity,
+                productName: detail.productName,
+                status: true,
+              })),
+            },
+          ],
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${bearerToken}`,
+            },
+          }
+        );
+
+        console.log("Cart updated successfully");
+        setCart(updatedCart);
+      } catch (error) {
+        console.error(`Error updating cart: ${error.message}`);
+        setError(`Error updating cart: ${error.message}`);
+      }
+    },
+    [cart]
+  );
+
+  useEffect(() => {
+    const calculateTotal = () => {
+      const totalAmount = cart
+        .reduce((total, cartItem) => {
+          const itemTotal = cartItem.cartDetails.reduce((itemTotal, item) => {
+            const price = parseFloat(item.unitPrice);
+            return itemTotal + item.quantity * (price || 0);
+          }, 0);
+          return total + itemTotal;
+        }, 0)
+        .toFixed(2);
+      setTotal(totalAmount);
+    };
+
     calculateTotal();
   }, [cart]);
 
   const debouncedQuantity = useDebounce(quantity, 2000);
 
   useEffect(() => {
-    if (Object.keys(debouncedQuantity).length > 0) {
-      for (const [index, newQuantity] of Object.entries(debouncedQuantity)) {
-        updateCart(index, newQuantity, null);
-      }
+    const newQuantities = Object.entries(debouncedQuantity);
+    const prevQuantities = Object.entries(prevDebouncedQuantity.current);
+
+    if (
+      newQuantities.length === prevQuantities.length &&
+      newQuantities.every(
+        ([key, value]) => prevDebouncedQuantity.current[key] === value
+      )
+    ) {
+      // Quantities haven't changed, do not update
+      return;
     }
+
+    if (Object.keys(debouncedQuantity).length > 0) {
+      console.log("Debounced Quantity:", debouncedQuantity);
+      Object.entries(debouncedQuantity).forEach(
+        ([inventoryId, newQuantity]) => {
+          console.log(
+            `Triggering updateCart for inventoryId=${inventoryId}, newQuantity=${newQuantity}`
+          );
+          updateCart(Number(inventoryId), newQuantity);
+        }
+      );
+    }
+
+    // Update prevDebouncedQuantity to the current debouncedQuantity
+    prevDebouncedQuantity.current = { ...debouncedQuantity };
   }, [debouncedQuantity, updateCart]);
 
-  const handleQuantityChange = (index, newQuantity) => {
-    setQuantity((prevQuantity) => ({
-      ...prevQuantity,
-      [index]: newQuantity,
-    }));
-  };
-
   const handleSelectItem = (index) => {
-    const newSelectedItems = [...selectedItems];
-    if (newSelectedItems.includes(index)) {
-      newSelectedItems.splice(newSelectedItems.indexOf(index), 1);
-    } else {
-      newSelectedItems.push(index);
-    }
-    setSelectedItems(newSelectedItems);
+    setSelectedItems((prev) =>
+      prev.includes(index)
+        ? prev.filter((item) => item !== index)
+        : [...prev, index]
+    );
   };
 
   const handleCheckoutClick = async () => {
@@ -78,8 +236,32 @@ const Cart = () => {
   const handleEmptyCartClick = async () => {
     await handleEmptyCart();
   };
-  const handleDeleteClick = async () => {
-    await handleDelete();
+
+  const handleDelete = async (index) => {
+    const itemToDelete = cart[index];
+    if (!itemToDelete || !itemToDelete.cartDetails) return;
+
+    try {
+      const bearerToken = sessionStorage.getItem("access_token");
+      if (!bearerToken) throw new Error("No access token found");
+
+      await axios.post(
+        `${BASE_URL}/api/Cart/RemoveFromCart`,
+        {
+          cartId: itemToDelete.cartId,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${bearerToken}`,
+          },
+        }
+      );
+
+      setCart((prevCart) => prevCart.filter((_, i) => i !== index));
+    } catch (error) {
+      setError(`Error removing item from cart: ${error.message}`);
+    }
   };
 
   return (
@@ -102,18 +284,18 @@ const Cart = () => {
       ) : (
         <div>
           <div className="flex justify-around border-b-2 border-black pl-[70px] pb-[30px]">
-            <h2 className=" font-bold text-[30px]">MY CART</h2>
-            <button className=" w-5 h-5" onClick={handleEmptyCartClick}>
+            <h2 className="font-bold text-[30px]">MY CART</h2>
+            <button className="w-5 h-5" onClick={handleEmptyCartClick}>
               <FiTrash />
             </button>
           </div>
 
-          <div className="mx-[70px] mt-10 flex justify-between items-start ">
+          <div className="mx-[70px] mt-10 flex justify-between items-start">
             <div className="flex-1 flex flex-row justify-start flex-wrap gap-4 pt-10 items-center">
               {cart.map((cartItem, cartIndex) =>
                 cartItem.cartDetails.map((item, itemIndex) => (
                   <div
-                    key={itemIndex}
+                    key={item.inventoryId}
                     className="flex w-[600px] flex-row gap-2 justify-start items-center p-7 shadow-xl rounded-xl"
                   >
                     <img
@@ -126,22 +308,25 @@ const Cart = () => {
                         {item.productName} <span>{item.inventoryId}</span>
                       </h5>
                       <p className="mb-3 text-[14px]">₦ {item.unitPrice}</p>
-                      <div className=" flex justify-start   items-center">
-                        <label className=" m-0 pr-4">Qty</label>
+                      <div className="flex justify-start items-center">
+                        <label className="m-0 pr-4">Qty</label>
                         <input
                           type="number"
                           min="1"
                           className="border border-black/50 w-16"
-                          value={quantity[cartIndex] || item.quantity}
+                          value={quantity[item.inventoryId] || item.quantity}
                           onChange={(e) =>
-                            handleQuantityChange(cartIndex, e.target.value)
+                            handleQuantityChange(
+                              item.inventoryId,
+                              e.target.value
+                            )
                           }
                         />
                       </div>
                       <p>{item.status}</p>
                     </div>
                     <button
-                      onClick={() => handleDelete(cartIndex)}
+                      onClick={() => handleDelete(item.inventoryId)}
                       className="ml-auto text-red-500"
                     >
                       Remove

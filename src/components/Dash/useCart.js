@@ -11,54 +11,6 @@ const useCart = () => {
   const [loading, setLoading] = useState(false);
   const [checkoutError, setCheckoutError] = useState(null);
 
-  const fetchCart = useCallback(async () => {
-    try {
-      const bearerToken = sessionStorage.getItem("access_token");
-      if (!bearerToken) {
-        throw new Error("No access token found in session storage");
-      }
-
-      const url = `${BASE_URL}/api/Cart/GetCart?isCustomer=true`;
-      const response = await fetch(url, {
-        method: "GET",
-        headers: {
-          "ngrok-skip-browser-warning": "69420",
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${bearerToken}`,
-        },
-      });
-
-      if (!response.ok) {
-        const responseBody = await response.text();
-        throw new Error(
-          `HTTP error! Status: ${response.status}, Response: ${responseBody}`
-        );
-      }
-
-      const responseData = await response.json();
-      if (responseData) {
-        console.log("Fetched cart data:", responseData);
-        setCart(responseData.cartResponse || []);
-        setCartCount(responseData.cartCount || 0);
-
-        const ids = responseData.cartResponse.map(
-          (cartItem) => cartItem.cartId
-        );
-        setCartIds(ids);
-        console.log("Cart IDs:", ids);
-
-        sessionStorage.setItem("cartData", JSON.stringify(responseData));
-      }
-    } catch (error) {
-      console.error("Error fetching cart data:", error);
-      setError(`An error occurred while fetching cart data: ${error.message}`);
-    }
-  }, []);
-
-  useEffect(() => {
-    fetchCart();
-  }, [fetchCart]);
-
   const addToCart = useCallback(
     async (inventory) => {
       try {
@@ -113,108 +65,7 @@ const useCart = () => {
         setError(`An error occurred while adding to cart: ${error.message}`);
       }
     },
-    [cartIds, fetchCart]
-  );
-
-  const handleEmptyCart = useCallback(async () => {
-    try {
-      const bearerToken = sessionStorage.getItem("access_token");
-      if (!bearerToken) {
-        throw new Error("No access token found in session storage");
-      }
-
-      const cartRemovePayload = {
-        cartId: cartIds[0],
-      };
-
-      const url = `${BASE_URL}/api/Cart/RemoveFromCart`;
-      const response = await fetch(url, {
-        method: "POST",
-        headers: {
-          "ngrok-skip-browser-warning": "69420",
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${bearerToken}`,
-        },
-        body: JSON.stringify(cartRemovePayload),
-      });
-
-      if (!response.ok) {
-        const responseBody = await response.text();
-        throw new Error(
-          `HTTP error! Status: ${response.status}, Response: ${responseBody}`
-        );
-      }
-
-      const responseData = await response.json();
-      if (responseData) {
-        console.log("Cart emptied successfully:", responseData);
-        setCart([]);
-      }
-    } catch (error) {
-      console.error("Error clearing cart:", error);
-      setError(`An error occurred while clearing the cart: ${error.message}`);
-    }
-  }, [cartIds]);
-
-  const updateCart = useCallback(
-    async (index, newQuantity, newStatus = true) => {
-      try {
-        const updatedCart = [...cart];
-        const itemToUpdate = updatedCart[index];
-
-        if (!itemToUpdate || !itemToUpdate.cartDetails) {
-          throw new Error("Item to update or its details are missing.");
-        }
-
-        if (newQuantity <= 0) {
-          updatedCart.splice(index, 1); // Remove item if quantity is <= 0
-        } else {
-          itemToUpdate.cartDetails[0].quantity = newQuantity;
-        }
-
-        itemToUpdate.cartDetails[0].status = true;
-        console.log(newStatus, "new status");
-        const bearerToken = sessionStorage.getItem("access_token");
-        if (!bearerToken) {
-          throw new Error("No access token found in session storage");
-        }
-
-        const cartUpdatePayload = [
-          {
-            cartId: itemToUpdate.cartId,
-            cartCommand: null,
-            carts: itemToUpdate.cartDetails.map((detail) => ({
-              inventoryId: detail.inventoryId,
-              quantity: detail.quantity,
-              productName: detail.productName,
-              status: true,
-            })),
-          },
-        ];
-
-        console.log("Updating cart with payload:", cartUpdatePayload);
-
-        const url = `${BASE_URL}/api/Cart/UpdateCart`;
-        const response = await axios.put(url, cartUpdatePayload, {
-          headers: {
-            "ngrok-skip-browser-warning": "69420",
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${bearerToken}`,
-          },
-        });
-
-        const responseData = response.data;
-        if (responseData) {
-          console.log("Cart updated successfully:", responseData);
-          setCart(responseData.cartResponse || []);
-          window.location.reload();
-        }
-      } catch (error) {
-        console.error("Error updating cart:", error);
-        setError(`An error occurred while updating the cart: ${error.message}`);
-      }
-    },
-    [cart]
+    [cartIds]
   );
 
   const handleCheckout = useCallback(
@@ -267,18 +118,18 @@ const useCart = () => {
   );
 
   return {
-    cart,
-    cartCount,
-    setCart,
-    error,
-    alertMessage,
-    loading,
-    checkoutError,
-    fetchCart,
-    addToCart,
-    updateCart,
-    handleCheckout,
-    handleEmptyCart,
+    // cart,
+    // cartCount,
+    // setCart,
+    // error,
+    // alertMessage,
+    // loading,
+    // checkoutError,
+    // fetchCart,
+    // addToCart,
+    // updateCart,
+    // handleCheckout,
+    // handleEmptyCart,
   };
 };
 
