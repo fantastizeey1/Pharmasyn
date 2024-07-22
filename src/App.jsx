@@ -5,7 +5,6 @@ import Success from "./components/register/succes";
 import SignIn from "./components/signIn/signIn";
 import SignUp from "./components/register/SignUp";
 import Success2 from "./components/signIn/success2";
-
 import SignIn2 from "./components/signIn/signin2";
 import Dashboard from "./components/Dash/Dashboard";
 import Home from "./components/Landingpage/Home";
