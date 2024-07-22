@@ -4,7 +4,6 @@ import { FaUserTimes, FaCheckCircle } from "react-icons/fa";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import "/src/index.css";
 import { BASE_URL } from "../../config";
-import RegisterPhamComp from "./Register2PhamComp";
 
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const passwordRegex =
