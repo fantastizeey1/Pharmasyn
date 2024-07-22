@@ -5,21 +5,27 @@ import Footer from "../Landingpage/Footer";
 import Btn from "../Landingpage/Btn";
 import useCart from "../Dash/useCart";
 import { FiTrash } from "react-icons/fi";
+import useDebounce from "./UseDeounce";
 
 const Cart = () => {
   const {
     cart,
     cartCount,
-    fetchCart,
     addToCart,
-    updateCart,
-    handleCheckout,
     handleEmptyCart,
+    updateCart,
+    handleDelete,
+    handleCheckout,
+    alertMessage,
+    error,
+    loading,
+    checkoutError,
   } = useCart();
 
   const [selectedItems, setSelectedItems] = useState([]);
   const [total, setTotal] = useState(0);
   const [cartItemCount, setCartItemCount] = useState(0);
+  const [quantity, setQuantity] = useState({});
 
   const calculateTotal = () => {
     const totalAmount = cart
@@ -34,44 +40,25 @@ const Cart = () => {
     setTotal(totalAmount);
   };
 
-  const calculateItemCount = () => {
-    const itemCount = cart.reduce((total, cartItem) => {
-      return (
-        total +
-        cartItem.cartDetails.reduce(
-          (itemTotal, item) => itemTotal + item.quantity,
-          0
-        )
-      );
-    }, 0);
-    setCartItemCount(itemCount);
-  };
-
   useEffect(() => {
     calculateTotal();
-    calculateItemCount();
   }, [cart]);
 
-  const handleQuantityChange = (index, newQuantity, command) => {
-    updateCart(index, newQuantity, command);
-  };
+  const debouncedQuantity = useDebounce(quantity, 2000);
 
-  const handleIncrease = (index) => {
-    const newQuantity = cart[index].quantity + 1;
-    handleQuantityChange(index, newQuantity, "add");
-  };
-
-  const handleDecrease = (index) => {
-    const newQuantity = cart[index].quantity - 1;
-    if (newQuantity <= 0) {
-      handleDelete(index);
-    } else {
-      handleQuantityChange(index, newQuantity, "subtract");
+  useEffect(() => {
+    if (Object.keys(debouncedQuantity).length > 0) {
+      for (const [index, newQuantity] of Object.entries(debouncedQuantity)) {
+        updateCart(index, newQuantity, null);
+      }
     }
-  };
+  }, [debouncedQuantity, updateCart]);
 
-  const handleDelete = (index) => {
-    updateCart(index, 0, "null");
+  const handleQuantityChange = (index, newQuantity) => {
+    setQuantity((prevQuantity) => ({
+      ...prevQuantity,
+      [index]: newQuantity,
+    }));
   };
 
   const handleSelectItem = (index) => {
@@ -89,7 +76,10 @@ const Cart = () => {
   };
 
   const handleEmptyCartClick = async () => {
-    await handleEmptyCart(); // Use handleEmptyCart here
+    await handleEmptyCart();
+  };
+  const handleDeleteClick = async () => {
+    await handleDelete();
   };
 
   return (
@@ -111,10 +101,8 @@ const Cart = () => {
         </div>
       ) : (
         <div>
-          <div className="flex justify-between">
-            <h2 className="border-b-2 border-black pl-[70px] pb-[30px] font-bold text-[30px]">
-              MY CART
-            </h2>
+          <div className="flex justify-around border-b-2 border-black pl-[70px] pb-[30px]">
+            <h2 className=" font-bold text-[30px]">MY CART</h2>
             <button className=" w-5 h-5" onClick={handleEmptyCartClick}>
               <FiTrash />
             </button>
@@ -129,30 +117,28 @@ const Cart = () => {
                     className="flex w-[600px] flex-row gap-2 justify-start items-center p-7 shadow-xl rounded-xl"
                   >
                     <img
-                      src={item.img || "/suii.jpg"} // Default image if none provided
+                      src={item.img || "/suii.jpg"}
                       alt={item.productName}
-                      className="w-[80px] h-[80px] mr-10"
+                      className="w-[80px] h-[100px] mr-10"
                     />
                     <div>
                       <h5 className="font-bold text-[24px]">
-                        {item.productName}
+                        {item.productName} <span>{item.inventoryId}</span>
                       </h5>
                       <p className="mb-3 text-[14px]">₦ {item.unitPrice}</p>
-                      <div className="border-2 border-black w-32 h-12 flex justify-around items-center">
-                        <button
-                          className=" "
-                          onClick={() => handleDecrease(cartIndex)}
-                        >
-                          <p className="text-[35px] -mt-6">-</p>
-                        </button>
-                        <span className="text-[35px]">{item.quantity}</span>
-                        <button
-                          className=" "
-                          onClick={() => handleIncrease(cartIndex)}
-                        >
-                          <p className="text-[32px] -mt-4">+</p>
-                        </button>
+                      <div className=" flex justify-start   items-center">
+                        <label className=" m-0 pr-4">Qty</label>
+                        <input
+                          type="number"
+                          min="1"
+                          className="border border-black/50 w-16"
+                          value={quantity[cartIndex] || item.quantity}
+                          onChange={(e) =>
+                            handleQuantityChange(cartIndex, e.target.value)
+                          }
+                        />
                       </div>
+                      <p>{item.status}</p>
                     </div>
                     <button
                       onClick={() => handleDelete(cartIndex)}

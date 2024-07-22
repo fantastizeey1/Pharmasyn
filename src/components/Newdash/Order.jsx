@@ -21,6 +21,49 @@ const Order = () => {
     fetchData();
   }, []);
 
+  const getOrder = useCallback(async () => {
+    try {
+      const bearerToken = sessionStorage.getItem("access_token");
+      if (!bearerToken) {
+        throw new Error("No access token found in session storage");
+      }
+
+      const url = `${BASE_URL}/api/Order/GetOrders`;
+      const response = await fetch(url, {
+        method: "GET",
+        headers: {
+          "ngrok-skip-browser-warning": "69420",
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${bearerToken}`,
+        },
+      });
+
+      if (!response.ok) {
+        const responseBody = await response.text();
+        throw new Error(
+          `HTTP error! Status: ${response.status}, Response: ${responseBody}`
+        );
+      }
+
+      const responseData = await response.json();
+      if (responseData) {
+        console.log("Fetched order data:", responseData);
+        const { orders = [], responseCode, responseMessage } = responseData;
+
+        // Assuming setOrder and setOrderCount are the appropriate state setters
+        setOrder(orders);
+        setOrderCount(orders.length);
+      }
+    } catch (error) {
+      console.error("Error fetching order data:", error);
+      setError(`An error occurred while fetching order data: ${error.message}`);
+    }
+  }, []);
+
+  useEffect(() => {
+    getOrder();
+  }, [getOrder]);
+
   async function getData() {
     // Fetch data from your API here.
     return [
