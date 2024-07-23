@@ -15,6 +15,16 @@ const Register2 = () => {
   const location = useLocation();
   const userType = location.state?.userType || "1"; // Default to "1" if userType is not provided
 
+  const [isLoading, setIsLoading] = useState(false);
+  const handleClick = () => {
+    setIsLoading(true);
+
+    // Simulate an API call or any async operation
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 500); // Set the timeout duration to 3000 milliseconds (3 seconds)
+  };
+
   const handleFileUpload = (e, setBase64File) => {
     const uploadedFile = e.target.files[0];
     const reader = new FileReader();
@@ -244,8 +254,9 @@ const Register2 = () => {
             <button
               type="submit"
               className="bg-[#0C0C0C] text-white py-2 px-4 rounded mt-4"
+              onClick={handleClick}
             >
-              Complete Registration
+              {isLoading ? "Loading..." : "Complete Registration"}
             </button>
           </form>
         </div>

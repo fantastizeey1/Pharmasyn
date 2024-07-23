@@ -45,9 +45,15 @@ function Register() {
   const navigate = useNavigate();
   console.log(userType);
 
-  // Initialize userType based on accountType from location state
+  const [isLoading, setIsLoading] = useState(false);
+  const handleClick = () => {
+    setIsLoading(true);
 
-  console.log(userType);
+    // Simulate an API call or any async operation
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 500); // Set the timeout duration to 3000 milliseconds (3 seconds)
+  };
 
   const validateForm = () => {
     return validEmail && validPwd && validMatch && validPhone;
@@ -432,22 +438,22 @@ function Register() {
               <button
                 type="submit"
                 disabled={
-                  !validPwd || !validMatch || !validEmail || !validPhone
-                } // Corrected disabling logic
-                className={`p-2 text-l border-2  cursor-pointer 
-          ${
-            !validPwd || !validMatch || !validEmail || !validPhone
-              ? "bg-red-600"
-              : "bg-blue-600"
-          }
-          ${
-            !validPwd || !validMatch || !validEmail || !validPhone
-              ? "disabled:bg-[#49597e]"
-              : "enabled:bg-[#013299]"
-          }
-          `}
+                  !validPwd ||
+                  !validMatch ||
+                  !validEmail ||
+                  !validPhone ||
+                  isLoading
+                }
+                className={`p-2 text-l border-2 cursor-pointer
+        ${
+          !validPwd || !validMatch || !validEmail || !validPhone || isLoading
+            ? "bg-red-600 disabled:bg-[#49597e] cursor-not-allowed"
+            : "bg-blue-600 enabled:bg-[#013299] cursor-pointer"
+        }
+      `}
+                onClick={handleClick}
               >
-                Create Account
+                {isLoading ? "Loading..." : "Create Account"}
               </button>
             </form>
             <p className="text-yellow-50">

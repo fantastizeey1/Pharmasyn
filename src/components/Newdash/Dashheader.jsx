@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { AiOutlineMenu, AiOutlineClose } from "react-icons/ai";
 import logo from "/logo.jpg";
 import searchIcon from "/searchicon.svg";
-import cartIcon from "/cart.svg";
+import cartIcon from "/Cart.svg";
 
 const Dashheader = ({ cartCount }) => {
   const [nav, setNav] = useState(false);

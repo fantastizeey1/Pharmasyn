@@ -14,6 +14,16 @@ function SignIn2() {
   const navigate = useNavigate();
   const location = useLocation();
 
+  const [isLoading, setIsLoading] = useState(false);
+  const handleClick = () => {
+    setIsLoading(true);
+
+    // Simulate an API call or any async operation
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 500); // Set the timeout duration to 3000 milliseconds (3 seconds)
+  };
+
   useEffect(() => {
     if (location.state && location.state.email && location.state.password) {
       setEmailAddress(location.state.email);
@@ -156,10 +166,11 @@ function SignIn2() {
               </Link>
             </div>
             <button
+              onClick={handleClick}
               type="submit"
               className="w-full bg-[#013299] text-white py-2 px-4 rounded-lg hover:bg-[#2b50a0]"
             >
-              Verify OTP
+              {isLoading ? "Loading..." : "Verify OTP"}
             </button>
 
             <p className="mt-2 text-sm text-end text-black">

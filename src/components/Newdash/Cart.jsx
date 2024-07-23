@@ -10,7 +10,6 @@ import { FiTrash } from "react-icons/fi";
 import useDebounce from "./UseDeounce";
 
 const Cart = () => {
-  const { handleCheckout } = useCart();
   const [cart, setCart] = useState([]);
   const [cartIds, setCartIds] = useState([]);
   const [cartCount, setCartCount] = useState(0);

@@ -10,6 +10,16 @@ const Forgotpassword = () => {
   const errRef = useRef();
   const navigate = useNavigate();
 
+  const [isLoading, setIsLoading] = useState(false);
+  const handleClick = () => {
+    setIsLoading(true);
+
+    // Simulate an API call or any async operation
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 500); // Set the timeout duration to 3000 milliseconds (3 seconds)
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -104,8 +114,9 @@ const Forgotpassword = () => {
             <button
               type="submit"
               className="w-full bg-[#013299]  text-white py-2 px-4 text-[30px] rounded-lg hover:bg-[#2b50a0]"
+              onClick={handleClick}
             >
-              Submit
+              {isLoading ? "Loading..." : "Submit"}
             </button>
 
             <p className="mt-2 text-sm text-end text-black">
