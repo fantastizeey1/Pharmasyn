@@ -311,7 +311,18 @@ const Cart = () => {
       );
 
       console.log("Cart updated successfully");
-      setCart(updatedCart);
+
+      // Filter out items with status set to false
+      const newCart = updatedCart
+        .map((cartItem) => ({
+          ...cartItem,
+          cartDetails: cartItem.cartDetails.filter(
+            (detail) => detail.status !== false
+          ),
+        }))
+        .filter((cartItem) => cartItem.cartDetails.length > 0);
+
+      setCart(newCart);
     } catch (error) {
       console.error(`Error removing item from cart: ${error.message}`); // Debug log
       setError(`Error removing item from cart: ${error.message}`);
