@@ -265,40 +265,52 @@ const Cart = () => {
         throw new Error("Item to delete not found.");
       }
 
+      // Set the status to false
+      itemToDelete.status = false;
+
       const bearerToken = sessionStorage.getItem("access_token");
       if (!bearerToken) throw new Error("No access token found");
 
-      // Remove the item from the cart
-      updatedCart[cartIndex].cartDetails.splice(detailIndex, 1);
+      console.log(
+        "Payload:",
+        JSON.stringify([
+          {
+            cartId: updatedCart[cartIndex].cartId,
+            cartCommand: null,
+            carts: updatedCart[cartIndex].cartDetails.map((detail) => ({
+              inventoryId: detail.inventoryId,
+              quantity: detail.quantity,
+              productName: detail.productName,
+              status: detail.status,
+            })),
+          },
+        ])
+      );
 
-      // If there are no more items in cartDetails, remove the cart item itself
-      if (updatedCart[cartIndex].cartDetails.length === 0) {
-        updatedCart.splice(cartIndex, 1);
-      }
+      await axios.put(
+        `${BASE_URL}/api/Cart/UpdateCart`,
+        [
+          {
+            cartId: updatedCart[cartIndex].cartId,
+            cartCommand: null,
+            carts: updatedCart[cartIndex].cartDetails.map((detail) => ({
+              inventoryId: detail.inventoryId,
+              quantity: detail.quantity,
+              productName: detail.productName,
+              status: detail.status,
+            })),
+          },
+        ],
+        {
+          headers: {
+            "ngrok-skip-browser-warning": "69420",
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${bearerToken}`,
+          },
+        }
+      );
 
-      console.log("Updated Cart:", JSON.stringify(updatedCart));
-
-      const payload = updatedCart.map((cartItem) => ({
-        cartId: cartItem.cartId,
-        cartCommand: null,
-        carts: cartItem.cartDetails.map((detail) => ({
-          inventoryId: detail.inventoryId,
-          quantity: detail.quantity,
-          productName: detail.productName,
-          status: true,
-        })),
-      }));
-
-      console.log("Payload:", JSON.stringify(payload));
-
-      await axios.put(`${BASE_URL}/api/Cart/UpdateCart`, payload, {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${bearerToken}`,
-        },
-      });
-
-      console.log("Item removed successfully");
+      console.log("Cart updated successfully");
       setCart(updatedCart);
     } catch (error) {
       console.error(`Error removing item from cart: ${error.message}`); // Debug log
