@@ -8,6 +8,7 @@ import Btn from "../Landingpage/Btn";
 import useCart from "../Dash/useCart";
 import { FiTrash } from "react-icons/fi";
 import useDebounce from "./UseDeounce";
+import { NavLink, Link, useLocation } from "react-router-dom";
 
 const Cart = () => {
   const [cart, setCart] = useState([]);
@@ -331,98 +332,174 @@ const Cart = () => {
   return (
     <div>
       <Dashheader cartCount={cartCount} />
-      {cart.length === 0 ? (
-        <div className="flex justify-center items-center flex-col maybe">
-          <img
-            src="/cartempty.png"
-            alt="empty cart image"
-            className="w-[400px]"
-          />
-          <h2 className="font-bold mb-[60px]">YOUR CART IS EMPTY</h2>
-          <Btn
-            title="Shop"
-            linkpath="/Shop"
-            className="w-[800px] h-[90px] flex justify-center items-center px-2 text-[30px]"
-          />
-        </div>
-      ) : (
-        <div>
-          <div className="flex justify-around border-b-2 border-black pl-[70px] pb-[30px]">
-            <h2 className="font-bold text-[30px]">MY CART</h2>
-            <button className="w-5 h-5" onClick={handleEmptyCartClick}>
-              <FiTrash />
-            </button>
-          </div>
+      <div className="flex  items-center gap-5 mx-[15px] md:mx-[40px]">
+        <div className="w-[180px]  bg-white pl-[15px] pt-[15px] flex flex-col items-start h-[80vh] mt-5 rounded-lg shadow-lg">
+          <div className="flex flex-col items-start w-full">
+            <div className="flex flex-col mb-[150px] w-full">
+              <NavLink
+                to="/Shop"
+                className={({ isActive }) =>
+                  isActive
+                    ? "flex items-center text-[16px] font-medium mb-[44px] text-blue-500"
+                    : "flex items-center text-[16px] font-medium mb-[44px] text-black"
+                }
+              >
+                <img
+                  src={"/market.svg"}
+                  alt="icon"
+                  className="mr-4 w-[20px] h-[20px]"
+                />
+                MarketPlace
+              </NavLink>
 
-          <div className="mx-[70px] mt-10 flex justify-between items-start">
-            <div className="flex-1 flex flex-row justify-start flex-wrap gap-4 pt-10 items-center">
-              {cart.map((cartItem, cartIndex) =>
-                cartItem.cartDetails.map((item, itemIndex) => (
-                  <div
-                    key={item.inventoryId}
-                    className="flex w-[600px] flex-row gap-2 justify-start items-center p-7 shadow-xl rounded-xl"
-                  >
-                    <img
-                      src={item.img || "/suii.jpg"}
-                      alt={item.productName}
-                      className="w-[80px] h-[100px] mr-10"
-                    />
-                    <div>
-                      <h5 className="font-bold text-[24px]">
-                        {item.productName} <span>{item.inventoryId}</span>
-                      </h5>
-                      <p className="mb-3 text-[14px]">₦ {item.unitPrice}</p>
-                      <div className="flex justify-start items-center">
-                        <label className="m-0 pr-4">Qty</label>
-                        <input
-                          type="number"
-                          min="1"
-                          className="border border-black/50 w-16"
-                          value={quantity[item.inventoryId] || item.quantity}
-                          onChange={(e) =>
-                            handleQuantityChange(
-                              item.inventoryId,
-                              e.target.value
-                            )
-                          }
-                        />
-                      </div>
-                      <p>{item.status}</p>
-                    </div>
-                    <button
-                      onClick={() => {
-                        console.log(
-                          `Delete button clicked for inventoryId: ${item.inventoryId}`
-                        ); // Debug log
-                        handleDelete(item.inventoryId);
-                      }}
-                      className="ml-auto text-red-500"
+              <NavLink
+                to="/inventory"
+                className={({ isActive }) =>
+                  isActive
+                    ? "flex items-center text-[16px] font-medium mb-[44px] text-blue-500"
+                    : "flex items-center text-[16px] font-medium mb-[44px] text-black"
+                }
+              >
+                <img
+                  src={"/inventory.png"}
+                  alt="icon"
+                  className="mr-4 w-[20px] h-[20px]"
+                />
+                Inventory
+              </NavLink>
+
+              <NavLink
+                to="/orders"
+                className="flex items-center text-[16px] font-medium mb-[44px] text-black"
+              >
+                <img
+                  src="/Orders.png"
+                  alt="icon"
+                  className="mr-4 w-[20px] h-[20px]"
+                />
+                Orders
+              </NavLink>
+
+              <NavLink
+                to="/reports"
+                className={({ isActive }) =>
+                  isActive
+                    ? "flex items-center text-[16px] font-medium mb-[44px] text-blue-500"
+                    : "flex items-center text-[16px] font-medium mb-[44px] text-black"
+                }
+              >
+                <img src="/reports.png" alt="icon" className="mr-4 w-[20px]" />
+                Reports
+              </NavLink>
+
+              <NavLink
+                to="/settings"
+                className={({ isActive }) =>
+                  isActive
+                    ? "flex items-center text-[16px] font-medium mb-[44px] text-blue-500"
+                    : "flex items-center text-[16px] font-medium mb-[44px] text-black"
+                }
+              >
+                <img src="/settings.png" alt="icon" className="mr-4 w-[20px]" />
+                Settings
+              </NavLink>
+            </div>
+          </div>
+        </div>
+        {cart.length === 0 ? (
+          <div className="flex justify-center items-center flex-col maybe">
+            <img
+              src="/cartempty.png"
+              alt="empty cart image"
+              className="w-[400px]"
+            />
+            <h2 className="font-bold mb-[60px]">YOUR CART IS EMPTY</h2>
+            <Btn
+              title="Shop"
+              linkpath="/Shop"
+              className="w-[800px] h-[90px] flex justify-center items-center px-2 text-[30px]"
+            />
+          </div>
+        ) : (
+          <div>
+            <div className="flex justify-around border-b-2 border-black pl-[70px] pb-[30px]">
+              <h2 className="font-bold text-[30px]">MY CART</h2>
+              <button className="w-5 h-5" onClick={handleEmptyCartClick}>
+                <FiTrash />
+              </button>
+            </div>
+
+            <div className="mx-[70px] mt-10 flex justify-between items-start">
+              <div className="flex-1 flex flex-row justify-start flex-wrap gap-4 pt-10 items-center">
+                {cart.map((cartItem, cartIndex) =>
+                  cartItem.cartDetails.map((item, itemIndex) => (
+                    <div
+                      key={item.inventoryId}
+                      className="flex w-[600px] flex-row gap-2 justify-start items-center p-7 shadow-xl rounded-xl"
                     >
-                      Remove
-                    </button>
-                  </div>
-                ))
-              )}
-            </div>
-
-            <div className="shadow-xl p-7 pt-10 w-[400px] rounded-xl">
-              <div className="flex justify-between items-center mb-4">
-                <p className="text-[16px] text-[#0C0C0C]/90">Total</p>
-                <p className="text-[16px] text-[#0C0C0C]/90">₦{total}</p>
+                      <img
+                        src={item.img || "/suii.jpg"}
+                        alt={item.productName}
+                        className="w-[80px] h-[100px] mr-10"
+                      />
+                      <div>
+                        <h5 className="font-bold text-[24px]">
+                          {item.productName} <span>{item.inventoryId}</span>
+                        </h5>
+                        <p className="mb-3 text-[14px]">₦ {item.unitPrice}</p>
+                        <div className="flex justify-start items-center">
+                          <label className="m-0 pr-4">Qty</label>
+                          <input
+                            type="number"
+                            min="1"
+                            className="border border-black/50 w-16"
+                            value={quantity[item.inventoryId] || item.quantity}
+                            onChange={(e) =>
+                              handleQuantityChange(
+                                item.inventoryId,
+                                e.target.value
+                              )
+                            }
+                          />
+                        </div>
+                        <p>{item.status}</p>
+                      </div>
+                      <button
+                        onClick={() => {
+                          console.log(
+                            `Delete button clicked for inventoryId: ${item.inventoryId}`
+                          ); // Debug log
+                          handleDelete(item.inventoryId);
+                        }}
+                        className="ml-auto text-red-500"
+                      >
+                        Remove
+                      </button>
+                    </div>
+                  ))
+                )}
               </div>
-              <p className="text-[16px] text-[#0C0C0C]/90">
-                Taxes and shipping calculated at checkout
-              </p>
-              <Btn
-                title="Checkout"
-                linkpath="#"
-                className="w-full h-[60px] flex justify-center items-center mt-8 px-2 text-[22px]"
-                onClick={handleCheckoutClick}
-              />
+
+              <div className="shadow-xl p-7 pt-10 w-[400px] rounded-xl">
+                <div className="flex justify-between items-center mb-4">
+                  <p className="text-[16px] text-[#0C0C0C]/90">Total</p>
+                  <p className="text-[16px] text-[#0C0C0C]/90">₦{total}</p>
+                </div>
+                <p className="text-[16px] text-[#0C0C0C]/90">
+                  Taxes and shipping calculated at checkout
+                </p>
+                <Btn
+                  title="Checkout"
+                  linkpath="#"
+                  className="w-full h-[60px] flex justify-center items-center mt-8 px-2 text-[22px]"
+                  onClick={handleCheckoutClick}
+                />
+              </div>
             </div>
           </div>
-        </div>
-      )}
+        )}
+      </div>
+
       <Discoverus />
       <Footer />
     </div>

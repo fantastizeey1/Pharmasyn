@@ -247,7 +247,7 @@ const Shop = () => {
               className="ml-[36px] text-[14px] font-bold hover:scale-110"
               aria-label="Shop"
             >
-              Shop
+              Marketplace
             </Link>
             <Link
               to="/#contact-us"
@@ -298,69 +298,84 @@ const Shop = () => {
           </div>
         </div>
       </header>
-      <div className="w-[130px] fixed bg-white pl-[15px] pt-[15px] flex flex-col items-start h-[50vh] rounded-r-xl shadow-lg">
-        <div className="flex flex-col items-start w-full">
-          <div className="flex flex-col mb-[150px] w-full">
-            <NavLink
-              to="/inventory"
-              className={({ isActive }) =>
-                isActive
-                  ? "flex items-center text-[16px] font-medium mb-[44px] text-blue-500"
-                  : "flex items-center text-[16px] font-medium mb-[44px] text-black"
-              }
-            >
-              <img
-                src={"/inventory.png"}
-                alt="icon"
-                className="mr-4 w-[20px] h-[20px]"
-              />
-              Inventory
-            </NavLink>
 
-            <NavLink
-              to="/orders"
-              className="flex items-center text-[16px] font-medium mb-[44px] text-black"
-            >
-              <img
-                src="/Orders.png"
-                alt="icon"
-                className="mr-4 w-[20px] h-[20px]"
-              />
-              Orders
-            </NavLink>
-
-            <NavLink
-              to="/reports"
-              className={({ isActive }) =>
-                isActive
-                  ? "flex items-center text-[16px] font-medium mb-[44px] text-blue-500"
-                  : "flex items-center text-[16px] font-medium mb-[44px] text-black"
-              }
-            >
-              <img src="/reports.png" alt="icon" className="mr-4 w-[20px]" />
-              Reports
-            </NavLink>
-
-            <NavLink
-              to="/settings"
-              className={({ isActive }) =>
-                isActive
-                  ? "flex items-center text-[16px] font-medium mb-[44px] text-blue-500"
-                  : "flex items-center text-[16px] font-medium mb-[44px] text-black"
-              }
-            >
-              <img src="/settings.png" alt="icon" className="mr-4 w-[20px]" />
-              Settings
-            </NavLink>
-          </div>
-
-          <div className="flex items-center"></div>
-        </div>
-      </div>
       <div className="mx-[15px] md:mx-[70px]">
-        <div className=" mt-[45px] mb-[65px] w-full h-[168px] bg-[#013299] justify-center flex items-center rounded-xl">
-          <h1 className="text-[40px] text-white font-bold">PRODUCTS</h1>
+        <div className="w-[180px]  bg-white pl-[15px] pt-[15px] flex flex-col items-start h-[80vh] mt-5 rounded-lg shadow-lg">
+          <div className="flex flex-col items-start w-full">
+            <div className="flex flex-col mb-[150px] w-full">
+              <NavLink
+                to="/Shop"
+                className={({ isActive }) =>
+                  isActive
+                    ? "flex items-center text-[16px] font-medium mb-[44px] text-blue-500"
+                    : "flex items-center text-[16px] font-medium mb-[44px] text-black"
+                }
+              >
+                <img
+                  src={"/market.svg"}
+                  alt="icon"
+                  className="mr-4 w-[20px] h-[20px]"
+                />
+                MarketPlace
+              </NavLink>
+
+              <NavLink
+                to="/inventory"
+                className={({ isActive }) =>
+                  isActive
+                    ? "flex items-center text-[16px] font-medium mb-[44px] text-blue-500"
+                    : "flex items-center text-[16px] font-medium mb-[44px] text-black"
+                }
+              >
+                <img
+                  src={"/inventory.png"}
+                  alt="icon"
+                  className="mr-4 w-[20px] h-[20px]"
+                />
+                Inventory
+              </NavLink>
+
+              <NavLink
+                to="/orders"
+                className="flex items-center text-[16px] font-medium mb-[44px] text-black"
+              >
+                <img
+                  src="/Orders.png"
+                  alt="icon"
+                  className="mr-4 w-[20px] h-[20px]"
+                />
+                Orders
+              </NavLink>
+
+              <NavLink
+                to="/reports"
+                className={({ isActive }) =>
+                  isActive
+                    ? "flex items-center text-[16px] font-medium mb-[44px] text-blue-500"
+                    : "flex items-center text-[16px] font-medium mb-[44px] text-black"
+                }
+              >
+                <img src="/reports.png" alt="icon" className="mr-4 w-[20px]" />
+                Reports
+              </NavLink>
+
+              <NavLink
+                to="/settings"
+                className={({ isActive }) =>
+                  isActive
+                    ? "flex items-center text-[16px] font-medium mb-[44px] text-blue-500"
+                    : "flex items-center text-[16px] font-medium mb-[44px] text-black"
+                }
+              >
+                <img src="/settings.png" alt="icon" className="mr-4 w-[20px]" />
+                Settings
+              </NavLink>
+            </div>
+          </div>
         </div>
+        {/* <div className=" mt-[45px] mb-[65px] w-full h-[168px] bg-[#013299] justify-center flex items-center rounded-xl">
+          <h1 className="text-[40px] text-white font-bold">PRODUCTS</h1>
+        </div> */}
       </div>
       <div className="mx-[15px] md:mx-[120px]">
         <div className="md:grid md:grid-cols-3 md:gap-x-4 lg:gap-x-10 md:gap-y-10">
