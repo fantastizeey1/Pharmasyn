@@ -236,6 +236,22 @@ const Status = () => {
           <div className="flex flex-col items-start w-full">
             <div className="flex flex-col mb-[150px] w-full">
               <NavLink
+                to="/Shop"
+                className={({ isActive }) =>
+                  isActive
+                    ? "flex items-center text-[16px] font-medium mb-[44px] text-blue-500"
+                    : "flex items-center text-[16px] font-medium mb-[44px] text-black"
+                }
+              >
+                <img
+                  src={"/market.svg"}
+                  alt="icon"
+                  className="mr-4 w-[20px] h-[20px]"
+                />
+                MarketPlace
+              </NavLink>
+
+              <NavLink
                 to="/inventory"
                 className={({ isActive }) =>
                   isActive
