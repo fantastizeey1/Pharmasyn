@@ -158,25 +158,6 @@ function Register() {
               For the purpose of account regulation, your details are required.
             </p>
             <form action="" onSubmit={handleSubmit}>
-              {/* <label htmlFor="userType" className="mb-2">
-                Choose your user type:
-              </label>
-              <select
-                id="userType"
-                name="userType"
-                onChange={handleUserTypeChange}
-                value={userType}
-                className="rounded-lg text-[#0C0C0C] p-2 border-2 border-[#0C0C0C]/50 placeholder:text-[#0C0C0C]/50 placeholder:text-[14px]"
-              >
-                <option value={1}>Pharmaceutical Company</option>
-                <option value={2}>Wholesale Pharmacy</option>
-                <option value={3}>Retail Pharmacy</option>
-                <option value={4}>Hospital Pharmacy</option>{" "}
-                
-                <option value={5}>Doctor</option> 
-                <option value={6}>Pharmacist</option> 
-              </select> */}
-
               <label htmlFor="name" className="mb-2">
                 Full Name:
               </label>
