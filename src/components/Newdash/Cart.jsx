@@ -229,10 +229,6 @@ const Cart = () => {
     );
   };
 
-  const handleCheckoutClick = async () => {
-    await handleCheckout(selectedItems);
-  };
-
   const handleEmptyCartClick = async () => {
     await handleEmptyCart();
   };
@@ -329,11 +325,42 @@ const Cart = () => {
     }
   };
 
+  const handleCheckout = async (cart) => {
+    const bearerToken = sessionStorage.getItem("access_token");
+    if (!bearerToken) {
+      console.error("No access token found");
+      return;
+    }
+
+    const payload = cart.map((item) => ({
+      cartId: item.cartId,
+      approvalStatus: 2,
+    }));
+
+    try {
+      await axios.put(`${BASE_URL}/api/Order/CreateOrder`, payload, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${bearerToken}`,
+        },
+      });
+      console.log("Order created successfully");
+      handleEmptyCart();
+    } catch (error) {
+      console.error(`Error creating order: ${error.message}`);
+      setError(`Error creating order: ${error.message}`);
+    }
+  };
+
+  const handleCheckoutClick = () => {
+    handleCheckout(cart);
+  };
+
   return (
-    <div>
+    <div className="max-w-[100%]">
       <Dashheader cartCount={cartCount} />
       <div className="flex  items-center gap-5 mx-[15px] md:mx-[40px]">
-        <div className="w-[180px]  bg-white pl-[15px] pt-[15px] flex flex-col items-start h-[80vh] mt-5 rounded-lg shadow-lg">
+        <div className="min-w-[180px]  bg-white pl-[15px] pt-[15px] flex flex-col items-start h-[80vh] mt-5 rounded-lg shadow-lg">
           <div className="flex flex-col items-start w-full">
             <div className="flex flex-col mb-[150px] w-full">
               <NavLink
@@ -421,15 +448,15 @@ const Cart = () => {
             />
           </div>
         ) : (
-          <div>
-            <div className="flex justify-around border-b-2 border-black pl-[70px] pb-[30px]">
+          <div className="flex justify-center items-center flex-col maybe w-[85%]">
+            <div className="flex justify-between  w-full border-b-2 border-black pl-[70px] pb-[30px]">
               <h2 className="font-bold text-[30px]">MY CART</h2>
-              <button className="w-5 h-5" onClick={handleEmptyCartClick}>
+              <button className="w-5 h-5 mr-12" onClick={handleEmptyCartClick}>
                 <FiTrash />
               </button>
             </div>
 
-            <div className="mx-[70px] mt-10 flex justify-between items-start">
+            <div className="mx-[70px] mt-10 flex justify-between items-start w-full">
               <div className="flex-1 flex flex-row justify-start flex-wrap gap-4 pt-10 items-center">
                 {cart.map((cartItem, cartIndex) =>
                   cartItem.cartDetails.map((item, itemIndex) => (
@@ -491,7 +518,7 @@ const Cart = () => {
                 <Btn
                   title="Checkout"
                   linkpath="#"
-                  className="w-full h-[60px] flex justify-center items-center mt-8 px-2 text-[22px]"
+                  className="w-full h-[60px] flex justify-center items-center mt-8 px-2 text-[22px] cursor-pointer"
                   onClick={handleCheckoutClick}
                 />
               </div>
