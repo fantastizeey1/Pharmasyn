@@ -354,6 +354,7 @@ const Cart = () => {
 
   const handleCheckoutClick = () => {
     handleCheckout(cart);
+    console.log("the click");
   };
 
   return (

@@ -46,14 +46,6 @@ function Register() {
   console.log(userType);
 
   const [isLoading, setIsLoading] = useState(false);
-  const handleClick = () => {
-    setIsLoading(true);
-
-    // Simulate an API call or any async operation
-    setTimeout(() => {
-      setIsLoading(false);
-    }, 500); // Set the timeout duration to 3000 milliseconds (3 seconds)
-  };
 
   const validateForm = () => {
     return validEmail && validPwd && validMatch && validPhone;
@@ -67,7 +59,6 @@ function Register() {
 
   useEffect(() => {
     const result = emailRegex.test(email);
-
     setValidEmail(result);
   }, [email]);
 
@@ -103,29 +94,22 @@ function Register() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    console.log("handleSubmit function called"); // Add this log statement
-
-    // Check if all form fields are valid
     const isValid = validateForm();
-    console.log(isValid);
-
     if (!isValid) return;
 
+    setIsLoading(true);
+
     try {
-      // Prepare form data object
       const formData = {
-        userType: userTypeNumber,
-        companyName: user, // Add your company name input value here
-        companyEmail: email, // Use the email input value
+        userType: parseInt(userType, 10),
+        companyName: user,
+        companyEmail: email,
         password: pwd,
         repeatPassword: matchPwd,
         phoneNumber: phone,
-        address: address, // Add your address input value here
-        // Add other form fields as needed
+        address: address,
       };
 
-      console.log("Form data:", formData); // Log the form data
-      // Send form data to backend
       const response = await fetch(`${BASE_URL}/api/Registration/StepOne`, {
         method: "POST",
         headers: {
@@ -134,12 +118,8 @@ function Register() {
         body: JSON.stringify(formData),
       });
 
-      console.log("Response:", response); // Log the response
-
       if (!response.ok) {
-        // Handle error response from backend
         const errorData = await response.json();
-        console.error("Failed to register user:", errorData.responseMessage);
         setErrMsg(
           `Failed to register user: ${
             errorData.responseMessage || response.statusText
@@ -148,22 +128,17 @@ function Register() {
         return;
       }
 
-      // If successful response from backend
       const responseData = await response.json();
-      const userId = responseData.userId; // Assuming the user ID is returned in the response
       localStorage.setItem("userId", responseData.userId);
       localStorage.setItem("userType", parseInt(formData.userType, 10));
-      console.log(userType);
 
-      // If successful response from backend
       setSuccess(true);
-      console.log("Success state set to true"); // Add logging statement
 
-      navigate("/register2", { state: { userType } }); // Pass userType as state
+      navigate("/register2", { state: { userType } });
     } catch (error) {
-      // Handle network errors or other exceptions
-      console.error("Error registering user: net i think", error);
       setErrMsg("An error occurred while processing your request.");
+    } finally {
+      setIsLoading(false);
     }
   };
   return (
@@ -451,7 +426,6 @@ function Register() {
             : "bg-blue-600 enabled:bg-[#013299] cursor-pointer"
         }
       `}
-                onClick={handleClick}
               >
                 {isLoading ? "Loading..." : "Create Account"}
               </button>
