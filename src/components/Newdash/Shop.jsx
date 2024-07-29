@@ -299,7 +299,7 @@ const Shop = () => {
         </div>
       </header>
 
-      <div className="mx-[15px] md:mx-[70px]">
+      <div className="mx-[15px] md:mx-[70px] flex  mt-10">
         <div className="w-[180px]  bg-white pl-[15px] pt-[15px] flex flex-col items-start h-[80vh] mt-5 rounded-lg shadow-lg">
           <div className="flex flex-col items-start w-full">
             <div className="flex flex-col mb-[150px] w-full">
@@ -376,40 +376,45 @@ const Shop = () => {
         {/* <div className=" mt-[45px] mb-[65px] w-full h-[168px] bg-[#013299] justify-center flex items-center rounded-xl">
           <h1 className="text-[40px] text-white font-bold">PRODUCTS</h1>
         </div> */}
-      </div>
-      <div className="mx-[15px] md:mx-[120px]">
-        <div className="md:grid md:grid-cols-3 md:gap-x-4 lg:gap-x-10 md:gap-y-10">
-          {inventories.map((product, index) => (
-            <div
-              key={index}
-              className="shadow-lg xl:w-[305px] md:w-[305px] rounded-lg md: h-[517px] xl:h-[517px] ml-[30px] flex-1 flex justify-center items-center flex-col"
-            >
-              <img
-                src={product.imageUrl ? product.imageUrl : defaultImageUrl}
-                alt={
-                  product.inventoryName
-                    ? product.inventoryName
-                    : "Default Image"
-                }
-                className="w-[256px] h-[256px] mb-2 "
-              />
-              <h3 className="text-[25px] font-semibold mb-[20px]">
-                {product.inventoryName}
-              </h3>
-
-              <p className="text-[24px] font-normal mb-5">{product.userName}</p>
-              <p className="text-[24px] font-semibold mb-3">₦{product.price}</p>
-
-              <button
-                className="bg-[#013299] hover:bg-blue-700 text-white text-[12px] font-bold py-2 px-4 rounded"
-                onClick={() => addToCart(product, index)}
+        <div className="">
+          <div className="md:grid md:grid-cols-3 md:gap-x-4 lg:gap-x-10 md:gap-y-10">
+            {inventories.map((product, index) => (
+              <div
+                key={index}
+                className="shadow-lg xl:w-[305px] md:w-[305px] rounded-lg md: h-[517px] xl:h-[517px] ml-[30px] flex-1 flex justify-center items-center flex-col"
               >
-                Add To Cart
-              </button>
-            </div>
-          ))}
+                <img
+                  src={product.imageUrl ? product.imageUrl : defaultImageUrl}
+                  alt={
+                    product.inventoryName
+                      ? product.inventoryName
+                      : "Default Image"
+                  }
+                  className="w-[256px] h-[256px] mb-2 "
+                />
+                <h3 className="text-[25px] font-semibold mb-[20px]">
+                  {product.inventoryName}
+                </h3>
+
+                <p className="text-[24px] font-normal mb-5">
+                  {product.userName}
+                </p>
+                <p className="text-[24px] font-semibold mb-3">
+                  ₦{product.price}
+                </p>
+
+                <button
+                  className="bg-[#013299] hover:bg-blue-700 text-white text-[12px] font-bold py-2 px-4 rounded"
+                  onClick={() => addToCart(product, index)}
+                >
+                  Add To Cart
+                </button>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
+
       <Discoverus />
       <Footer />
     </div>
