@@ -8,10 +8,12 @@ import { Button } from "../ui/button";
 import OverallInventory from "./OverallInventory";
 import FileUploadWithPreview from "./FileUploadWithPreview ";
 import { IoIosNotificationsOutline } from "react-icons/io";
+import axios from "axios";
+import { BASE_URL } from "../../config";
 
 const Inventory = () => {
   const [showModal, setShowModal] = useState(false);
-
+  const [error, setError] = useState(null);
   const [data, setData] = useState([]);
   const hasData = (data, key) =>
     data.some((item) => item[key] !== undefined && item[key] !== null);
@@ -24,6 +26,57 @@ const Inventory = () => {
 
     fetchData();
   }, []);
+
+  // addProduct Function
+  const addProduct = async (event) => {
+    event.preventDefault();
+    try {
+      const formData = new FormData(event.target);
+      const inventory = {
+        inventoryName: formData.get("productName"),
+        description: formData.get("description"),
+        quantity: formData.get("quantity"),
+        price: {
+          wholesalerPrice: formData.get("wholesalerPrice"),
+          retailerPrice: formData.get("retailerPrice"),
+        },
+        permittedCustomers: formData
+          .get("permittedCustomers")
+          .split(",")
+          .map(Number),
+        isCredit: formData.get("isCredit") === "on",
+      };
+
+      const bearerToken = sessionStorage.getItem("access_token");
+      if (!bearerToken) {
+        throw new Error("No access token found in session storage");
+      }
+
+      const url = `${BASE_URL}/api/Inventory/Create`;
+
+      const response = await axios.post(url, inventory, {
+        headers: {
+          "Content-Type": "application/json",
+          "ngrok-skip-browser-warning": "69420",
+          Authorization: `Bearer ${bearerToken}`,
+        },
+      });
+
+      setCart(response.data.cartDetails || []);
+      setCartId(response.data.cartId);
+      setIsCartEmpty(false);
+
+      setAlertMessage(`${inventory.inventoryName} added to cart`);
+      setTimeout(() => {
+        setAlertMessage(null);
+      }, 2000);
+    } catch (error) {
+      console.error("Error adding to cart:", error);
+      setError(
+        `An error occurred while adding to the cart: ${error.message}. Please try again later.`
+      );
+    }
+  };
 
   async function getData() {
     // Fetch data from your API here.
@@ -317,94 +370,163 @@ const Inventory = () => {
       </div>
 
       {showModal && (
-        <div className="fixed  py-4 inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
+        <div className="fixed py-4 inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
           <div className="bg-white rounded-lg h-[90%] overflow-y-auto p-6 w-[500px]">
             <h2 className="text-xl font-semibold mb-2">New Product</h2>
-            <div className="mb-2 flex justify-center items-center">
-              <FileUploadWithPreview />
-            </div>
-            <div className="flex flex-col space-y-4">
-              <div className="flex justify-between">
-                <label className="block font-medium text-[16px] text-[#0C0C0C]/80">
-                  Product Name
-                </label>
-                <input
-                  type="text"
-                  className="w-[273px] border border-gray-300 p-2 rounded mt-1 placeholder:text-[#0C0C0C]/50 placeholder:text-[16px] "
-                  placeholder="Enter product name"
-                />
+            <form onSubmit={addProduct}>
+              <div className="mb-2 flex justify-center items-center">
+                <FileUploadWithPreview />
               </div>
-              <div className="flex justify-between">
-                <label className="block font-medium text-[16px] text-[#0C0C0C]/80">
-                  Product ID
-                </label>
-                <input
-                  type="text"
-                  className="w-[273px] border border-gray-300 p-2 rounded mt-1 placeholder:text-[#0C0C0C]/50 placeholder:text-[16px]"
-                  placeholder="Enter product ID"
-                />
+              <div className="flex flex-col space-y-4">
+                <div className="flex justify-between">
+                  <label className="block font-medium text-[16px] text-[#0C0C0C]/80">
+                    Product Name
+                  </label>
+                  <input
+                    type="text"
+                    className="w-[273px] border border-gray-300 p-2 rounded mt-1 placeholder:text-[#0C0C0C]/50 placeholder:text-[16px]"
+                    placeholder="Enter product name"
+                    name="productName"
+                  />
+                </div>
+                <div className="flex justify-between">
+                  <label className="block font-medium text-[16px] text-[#0C0C0C]/80">
+                    Product ID
+                  </label>
+                  <input
+                    type="text"
+                    className="w-[273px] border border-gray-300 p-2 rounded mt-1 placeholder:text-[#0C0C0C]/50 placeholder:text-[16px]"
+                    placeholder="Enter product ID"
+                    name="productId"
+                  />
+                </div>
+                <div className="flex justify-between">
+                  <label className="block font-medium text-[16px] text-[#0C0C0C]/80">
+                    Category
+                  </label>
+                  <select
+                    className="w-[273px] border border-gray-300 p-2 rounded mt-1 placeholder:text-[#0C0C0C]/50 placeholder:text-[16px]"
+                    name="category"
+                  >
+                    <option className="text-[#0C0C0C]/50 text-[16px]">
+                      Select product category
+                    </option>
+                  </select>
+                </div>
+                <div className="flex justify-between">
+                  <label className="block font-medium text-[16px] text-[#0C0C0C]/80">
+                    Buying Price
+                  </label>
+                  <input
+                    type="text"
+                    className="w-[273px] border border-gray-300 p-2 rounded mt-1 placeholder:text-[#0C0C0C]/50 placeholder:text-[16px]"
+                    placeholder="Enter buying price"
+                    name="buyingPrice"
+                  />
+                </div>
+                <div className="flex justify-between">
+                  <label className="block font-medium text-[16px] text-[#0C0C0C]/80">
+                    Quantity
+                  </label>
+                  <input
+                    type="text"
+                    className="w-[273px] border border-gray-300 p-2 rounded mt-1 placeholder:text-[#0C0C0C]/50 placeholder:text-[16px]"
+                    placeholder="Enter product quantity"
+                    name="quantity"
+                  />
+                </div>
+                <div className="flex justify-between">
+                  <label className="block font-medium text-[16px] text-[#0C0C0C]/80">
+                    Unit
+                  </label>
+                  <input
+                    type="text"
+                    className="w-[273px] border border-gray-300 p-2 rounded mt-1 placeholder:text-[#0C0C0C]/50 placeholder:text-[16px]"
+                    placeholder="Enter product unit"
+                    name="unit"
+                  />
+                </div>
+                <div className="flex justify-between">
+                  <label className="block font-medium text-[16px] text-[#0C0C0C]/80">
+                    Expiry Date
+                  </label>
+                  <input
+                    type="date"
+                    className="w-[273px] border border-gray-300 p-2 rounded mt-1 placeholder:text-[#0C0C0C]/50 placeholder:text-[16px]"
+                    name="expiryDate"
+                  />
+                </div>
+                <div className="flex justify-between">
+                  <label className="block font-medium text-[16px] text-[#0C0C0C]/80">
+                    Description
+                  </label>
+                  <input
+                    type="text"
+                    className="w-[273px] border border-gray-300 p-2 rounded mt-1 placeholder:text-[#0C0C0C]/50 placeholder:text-[16px]"
+                    placeholder="Enter description"
+                    name="description"
+                  />
+                </div>
+                <div className="flex justify-between">
+                  <label className="block font-medium text-[16px] text-[#0C0C0C]/80">
+                    Wholesaler Price
+                  </label>
+                  <input
+                    type="text"
+                    className="w-[273px] border border-gray-300 p-2 rounded mt-1 placeholder:text-[#0C0C0C]/50 placeholder:text-[16px]"
+                    placeholder="Enter wholesaler price"
+                    name="wholesalerPrice"
+                  />
+                </div>
+                <div className="flex justify-between">
+                  <label className="block font-medium text-[16px] text-[#0C0C0C]/80">
+                    Retailer Price
+                  </label>
+                  <input
+                    type="text"
+                    className="w-[273px] border border-gray-300 p-2 rounded mt-1 placeholder:text-[#0C0C0C]/50 placeholder:text-[16px]"
+                    placeholder="Enter retailer price"
+                    name="retailerPrice"
+                  />
+                </div>
+                <div className="flex justify-between">
+                  <label className="block font-medium text-[16px] text-[#0C0C0C]/80">
+                    Permitted Customers
+                  </label>
+                  <input
+                    type="text"
+                    className="w-[273px] border border-gray-300 p-2 rounded mt-1 placeholder:text-[#0C0C0C]/50 placeholder:text-[16px]"
+                    placeholder="Enter permitted customers"
+                    name="permittedCustomers"
+                  />
+                </div>
+                <div className="flex justify-between">
+                  <label className="block font-medium text-[16px] text-[#0C0C0C]/80">
+                    Is Credit
+                  </label>
+                  <input
+                    type="checkbox"
+                    className="w-[273px] border border-gray-300 p-2 rounded mt-1"
+                    name="isCredit"
+                  />
+                </div>
               </div>
-              <div className="flex justify-between">
-                <label className="block font-medium text-[16px] text-[#0C0C0C]/80">
-                  Category
-                </label>
-                <select className="w-[273px] border border-gray-300 p-2 rounded mt-1 placeholder:text-[#0C0C0C]/50 placeholder:text-[16px]">
-                  <option className="text-[#0C0C0C]/50 text-[16px]">
-                    Select product category
-                  </option>
-                </select>
+              <div className="flex justify-end space-x-4 mt-6">
+                <button
+                  type="button"
+                  className="px-4 py-2 text-[#0C0C0C]/50 rounded border border-[#acacad] hover:bg-current"
+                  onClick={() => setShowModal(false)}
+                >
+                  Discard
+                </button>
+                <button
+                  type="submit"
+                  className="bg-[#013299] text-white px-4 py-2 rounded"
+                >
+                  Add Product
+                </button>
               </div>
-              <div className="flex justify-between">
-                <label className="block font-medium text-[16px] text-[#0C0C0C]/80">
-                  Buying Price
-                </label>
-                <input
-                  type="text"
-                  className="w-[273px] border border-gray-300 p-2 rounded mt-1 placeholder:text-[#0C0C0C]/50 placeholder:text-[16px]"
-                  placeholder="Enter buying price"
-                />
-              </div>
-              <div className="flex justify-between">
-                <label className="block font-medium text-[16px] text-[#0C0C0C]/80">
-                  Quantity
-                </label>
-                <input
-                  type="text"
-                  className="w-[273px] border border-gray-300 p-2 rounded mt-1 placeholder:text-[#0C0C0C]/50 placeholder:text-[16px]"
-                  placeholder="Enter product quantity"
-                />
-              </div>
-              <div className="flex justify-between">
-                <label className="block font-medium text-[16px] text-[#0C0C0C]/80">
-                  Unit
-                </label>
-                <input
-                  type="text"
-                  className="w-[273px] border border-gray-300 p-2 rounded mt-1 placeholder:text-[#0C0C0C]/50 placeholder:text-[16px]"
-                  placeholder="Enter product unit"
-                />
-              </div>
-              <div className="flex justify-between">
-                <label className="block font-medium text-[16px] text-[#0C0C0C]/80">
-                  Expiry Date
-                </label>
-                <input
-                  type="date"
-                  className="w-[273px] border border-gray-300 p-2 rounded mt-1 placeholder:text-[#0C0C0C]/50 placeholder:text-[16px]"
-                />
-              </div>
-            </div>
-            <div className="flex justify-end space-x-4 mt-6">
-              <button
-                className=" px-4 py-2 text-[#0C0C0C]/50 rounded border border-[#acacad] hover:bg-current"
-                onClick={() => setShowModal(false)}
-              >
-                Discard
-              </button>
-              <button className="bg-[#013299] text-white px-4 py-2 rounded">
-                Add Product
-              </button>
-            </div>
+            </form>
           </div>
         </div>
       )}

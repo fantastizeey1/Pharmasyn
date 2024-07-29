@@ -338,7 +338,7 @@ const Cart = () => {
     }));
 
     try {
-      await axios.put(`${BASE_URL}/api/Order/CreateOrder`, payload, {
+      await axios.post(`${BASE_URL}/api/Order/CreateOrder`, payload, {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${bearerToken}`,
@@ -516,12 +516,12 @@ const Cart = () => {
                 <p className="text-[16px] text-[#0C0C0C]/90">
                   Taxes and shipping calculated at checkout
                 </p>
-                <Btn
-                  title="Checkout"
-                  linkpath="#"
-                  className="w-full h-[60px] flex justify-center items-center mt-8 px-2 text-[22px] cursor-pointer"
+                <button
+                  className="w-full bg-[#013299] text-white py-2 px-4 rounded-lg hover:bg-[#2b50a0]"
                   onClick={handleCheckoutClick}
-                />
+                >
+                  Checkout
+                </button>
               </div>
             </div>
           </div>
