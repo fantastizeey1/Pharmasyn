@@ -327,6 +327,22 @@ const Order = () => {
               </NavLink>
 
               <NavLink
+                to="/orders2"
+                className={({ isActive, location }) =>
+                  isActive || location.pathname.startsWith("/orders")
+                    ? "flex items-center text-[16px] font-medium mb-[44px] text-blue-500"
+                    : "flex items-center text-[16px] font-medium mb-[44px] text-black"
+                }
+              >
+                <img
+                  src="/Orders.png"
+                  alt="icon"
+                  className="mr-4 w-[20px] h-[20px]"
+                />
+                Orders2
+              </NavLink>
+
+              <NavLink
                 to="/reports"
                 className={({ isActive }) =>
                   isActive
