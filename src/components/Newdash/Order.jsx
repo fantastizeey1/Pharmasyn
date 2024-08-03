@@ -311,9 +311,9 @@ const Order = () => {
               </NavLink>
 
               <NavLink
-                to="/orders"
+                to="/Invoice"
                 className={({ isActive, location }) =>
-                  isActive || location.pathname.startsWith("/orders")
+                  isActive
                     ? "flex items-center text-[16px] font-medium mb-[44px] text-blue-500"
                     : "flex items-center text-[16px] font-medium mb-[44px] text-black"
                 }
@@ -323,7 +323,7 @@ const Order = () => {
                   alt="icon"
                   className="mr-4 w-[20px] h-[20px]"
                 />
-                Orders
+                Invoice
               </NavLink>
 
               <NavLink

@@ -19,7 +19,7 @@ import Cart from "./components/Newdash/Cart";
 import Inventory from "./components/Newdash/Inventory";
 import Order from "./components/Newdash/Order";
 import Status from "./components/Newdash/Status";
-import Orders2 from "./components/Newdash/Orders2";
+import Invoice from "./components/Newdash/Invoice";
 
 function App() {
   return (
@@ -34,7 +34,6 @@ function App() {
         <Route path="/SignIn" element={<SignIn />} />
         <Route path="/SignIn2" element={<SignIn2 />} />
         <Route path="/Signin-Success" element={<Success2 />} />
-
         <Route path="/Forgotpassword" element={<Forgotpassword />} />
         <Route path="/Forgotpassword2" element={<Forgotpassword2 />} />
         <Route path="/ChangePassword" element={<ChangePassword />} />
@@ -44,7 +43,7 @@ function App() {
         <Route path="/Inventory" element={<Inventory />} />
         <Route path="/Orders" element={<Order />} />
         <Route path="/Orders/Status" element={<Status />} />
-        <Route path="/Orders2" element={<Orders2 />} />
+        <Route path="/Invoice" element={<Invoice />} />
 
         {/* Add more routes as needed */}
       </Routes>

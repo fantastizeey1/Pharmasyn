@@ -348,7 +348,7 @@ const Shop = () => {
               </NavLink>
 
               <NavLink
-                to="/orders2"
+                to="/Invoice"
                 className={({ isActive, location }) =>
                   isActive
                     ? "flex items-center text-[16px] font-medium mb-[44px] text-blue-500"
@@ -360,7 +360,7 @@ const Shop = () => {
                   alt="icon"
                   className="mr-4 w-[20px] h-[20px]"
                 />
-                Orders2
+                Invoice
               </NavLink>
 
               <NavLink
