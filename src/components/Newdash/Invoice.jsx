@@ -303,9 +303,9 @@ const Invoice = () => {
               <h2 className="text-xl font-semibold  mb-2">
                 {order.customerName}
               </h2>
-              <h3>Order ID: #911419</h3>
+              <h3 className="text-xl font-semibold  mb-2">Order ID: #911419</h3>
             </div>
-            <div className="flex justify-between">
+            <div className="flex justify-between text-[#0C0C0C]/65">
               <p className="">
                 Order Date: {new Date(order.orderDate).toLocaleDateString()}
               </p>
@@ -320,7 +320,7 @@ const Invoice = () => {
             <table className="min-w-full bg-white border border-[#CACACA] rounded-xl my-10">
               <thead className="bg-[#F9FAFB]">
                 <tr>
-                  <th className="py-3 px-4 border-b border-gray-200 text-left text-[#0C0C0C]/65 font-medium ">
+                  <th className="py-3 px-4 border-b border-gray-200 text-[#0C0C0C] text-left text-[#0C0C0C]/65 font-medium ">
                     Product
                   </th>
                   <th className="py-3 px-4 border-b border-gray-200 text-center  text-[#0C0C0C]/65 font-medium ">
@@ -340,19 +340,19 @@ const Invoice = () => {
               <tbody>
                 {order.orderDetails.map((detail) => (
                   <tr key={detail.inventoryId}>
-                    <td className="py-3 px-4 border-b border-gray-200">
+                    <td className="py-3 px-4 border-b border-gray-200 text-[#0C0C0C]">
                       {detail.inventoryName}
                     </td>
-                    <td className="py-3 px-4 border-b text-center  border-gray-200">
+                    <td className="py-3 px-4 border-b text-center  border-gray-200 text-[#0C0C0C]">
                       {detail.vendorName}
                     </td>
-                    <td className="py-3 px-4 border-b text-center  border-gray-200">
+                    <td className="py-3 px-4 border-b text-center  border-gray-200 text-[#0C0C0C]">
                       {detail.quantity}
                     </td>
-                    <td className="py-3 px-4 border-b text-center border-gray-200">
+                    <td className="py-3 px-4 border-b text-center border-gray-200 text-[#0C0C0C]">
                       ${detail.unitPrice.toFixed(2)}
                     </td>
-                    <td className="py-3 px-4 border-b border-gray-200 text-right">
+                    <td className="py-3 px-4 border-b border-gray-200 text-[#0C0C0C] text-right">
                       ${detail.totalPrice.toFixed(2)}
                     </td>
                   </tr>
@@ -362,18 +362,18 @@ const Invoice = () => {
 
             <div className="mt-4">
               <div>
-                <p>Order Summary</p>
+                <p className="font-bold mb-2">Order Summary</p>
               </div>
 
-              <div className="flex justify-between text-[#0C0C0C]/65">
+              <div className="flex justify-between text-[#0C0C0C]/65 mb-2">
                 <span>Subtotal:</span>
                 <span>${order.subTotal.toFixed(2)}</span>
               </div>
-              <div className="flex justify-between text-[#0C0C0C]/65">
+              <div className="flex justify-between text-[#0C0C0C]/65 mb-2">
                 <span>Service Charge:</span>
                 <span>${order.serviceCharge.toFixed(2)}</span>
               </div>
-              <div className="flex justify-between text-[#0C0C0C]/65">
+              <div className="flex justify-between text-[#0C0C0C]/65 mb-2">
                 <span>Delivery Charge:</span>
                 <span>${order.deliveryCharge.toFixed(2)}</span>
               </div>
