@@ -199,8 +199,8 @@ const Invoice = () => {
         </div>
       </header>
 
-      <div className="flex gap-10 mt-10 first-letter:">
-        <div>
+      <div className="flex gap-10 mt-10 px-[30px]first-letter:">
+        <div className="ml-5 mr-5">
           <div className="flex flex-col items-start w-full">
             <div className="flex flex-col mb-[150px] w-full">
               <NavLink
