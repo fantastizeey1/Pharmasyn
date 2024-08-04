@@ -495,7 +495,7 @@ const Cart = () => {
                           <label className="m-0 pr-4">Qty</label>
                           <input
                             type="number"
-                            min="1"
+                            min="0"
                             className="border border-black/50 w-16"
                             value={quantity[item.inventoryId] || item.quantity}
                             onChange={(e) =>
