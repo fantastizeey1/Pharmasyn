@@ -375,7 +375,7 @@ const Inventory = () => {
           <OverallInventory />
 
           <div className="flex justify-between px-9 items-center ">
-            <h2 className="text-[20px] font-bold">Orders</h2>
+            <h2 className="text-[20px] font-bold">Inventory</h2>
 
             <Button className="bg-[#013299]" onClick={() => setShowModal(true)}>
               Add Product
