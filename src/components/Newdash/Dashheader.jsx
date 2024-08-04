@@ -47,7 +47,7 @@ const Dashheader = ({ cartCount }) => {
             className="ml-[36px] text-[14px] font-bold hover:scale-110"
             aria-label="Shop"
           >
-            Shop
+            MarketPlace
           </Link>
           <Link
             to="/#contact-us"

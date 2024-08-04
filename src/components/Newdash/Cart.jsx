@@ -76,7 +76,11 @@ const Cart = () => {
 
   const handleQuantityChange = (inventoryId, newQuantity) => {
     console.log(`Quantity changed: ${inventoryId}, ${newQuantity}`);
-    setQuantity((prev) => ({ ...prev, [inventoryId]: newQuantity }));
+    // Update state, converting to number only if it's not an empty string
+    setQuantity((prev) => ({
+      ...prev,
+      [inventoryId]: newQuantity === "" ? undefined : Number(newQuantity),
+    }));
   };
 
   // Ensure the updateCart function and other related functions use the correct inventoryId
@@ -498,12 +502,37 @@ const Cart = () => {
                             min="0"
                             className="border border-black/50 w-16"
                             value={quantity[item.inventoryId] || item.quantity}
-                            onChange={(e) =>
-                              handleQuantityChange(
-                                item.inventoryId,
-                                e.target.value
-                              )
+                            onChange={(e) => {
+                              const newValue = e.target.value;
+
+                              // Check if the new value is empty or a valid number
+                              if (newValue === "" || newValue >= 0) {
+                                handleQuantityChange(
+                                  item.inventoryId,
+                                  newValue === "" ? "" : Number(newValue)
+                                );
+                              }
+                            }}
+                          />
+                          <input
+                            type="number"
+                            min="0"
+                            className="border border-black/50 w-16"
+                            value={
+                              quantity[item.inventoryId] !== undefined
+                                ? quantity[item.inventoryId]
+                                : ""
                             }
+                            onChange={(e) => {
+                              const newValue = e.target.value;
+                              // Allow for empty string to clear the input and for valid numbers
+                              if (newValue === "" || Number(newValue) >= 0) {
+                                handleQuantityChange(
+                                  item.inventoryId,
+                                  newValue
+                                );
+                              }
+                            }}
                           />
                         </div>
                         <p>{item.status}</p>
