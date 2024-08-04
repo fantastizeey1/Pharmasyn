@@ -13,6 +13,7 @@ import { BASE_URL } from "../../config";
 
 const Inventory = () => {
   const [showModal, setShowModal] = useState(false);
+  const [alertMessage, setAlertMessage] = useState(null);
   const [error, setError] = useState(null);
   const [data, setData] = useState([]);
   const hasData = (data, key) =>
@@ -40,8 +41,8 @@ const Inventory = () => {
           wholesalerPrice: formData.get("wholesalerPrice"),
           retailerPrice: formData.get("retailerPrice"),
         },
-        permittedCustomers: formData
-          .get("permittedCustomers")
+        unPermittedCustomers: formData
+          .get("unPermittedCustomers")
           .split(",")
           .map(Number),
         isCredit: formData.get("isCredit") === "on",
@@ -62,11 +63,11 @@ const Inventory = () => {
         },
       });
 
-      setCart(response.data.cartDetails || []);
-      setCartId(response.data.cartId);
-      setIsCartEmpty(false);
-
-      setAlertMessage(`${inventory.inventoryName} added to cart`);
+      console.log("API Response:", response.data);
+      setAlertMessage(
+        `${response.data.inventory.inventoryName} added successfully`
+      );
+      setShowModal(false);
       setTimeout(() => {
         setAlertMessage(null);
       }, 2000);
@@ -75,6 +76,7 @@ const Inventory = () => {
       setError(
         `An error occurred while adding to the cart: ${error.message}. Please try again later.`
       );
+      // Optionally keep the modal open on error
     }
   };
 
@@ -381,6 +383,11 @@ const Inventory = () => {
           </div>
           <div className="container mx-auto py-10">
             <DataTable columns={columns} data={data} />
+            {alertMessage && (
+              <div className="mt-4 p-2 bg-green-100 text-green-800 border border-green-300 rounded">
+                {alertMessage}
+              </div>
+            )}
           </div>
         </div>
       </div>
@@ -513,7 +520,7 @@ const Inventory = () => {
                     type="text"
                     className="w-[273px] border border-gray-300 p-2 rounded mt-1 placeholder:text-[#0C0C0C]/50 placeholder:text-[16px]"
                     placeholder="Enter permitted customers"
-                    name="permittedCustomers"
+                    name="unPermittedCustomers"
                   />
                 </div>
                 <div className="flex justify-between">
