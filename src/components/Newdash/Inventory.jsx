@@ -40,7 +40,7 @@ const Inventory = () => {
         price: {
           wholesalerPrice: formData.get("wholesalerPrice"),
           retailerPrice: formData.get("retailerPrice"),
-          hospitalPrice: fornData.get("hospitalPrice"),
+          hospitalPrice: formData.get("hospitalPrice"),
         },
         unPermittedCustomers: formData
           .get("unPermittedCustomers")
@@ -520,7 +520,7 @@ const Inventory = () => {
                   <input
                     type="text"
                     className="w-[273px] border border-gray-300 p-2 rounded mt-1 placeholder:text-[#0C0C0C]/50 placeholder:text-[16px]"
-                    placeholder="Enter retailer price"
+                    placeholder="Enter Hospital price"
                     name="hospitalPrice"
                   />
                 </div>
