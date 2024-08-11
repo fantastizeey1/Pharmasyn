@@ -115,7 +115,7 @@ const Shop = () => {
         carts: [
           {
             inventoryId: inventory.id,
-            quantity: inventory.quantity,
+            quantity: 1,
             productName: inventory.inventoryName,
             status: true,
           },

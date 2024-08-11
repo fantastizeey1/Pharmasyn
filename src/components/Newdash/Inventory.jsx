@@ -1,7 +1,7 @@
 import { BsSearch } from "react-icons/bs";
 import { NavLink, Link } from "react-router-dom";
 import logo from "/logo.jpg";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { rawColumns } from "../Newdash/Table/Columns";
 import { DataTable } from "../Newdash/Table/data-table";
 import { Button } from "../ui/button";
@@ -16,6 +16,8 @@ const Inventory = () => {
   const [alertMessage, setAlertMessage] = useState(null);
   const [error, setError] = useState(null);
   const [data, setData] = useState([]);
+  const [myInventory, setmyInventory] = useState([]);
+  const [loading, setLoading] = useState(false);
   const hasData = (data, key) =>
     data.some((item) => item[key] !== undefined && item[key] !== null);
 
@@ -27,6 +29,34 @@ const Inventory = () => {
 
     fetchData();
   }, []);
+
+  const fetchMyInvenories = useCallback(async () => {
+    try {
+      const bearerToken = sessionStorage.getItem("access_token");
+      if (!bearerToken) throw new Error("No access token found");
+
+      const response = await axios.get(
+        `${BASE_URL}/api/Inventory/GetInventory-by-filter?page=1&pageCount=3&forCurrentUser=true`,
+        {
+          headers: {
+            "ngrok-skip-browser-warning": "69420",
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${bearerToken}`,
+          },
+        }
+      );
+
+      setmyInventory(response.data); // Store fetched inventory data in state
+    } catch (error) {
+      setError(`Error fetching your inventory data: ${error.message}`);
+    } finally {
+      setLoading(false); // Set loading to false once the request completes
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchMyInvenories();
+  }, [fetchMyInvenories]);
 
   // addProduct Function
   const addProduct = async (event) => {
@@ -83,6 +113,7 @@ const Inventory = () => {
 
   async function getData() {
     // Fetch data from your API here.
+
     return [
       {
         id: "1",
