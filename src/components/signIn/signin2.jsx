@@ -69,7 +69,7 @@ function SignIn2() {
       sessionStorage.setItem("token_type", responseData.token_type);
       sessionStorage.setItem("scope", responseData.scope);
 
-      navigate("/Signin-Success");
+      navigate("/Shop");
     } catch (error) {
       console.error("Error authenticating user:", error);
       setErrMsg("An error occurred while processing your request.");

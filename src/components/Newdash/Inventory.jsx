@@ -503,6 +503,17 @@ const Inventory = () => {
                 </div>
                 <div className="flex justify-between">
                   <label className="block font-medium text-[16px] text-[#0C0C0C]/80">
+                    MOQ
+                  </label>
+                  <input
+                    type="text"
+                    className="w-[273px] border border-gray-300 p-2 rounded mt-1 placeholder:text-[#0C0C0C]/50 placeholder:text-[16px]"
+                    placeholder="Enter product unit"
+                    name="unit"
+                  />
+                </div>
+                <div className="flex justify-between">
+                  <label className="block font-medium text-[16px] text-[#0C0C0C]/80">
                     Expiry Date
                   </label>
                   <input
