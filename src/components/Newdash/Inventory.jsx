@@ -47,16 +47,21 @@ const Inventory = () => {
       );
 
       if (response.status === 200) {
-        const {
-          inventories = [],
-          responseCode,
-          responseMessage,
-        } = response.data;
+        const { inventories = [] } = response.data;
 
         console.log("Fetched inventory data:", inventories);
 
-        setmyInventory(inventories);
-        // Assuming orders is defined somewhere in your component
+        const transformedData = inventories.map((item) => ({
+          id: item.id.toString(),
+          ProductId: `Product-${item.id}`,
+          ExpiryDate: "N/A", // Assuming expiry date is not provided in your API response
+          Quantity: `${item.quantity} Units`,
+          Price: `₦${item.price.toFixed(2)}`,
+          Product: item.inventoryName,
+          productAvailability: item.quantity > 0 ? "In-stock" : "Out-of-stock",
+        }));
+
+        setmyInventory(transformedData);
       } else {
         throw new Error(`Unexpected response code: ${response.status}`);
       }
@@ -428,7 +433,7 @@ const Inventory = () => {
             </Button>
           </div>
           <div className="container mx-auto py-10">
-            <DataTable columns={columns} data={data} />
+            <DataTable columns={columns} data={myInventory} />
             {alertMessage && (
               <div className="mt-4 p-2 bg-green-100 text-green-800 border border-green-300 rounded">
                 {alertMessage}

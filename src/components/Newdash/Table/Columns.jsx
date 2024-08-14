@@ -31,7 +31,7 @@ export const rawColumns = [
     accessorKey: "Price",
     header: () => <div className="text-left pl-4">Price</div>,
     cell: ({ row }) => (
-      <div className="text-left pl-4">₦{row.original.Price}</div>
+      <div className="text-left pl-4">{row.original.Price}</div>
     ),
   },
   {
