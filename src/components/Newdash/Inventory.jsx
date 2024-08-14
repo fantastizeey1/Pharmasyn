@@ -30,7 +30,7 @@ const Inventory = () => {
     fetchData();
   }, []);
 
-  const fetchMyInvenories = useCallback(async () => {
+  const fetchMyInventories = useCallback(async () => {
     try {
       const bearerToken = sessionStorage.getItem("access_token");
       if (!bearerToken) throw new Error("No access token found");
@@ -46,8 +46,22 @@ const Inventory = () => {
         }
       );
 
-      setmyInventory(response.data.inventories); // Store fetched inventory data in state
+      if (response.status === 200) {
+        const {
+          inventories = [],
+          responseCode,
+          responseMessage,
+        } = response.data;
+
+        console.log("Fetched inventory data:", inventories);
+
+        setmyInventory(inventories);
+        // Assuming orders is defined somewhere in your component
+      } else {
+        throw new Error(`Unexpected response code: ${response.status}`);
+      }
     } catch (error) {
+      console.error("Error fetching inventory data:", error);
       setError(`Error fetching your inventory data: ${error.message}`);
     } finally {
       setLoading(false); // Set loading to false once the request completes
@@ -55,8 +69,8 @@ const Inventory = () => {
   }, []);
 
   useEffect(() => {
-    fetchMyInvenories();
-  }, [fetchMyInvenories]);
+    fetchMyInventories();
+  }, [fetchMyInventories]);
 
   // addProduct Function
   const addProduct = async (event) => {

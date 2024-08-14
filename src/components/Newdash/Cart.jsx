@@ -8,7 +8,7 @@ import Btn from "../Landingpage/Btn";
 import useCart from "../Dash/useCart";
 import { FiTrash } from "react-icons/fi";
 import useDebounce from "./UseDeounce";
-import { NavLink, Link, useLocation } from "react-router-dom";
+import { NavLink, Link, useLocation, useNavigate } from "react-router-dom";
 
 const Cart = () => {
   const [cart, setCart] = useState([]);
@@ -18,6 +18,7 @@ const Cart = () => {
   const [total, setTotal] = useState(0);
   const [quantity, setQuantity] = useState({});
   const [selectedItems, setSelectedItems] = useState([]);
+  const navigate = useNavigate();
 
   const prevDebouncedQuantity = useRef({});
 
@@ -349,6 +350,7 @@ const Cart = () => {
         },
       });
       console.log("Order created successfully");
+      navigate("/Invoice");
       handleEmptyCart();
     } catch (error) {
       console.error(`Error creating order: ${error.message}`);

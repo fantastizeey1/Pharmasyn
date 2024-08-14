@@ -31,7 +31,7 @@ export const rawColumns = [
     accessorKey: "Price",
     header: () => <div className="text-left pl-4">Price</div>,
     cell: ({ row }) => (
-      <div className="text-left pl-4">{row.original.Price}</div>
+      <div className="text-left pl-4">₦{row.original.Price}</div>
     ),
   },
   {
@@ -114,7 +114,7 @@ export const rawColumns = [
     header: ({ column }) => <div className="text-right pl-4">Documents</div>,
     cell: ({ row }) => (
       <div className="flex justify-end items-center gap-8">
-        <Button className={"bg-[#013299]"}>{row.original.Documents}</Button>
+        <Button className={"bg-[#013299] "}>{row.original.Documents}</Button>
       </div>
     ),
   },

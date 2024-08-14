@@ -47,6 +47,7 @@ const Invoice = () => {
           const firstOrder = orders[0];
           setAmount(firstOrder.totalPrice); // Set amount to totalPrice
           setFullName(firstOrder.customerName); // Set fullName to customerName
+          setEmail(firstOrder.customerEmail);
         }
       }
     } catch (error) {
@@ -114,12 +115,160 @@ const Invoice = () => {
   };
 
   if (error) {
-    return <div className="text-center mt-8 text-red-500">{error}</div>;
+    return (
+      <main>
+        <header className="xl:mx-[70px] md:mx-[40px] mx-[15px] py-3">
+          <div className="flex justify-between items-center">
+            <Link to="/">
+              <div className="flex items-center gap-2">
+                <img
+                  src={logo}
+                  alt="Pharmasynthesis Logo"
+                  className="w-[40px] h-[40px]"
+                />
+                <p className="text-[#0C0C0C] text-[16px] font-bold">
+                  Pharmasynthesis
+                </p>
+              </div>
+            </Link>
+
+            <nav className="hidden md:flex flex-1 justify-center items-center">
+              <Link
+                to="/"
+                className="ml-[36px] text-[14px] font-bold hover:scale-110"
+                aria-label="Home"
+              >
+                Home
+              </Link>
+              <Link
+                to="/#about-us"
+                className="ml-[36px] text-[14px] font-bold hover:scale-110"
+                aria-label="About Us"
+              >
+                About Us
+              </Link>
+              <Link
+                to="/shop"
+                className="ml-[36px] text-[14px] font-bold hover:scale-110"
+                aria-label="Shop"
+              >
+                Marketplace
+              </Link>
+              <Link
+                to="/#contact-us"
+                className="ml-[36px] text-[14px] font-bold hover:scale-110"
+                aria-label="Contact Us"
+              >
+                Contact Us
+              </Link>
+            </nav>
+
+            <div className="flex justify-center items-center">
+              <Link
+                to="/profile"
+                className="ml-[16px] text-[14px] font-bold hover:scale-110"
+                aria-label="Log in"
+              >
+                <div className="w-8 h-8 rounded-full flex justify-center items-center text-[18px] text-white bg-blue-800">
+                  P
+                </div>
+              </Link>
+              <Link to="/Cart" className="relative">
+                <img
+                  src={cartIcon}
+                  alt="cart"
+                  className="w-[24px] ml-4 h-[24px] hover:scale-110"
+                />
+                {cartCount > 0 && (
+                  <span className="absolute top-[-5px] right-[-10px] bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                    {cartCount}
+                  </span>
+                )}
+              </Link>
+            </div>
+          </div>
+        </header>
+        <div className="text-center mt-8 text-red-500">{error}</div>
+      </main>
+    );
   }
 
   if (orders.length === 0) {
     return (
-      <div className="text-center mt-8 text-blue-500">No orders found.</div>
+      <main>
+        <header className="xl:mx-[70px] md:mx-[40px] mx-[15px] py-3">
+          <div className="flex justify-between items-center">
+            <Link to="/">
+              <div className="flex items-center gap-2">
+                <img
+                  src={logo}
+                  alt="Pharmasynthesis Logo"
+                  className="w-[40px] h-[40px]"
+                />
+                <p className="text-[#0C0C0C] text-[16px] font-bold">
+                  Pharmasynthesis
+                </p>
+              </div>
+            </Link>
+
+            <nav className="hidden md:flex flex-1 justify-center items-center">
+              <Link
+                to="/"
+                className="ml-[36px] text-[14px] font-bold hover:scale-110"
+                aria-label="Home"
+              >
+                Home
+              </Link>
+              <Link
+                to="/#about-us"
+                className="ml-[36px] text-[14px] font-bold hover:scale-110"
+                aria-label="About Us"
+              >
+                About Us
+              </Link>
+              <Link
+                to="/shop"
+                className="ml-[36px] text-[14px] font-bold hover:scale-110"
+                aria-label="Shop"
+              >
+                Marketplace
+              </Link>
+              <Link
+                to="/#contact-us"
+                className="ml-[36px] text-[14px] font-bold hover:scale-110"
+                aria-label="Contact Us"
+              >
+                Contact Us
+              </Link>
+            </nav>
+
+            <div className="flex justify-center items-center">
+              <Link
+                to="/profile"
+                className="ml-[16px] text-[14px] font-bold hover:scale-110"
+                aria-label="Log in"
+              >
+                <div className="w-8 h-8 rounded-full flex justify-center items-center text-[18px] text-white bg-blue-800">
+                  P
+                </div>
+              </Link>
+              <Link to="/Cart" className="relative">
+                <img
+                  src={cartIcon}
+                  alt="cart"
+                  className="w-[24px] ml-4 h-[24px] hover:scale-110"
+                />
+                {cartCount > 0 && (
+                  <span className="absolute top-[-5px] right-[-10px] bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                    {cartCount}
+                  </span>
+                )}
+              </Link>
+            </div>
+          </div>
+        </header>
+        <div className="text-center mt-8 text-blue-500">No orders found.</div>
+      </main>
     );
   }
 
@@ -296,14 +445,16 @@ const Invoice = () => {
           </div>
         </div>
 
-        <div className="w-[80%]">
+        <div className="w-[80%] ml-5">
           <h1 className="text-2xl font-bold  mb-4">Order Summary</h1>
           <div className="bg-white shadow-lg rounded-lg p-6 w-full">
             <div className="flex justify-between">
-              <h2 className="text-xl font-semibold  mb-2">
+              <h2 className="text-2xl font-semibold  mb-2">
                 {order.customerName}
               </h2>
-              <h3 className="text-xl font-semibold  mb-2">Order ID: #911419</h3>
+              <h3 className="text-[12px] font-semibold  mb-2">
+                Order ID: {order.orderId}
+              </h3>
             </div>
             <div className="flex justify-between text-[#0C0C0C]/65">
               <p className="">
@@ -317,7 +468,7 @@ const Invoice = () => {
               Total Price: ${order.totalPrice.toFixed(2)}
             </p> */}
 
-            <table className="min-w-full bg-white border border-[#CACACA] rounded-xl my-10">
+            <table className="min-w-full bg-white border border-[#CACACA] rounded-xl mt-10">
               <thead className="bg-[#F9FAFB]">
                 <tr>
                   <th className="py-3 px-4 border-b border-gray-200 text-[#0C0C0C] text-left text-[#0C0C0C]/65 font-medium ">
@@ -350,44 +501,103 @@ const Invoice = () => {
                       {detail.quantity}
                     </td>
                     <td className="py-3 px-4 border-b text-center border-gray-200 text-[#0C0C0C]">
-                      ${detail.unitPrice.toFixed(2)}
+                      ₦{detail.unitPrice.toFixed(2)}
                     </td>
                     <td className="py-3 px-4 border-b border-gray-200 text-[#0C0C0C] text-right">
-                      ${detail.totalPrice.toFixed(2)}
+                      ₦{detail.totalPrice.toFixed(2)}
                     </td>
                   </tr>
                 ))}
               </tbody>
             </table>
+            <div className=" ml-[50%] border w-1/2 flex justify-start flex-col rounded-b-xl overflow-clip">
+              <div className="w-full flex justify-start  flex-col p-4">
+                <div className="mt-4 font-bold  mb-2">Order Summary</div>
 
-            <div className="mt-4">
-              <div>
-                <p className="font-bold mb-2">Order Summary</p>
+                <div className="flex justify-between text-[#0C0C0C]/65 mb-2">
+                  <span>Subtotal:</span>
+                  <span>₦{order.subTotal.toFixed(2)}</span>
+                </div>
+                <div className="flex justify-between text-[#0C0C0C]/65 mb-2">
+                  <span>Service Charge:</span>
+                  <span>₦{order.serviceCharge.toFixed(2)}</span>
+                </div>
+                <div className="flex justify-between text-[#0C0C0C]/65 mb-2">
+                  <span>Delivery Charge:</span>
+                  <span>₦{order.deliveryCharge.toFixed(2)}</span>
+                </div>
+                <div className="flex justify-between text-xl font-bold  mt-2">
+                  <span>Total Price:</span>
+                  <span>₦{order.totalPrice.toFixed(2)}</span>
+                </div>
               </div>
-
-              <div className="flex justify-between text-[#0C0C0C]/65 mb-2">
-                <span>Subtotal:</span>
-                <span>${order.subTotal.toFixed(2)}</span>
-              </div>
-              <div className="flex justify-between text-[#0C0C0C]/65 mb-2">
-                <span>Service Charge:</span>
-                <span>${order.serviceCharge.toFixed(2)}</span>
-              </div>
-              <div className="flex justify-between text-[#0C0C0C]/65 mb-2">
-                <span>Delivery Charge:</span>
-                <span>${order.deliveryCharge.toFixed(2)}</span>
-              </div>
-              <div className="flex justify-between text-xl font-bold  mt-4">
-                <span>Total Price:</span>
-                <span>${order.totalPrice.toFixed(2)}</span>
-              </div>
+              <section
+                className="w-full bg-[#013299] max-h-[60px] m-0  "
+                id="paystack"
+              >
+                <div className=" ">
+                  <form onSubmit={payWithPaystack} className="">
+                    <div className="hidden">
+                      <label htmlFor="email" className="block text-white">
+                        Email:
+                      </label>
+                      <input
+                        type="email"
+                        id="email"
+                        placeholder="Enter your email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        required
+                        className="border p-2 w-full rounded-md"
+                      />
+                    </div>
+                    <div className="hidden">
+                      <label htmlFor="amount" className="block text-white">
+                        Amount (NGN):
+                      </label>
+                      <input
+                        type="number"
+                        id="amount"
+                        placeholder="Enter amount in NGN"
+                        value={amount}
+                        onChange={(e) => setAmount(e.target.value)}
+                        required
+                        className="border p-2 w-full rounded-md"
+                      />
+                    </div>
+                    <div className="hidden">
+                      <label htmlFor="fullName" className="block text-white">
+                        Full Name:
+                      </label>
+                      <input
+                        type="text"
+                        id="fullName"
+                        placeholder="Enter your full name"
+                        value={fullName}
+                        onChange={(e) => setFullName(e.target.value)}
+                        required
+                        className="border p-2 w-full rounded-md"
+                      />
+                    </div>
+                    <button
+                      type="submit"
+                      name="pay_now"
+                      id="pay-now"
+                      title="Pay now"
+                      className=" max-h-fit text-white pt-2  font-bold m-0"
+                    >
+                      Pay now
+                    </button>
+                  </form>
+                </div>
+              </section>
             </div>
           </div>
           <div>
-            <section className="w-full bg-white p-8" id="paystack">
+            {/* <section className="w-full bg-white p-8" id="paystack">
               <div className="max-w-md mx-auto bg-blue-500 rounded-lg shadow-md p-6">
                 <form onSubmit={payWithPaystack} className="space-y-4">
-                  <div>
+                  <div className="hidden">
                     <label htmlFor="email" className="block text-white">
                       Email:
                     </label>
@@ -401,7 +611,7 @@ const Invoice = () => {
                       className="border p-2 w-full rounded-md"
                     />
                   </div>
-                  <div>
+                  <div className="hidden">
                     <label htmlFor="amount" className="block text-white">
                       Amount (NGN):
                     </label>
@@ -415,7 +625,7 @@ const Invoice = () => {
                       className="border p-2 w-full rounded-md"
                     />
                   </div>
-                  <div>
+                  <div className="hidden">
                     <label htmlFor="fullName" className="block text-white">
                       Full Name:
                     </label>
@@ -440,7 +650,7 @@ const Invoice = () => {
                   </button>
                 </form>
               </div>
-            </section>
+            </section> */}
           </div>
         </div>
       </div>

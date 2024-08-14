@@ -56,7 +56,7 @@ const Docs = () => {
     return true; // For columns without accessorKey (e.g., select, actions)
   });
   return (
-    <main className="w-full">
+    <main className="container mx-auto p-4">
       <Adminheader />
       <div className="w-[230px] fixed bg-white pl-[15px] pt-[15px] flex flex-col items-start h-screen  rounded-2xl shadow-lg ml-7 mt-[50px]">
         <div className="flex flex-col items-start w-full">
