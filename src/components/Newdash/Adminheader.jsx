@@ -4,7 +4,7 @@ import logo from "/logo.jpg";
 import searchIcon from "/searchicon.svg";
 import cartIcon from "/Cart.svg";
 
-const Dashheader = ({ cartCount }) => {
+const Adminheader = () => {
   const [nav, setNav] = useState(false);
   const handleNav = () => {
     setNav(!nav);
@@ -58,7 +58,7 @@ const Dashheader = ({ cartCount }) => {
         </nav>
 
         <div className="flex justify-center items-center">
-          <div className="flex items-center justify-center bg-white shadow-lg rounded-full   md:max-w-md">
+          {/* <div className="flex items-center justify-center bg-white shadow-lg rounded-full   md:max-w-md">
             <input
               type="text"
               placeholder="Search Inventory"
@@ -71,14 +71,14 @@ const Dashheader = ({ cartCount }) => {
                 className="   md:w-10 md:h-10"
               />
             </button>
-          </div>
+          </div> */}
           <Link
             to="/profile"
             className="ml-[16px] text-[14px] font-bold hover:scale-110"
             aria-label="Log in"
           >
             <div className="w-8 h-8 rounded-full flex justify-center items-center text-[18px] text-white bg-blue-800">
-              P
+              A
             </div>
           </Link>
           <Link to="/Cart" className="relative">
@@ -87,11 +87,6 @@ const Dashheader = ({ cartCount }) => {
               alt="cart"
               className="w-[24px] ml-4 h-[24px] hover:scale-110"
             />
-            {cartCount > 0 && (
-              <span className="absolute top-[-5px] right-[-10px] bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
-                {cartCount}
-              </span>
-            )}
           </Link>
         </div>
       </div>
@@ -99,4 +94,4 @@ const Dashheader = ({ cartCount }) => {
   );
 };
 
-export default Dashheader;
+export default Adminheader;

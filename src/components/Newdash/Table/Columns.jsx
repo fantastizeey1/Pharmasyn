@@ -70,6 +70,34 @@ export const rawColumns = [
     ),
   },
   {
+    accessorKey: "Name",
+    header: () => <div className="text-left pl-4">Name</div>,
+    cell: ({ row }) => (
+      <div className="text-left pl-4">{row.original.Name}</div>
+    ),
+  },
+  {
+    accessorKey: "Phone_No",
+    header: () => <div className="text-left pl-4">Phone No</div>,
+    cell: ({ row }) => (
+      <div className="text-left pl-4">{row.original.Phone_No}</div>
+    ),
+  },
+  {
+    accessorKey: "Email",
+    header: () => <div className="text-left pl-4">Email</div>,
+    cell: ({ row }) => (
+      <div className="text-left pl-4">{row.original.Email}</div>
+    ),
+  },
+  {
+    accessorKey: "company",
+    header: () => <div className="text-left pl-4">Company</div>,
+    cell: ({ row }) => (
+      <div className="text-left pl-4">{row.original.company}</div>
+    ),
+  },
+  {
     accessorKey: "Availability",
     header: () => <div className="pr-4 text-end">Availability</div>,
     cell: ({ row }) => (
@@ -78,6 +106,15 @@ export const rawColumns = [
           {row.original.Availability[0]}
         </Button>
         <Button className="bg-[#DA3E33]">{row.original.Availability[1]}</Button>
+      </div>
+    ),
+  },
+  {
+    accessorKey: "Documents",
+    header: ({ column }) => <div className="text-right pl-4">Documents</div>,
+    cell: ({ row }) => (
+      <div className="flex justify-end items-center gap-8">
+        <Button className={"bg-[#013299]"}>{row.original.Documents}</Button>
       </div>
     ),
   },

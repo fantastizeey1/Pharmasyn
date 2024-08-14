@@ -46,7 +46,7 @@ const Inventory = () => {
         }
       );
 
-      setmyInventory(response.data); // Store fetched inventory data in state
+      setmyInventory(response.data.inventories); // Store fetched inventory data in state
     } catch (error) {
       setError(`Error fetching your inventory data: ${error.message}`);
     } finally {

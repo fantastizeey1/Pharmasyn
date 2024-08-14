@@ -72,7 +72,7 @@ const Register2 = () => {
         return;
       }
 
-      navigate("/success");
+      navigate("/SignIn");
     } catch (error) {
       setErrMsg("An error occurred while processing your request.");
     } finally {

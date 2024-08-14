@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { NavLink, Link, useLocation } from "react-router-dom";
-import { AiOutlineMenu, AiOutlineClose } from "react-icons/ai";
 import logo from "/logo.jpg";
 import searchIcon from "/searchicon.svg";
 import cartIcon from "/Cart.svg";
