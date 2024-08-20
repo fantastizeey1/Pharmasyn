@@ -13,6 +13,7 @@ import { BASE_URL } from "../../config";
 
 const Inventory = () => {
   const [showModal, setShowModal] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
   const [alertMessage, setAlertMessage] = useState(null);
   const [error, setError] = useState(null);
   const [data, setData] = useState([]);
@@ -29,7 +30,9 @@ const Inventory = () => {
 
     fetchData();
   }, []);
-
+  const convertToBackendDateFormat = (date) => {
+    return date.toISOString().split(".")[0] + "Z";
+  };
   const fetchMyInventories = useCallback(async () => {
     try {
       const bearerToken = sessionStorage.getItem("access_token");
@@ -76,6 +79,14 @@ const Inventory = () => {
   useEffect(() => {
     fetchMyInventories();
   }, [fetchMyInventories]);
+
+  const handleSubmit = (e) => {
+    if (isEditing) {
+      editProduct(e);
+    } else {
+      addProduct(e);
+    }
+  };
 
   // addProduct Function
   const addProduct = async (event) => {
@@ -127,6 +138,66 @@ const Inventory = () => {
         `An error occurred while adding to the cart: ${error.message}. Please try again later.`
       );
       // Optionally keep the modal open on error
+    }
+  };
+
+  // edditProduct Function
+  const editProduct = async (event) => {
+    event.preventDefault();
+    try {
+      const formData = new FormData(event.target);
+      const expiryDate = new Date(formData.get("expiryDate"));
+      const formattedExpiryDate = convertToBackendDateFormat(expiryDate);
+
+      const inventory = {
+        inventoryName: formData.get("productName"),
+        description: formData.get("description"),
+        quantity: formData.get("quantity"),
+        price: {
+          wholesalerPrice: formData.get("wholesalerPrice"),
+          retailerPrice: formData.get("retailerPrice"),
+          hospitalPrice: formData.get("hospitalPrice"),
+        },
+        unPermittedCustomers: formData
+          .get("unPermittedCustomers")
+          .split(",")
+          .map(Number),
+        minimumOrderQuantity: formData.get("MOQ"),
+        expiryDate: formattedExpiryDate,
+        isCredit: formData.get("isCredit") === "on",
+      };
+
+      const productId = formData.get("productId");
+
+      const bearerToken = sessionStorage.getItem("access_token");
+      if (!bearerToken) {
+        throw new Error("No access token found in session storage");
+      }
+
+      const url = `${BASE_URL}/api/Inventory/Edit/${productId}`;
+
+      const response = await axios.put(url, inventory, {
+        headers: {
+          "Content-Type": "application/json",
+          "ngrok-skip-browser-warning": "69420",
+          Authorization: `Bearer ${bearerToken}`,
+        },
+      });
+
+      console.log("API Response:", response.data);
+      setAlertMessage(
+        `${response.data.inventory.inventoryName} updated successfully`
+      );
+      setShowModal(false);
+      setTimeout(() => {
+        setAlertMessage(null);
+      }, 2000);
+    } catch (error) {
+      console.error("Error editing inventory:", error);
+      setError(
+        `An error occurred while editing inventory: ${error.message}. Please try again later.`
+      );
+      // The modal will stay open to allow the user to correct any issues
     }
   };
 
@@ -428,8 +499,23 @@ const Inventory = () => {
           <div className="flex justify-between px-9 items-center ">
             <h2 className="text-[20px] font-bold">Inventory</h2>
 
-            <Button className="bg-[#013299]" onClick={() => setShowModal(true)}>
+            <Button
+              className="bg-[#013299]"
+              onClick={() => {
+                setIsEditing(false); // Not editing, so it's an Add action
+                setShowModal(true); // Show modal
+              }}
+            >
               Add Product
+            </Button>
+            <Button
+              className="bg-[#013299]"
+              onClick={() => {
+                setIsEditing(true); // Editing action
+                setShowModal(true); // Show modal
+              }}
+            >
+              Edit Product
             </Button>
           </div>
           <div className="container mx-auto py-10">
@@ -446,8 +532,12 @@ const Inventory = () => {
       {showModal && (
         <div className="fixed py-4 inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
           <div className="bg-white rounded-lg h-[90%] overflow-y-auto p-6 w-[500px]">
-            <h2 className="text-xl font-semibold mb-2">New Product</h2>
-            <form onSubmit={addProduct}>
+            {error && <p className="text-red-500 mt-2">{error}</p>}
+
+            <h2 className="text-xl font-semibold mb-2">
+              {isEditing ? "Edit Product" : "New Product"}
+            </h2>
+            <form onSubmit={handleSubmit}>
               <div className="mb-2 flex justify-center items-center">
                 <FileUploadWithPreview />
               </div>
@@ -528,7 +618,7 @@ const Inventory = () => {
                     type="text"
                     className="w-[273px] border border-gray-300 p-2 rounded mt-1 placeholder:text-[#0C0C0C]/50 placeholder:text-[16px]"
                     placeholder="Enter product unit"
-                    name="unit"
+                    name="MOQ"
                   />
                 </div>
                 <div className="flex justify-between">
@@ -619,7 +709,7 @@ const Inventory = () => {
                   type="submit"
                   className="bg-[#013299] text-white px-4 py-2 rounded"
                 >
-                  Add Product
+                  {isEditing ? "Update Product" : "Add Product"}
                 </button>
               </div>
             </form>
