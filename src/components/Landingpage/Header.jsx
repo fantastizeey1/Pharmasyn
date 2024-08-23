@@ -20,7 +20,7 @@ const Header = () => {
             alt="Pharmasynthesis Logo"
             className="w-[40px] h-[40px] 2xl:w-[80px] 2xl:h-[80px]"
           />
-          <p className="text-[#0C0C0C] text-[16px] 2xl:text-[26px] font-bold">
+          <p className="text-[#0C0C0C] font-montserrat-alt text-[16px] 2xl:text-[26px] font-bold">
             Pharmasynthesis
           </p>
         </div>

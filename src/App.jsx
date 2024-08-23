@@ -22,6 +22,7 @@ import Status from "./components/Newdash/Status";
 import Invoice from "./components/Newdash/Invoice";
 import Admin from "./components/Newdash/Admin";
 import Docs from "./components/Newdash/Docs";
+import DocCheck from "./components/Newdash/DocCheck";
 
 function App() {
   return (
@@ -45,6 +46,7 @@ function App() {
         <Route path="/Inventory" element={<Inventory />} />
         <Route path="/Orders" element={<Order />} />
         <Route path="/Orders/Status" element={<Status />} />
+        <Route path="/Docs/DocCheck" element={<DocCheck />} />
         <Route path="/Invoice" element={<Invoice />} />
         <Route path="/Admin" element={<Admin />} />
         <Route path="/Docs" element={<Docs />} />

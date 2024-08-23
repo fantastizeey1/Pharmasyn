@@ -66,6 +66,10 @@ module.exports = {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
       },
+      fontFamily: {
+        "montserrat-alt": ['"Montserrat Alternates"', "sans-serif"],
+        montserrat: ['"Montserrat"', "sans-serif"],
+      },
     },
   },
   plugins: [require("tailwindcss-animate")],

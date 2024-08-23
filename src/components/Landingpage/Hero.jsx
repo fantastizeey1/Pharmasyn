@@ -9,7 +9,7 @@ const Hero = () => {
       className="mx-[15px] md:mx-[60px] xl:mx-[150px] h-[100vh-7vh] md:h-[100vh-10vh] flex flex-1 justify-center items-center flex-col-reverse md:flex-row mb-4 lg:mb-[122px]  "
     >
       <div className=" w-full md:w-[50%] ">
-        <h1 className="font-bold text-[26px] lg:text-[60px] leading-tight mb-3 md:mb-[28px] 2xl:text-[72px] 2xl:mb-[50px]">
+        <h1 className="font-bold font-montserrat text-[26px] lg:text-[60px] leading-tight mb-3 md:mb-[28px] 2xl:text-[72px] 2xl:mb-[50px]">
           Your Health, <br className="md:block hidden" />
           Just a Click Away
         </h1>

@@ -9,7 +9,7 @@ import Slider, { slidesData } from "./Slider";
 
 const Home = () => {
   return (
-    <div className="mx-auto xl:w-[99%]">
+    <div className="mx-auto xl:w-[99%] font-montserrat">
       <Header />
       <Hero />
       <Slider slides={slidesData} />

@@ -40,11 +40,11 @@ const Slider = ({ slides = slidesData }) => {
             key={index}
             className="w-[250px] h-[300px] xl:w-[280px] xl:h-[280px] 2xl:w-[320px] 2xl:h-[320px]  flex-shrink-0"
           >
-            <div className="2xl:px-[40px] xl:px-[36px] md:px-[16px] pb-[18px] pt-[50px] bg-white shadow-xl rounded-lg relative h-full">
-              <h3 className="text-[18px] 2xl:text-[21px] font-bold mb-[13px]">
+            <div className="2xl:pl-[30px] xl:pl-[36px] md:px-[16px] pb-[18px] pt-[50px] bg-white shadow-xl rounded-lg relative h-full">
+              <h3 className="text-[18px] xl:text-[17px]  font-bold mb-[13px]">
                 {slide.title}
               </h3>
-              <p className="text-[#0c0c0c] text-[14px] 2xl:text-[16px] mb-[37px]">
+              <p className="text-[#0c0c0c] text-[13px] font-normal 2xl:text-[18px] mb-[37px]">
                 {slide.description}
               </p>
               <Btn

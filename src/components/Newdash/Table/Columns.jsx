@@ -2,6 +2,7 @@ import React from "react";
 import { Button } from "@/components/ui/button";
 
 import { ArrowUpDown, MoreHorizontal } from "lucide-react";
+import { Navigate, useNavigate } from "react-router-dom";
 
 export const rawColumns = [
   {
@@ -112,11 +113,20 @@ export const rawColumns = [
   {
     accessorKey: "Documents",
     header: ({ column }) => <div className="text-right pl-4">Documents</div>,
-    cell: ({ row }) => (
-      <div className="flex justify-end items-center gap-8">
-        <Button className={"bg-[#013299] "}>{row.original.Documents}</Button>
-      </div>
-    ),
+    cell: ({ row }) => {
+      const navigate = useNavigate();
+
+      return (
+        <div className="flex justify-end items-center gap-8">
+          <Button
+            className="bg-[#013299]"
+            onClick={() => navigate("/Docs/DocCheck")}
+          >
+            {row.original.Documents}
+          </Button>
+        </div>
+      );
+    },
   },
   {
     accessorKey: "Status",

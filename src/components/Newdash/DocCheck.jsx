@@ -1,62 +1,12 @@
 import React, { useEffect, useState } from "react";
 import Adminheader from "./Adminheader";
 import { NavLink } from "react-router-dom";
-import { rawColumns } from "../Newdash/Table/Columns";
-import { DataTable } from "../Newdash/Table/data-table";
 import { Button } from "../ui/button";
+import DocumentCard from "./DocumentCard";
 
-const Docs = () => {
-  const [data, setData] = useState([]);
-  const hasData = (data, key) =>
-    data.some((item) => item[key] !== undefined && item[key] !== null);
-
-  useEffect(() => {
-    async function fetchData() {
-      const fetchedData = await getData();
-      setData(fetchedData);
-    }
-
-    fetchData();
-  }, []);
-
-  async function getData() {
-    return [
-      {
-        id: "1",
-        Name: "John Doe",
-        Phone_No: "08164819845",
-        Email: "prevail@gmail.com",
-        company: "Suill lmt",
-        Documents: "Veiw",
-      },
-      {
-        id: "2",
-        Name: "John Doeg",
-        Phone_No: "08164819845",
-        Email: "prevail@gmail.com",
-        company: "Suill lmt",
-        Documents: "Veiw",
-      },
-      {
-        id: "3",
-        Name: "John Doef",
-        Phone_No: "08164819845",
-        Email: "prevail@gmail.com",
-        company: "Suill lmt",
-        Documents: "Veiw",
-      },
-    ];
-  }
-
-  // Filter columns that have no data
-  const columns = rawColumns.filter((column) => {
-    if (column.accessorKey) {
-      return hasData(data, column.accessorKey);
-    }
-    return true; // For columns without accessorKey (e.g., select, actions)
-  });
+const DocCheck = () => {
   return (
-    <main className="container font-montserrat mx-auto p-4">
+    <main className="container mx-auto p-4 font-montserrat">
       <Adminheader />
       <div className="w-[230px] fixed bg-white pl-[15px] pt-[15px] flex flex-col items-start h-screen  rounded-2xl shadow-lg ml-7 mt-[50px]">
         <div className="flex flex-col items-start w-full">
@@ -113,15 +63,21 @@ const Docs = () => {
         </div>
       </div>
       <div className="fixed top-[105px] left-[300px] w-[calc(100%-250px)] h-[calc(100%-100px)]">
-        <div className="h-[100%] overflow-y-auto">
-          <div className="flex items-start ml-10 justify-start flex-col mr-[70px]">
-            <h3 className="text-[#0C0C0C] text-[20px] font-bold ">Documents</h3>
-            <p className="text-[#0C0C0C]/65 text-[15px] font-thin ">
-              Get to view and manage documents sent for approvals
-            </p>
-          </div>
-          <div className="container mx-auto py-10">
-            <DataTable columns={columns} data={data} />
+        <div className="h-[100%] shadow-xl overflow-y-auto">
+          <div className="flex justify-between items-start flex-col h-[100%] p-9">
+            <h2 className="text-2xl font-bold  mb-8 ">Neuro Pharmacy</h2>
+            <div className="flex flex-wrap justify-center gap-6">
+              <DocumentCard
+                title="Corporate Affairs Commission (CAC) Certificate"
+                fileName="CAC Certificate.pdf"
+                fileSize="1MB"
+              />
+              <DocumentCard
+                title="Company's Pharmacy License"
+                fileName="Company's Pharmacy License.pdf"
+                fileSize="1MB"
+              />
+            </div>
           </div>
         </div>
       </div>
@@ -129,4 +85,4 @@ const Docs = () => {
   );
 };
 
-export default Docs;
+export default DocCheck;
