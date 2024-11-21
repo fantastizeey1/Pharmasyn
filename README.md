@@ -1,4 +1,3 @@
-# web-client
 <h1 align="center">
   <a href="#"> Pharamasynthesis Web Client </a>
 </h1>
