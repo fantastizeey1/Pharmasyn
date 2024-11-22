@@ -13,87 +13,18 @@ import useCart from "../Dash/useCart";
 const Shop = () => {
   const { cartCount } = useCart();
   const [searchQuery, setSearchQuery] = useState("");
+  const [inventories, setInventories] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(0);
   const [cart, setCart] = useState([]);
   const [cartId, setCartId] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [alertMessage, setAlertMessage] = useState(null);
   const [isCartEmpty, setIsCartEmpty] = useState(true);
   const resultsPerPage = 10;
   const location = useLocation();
-
-  // Fetch inventories using the generated hook
-  const {
-    data: inventoriesData,
-    isLoading,
-    error,
-  } = useFetchInventoriesQuery({ searchTerm: searchQuery, page: currentPage });
-  // Destructure inventories and total pages
-  const inventories = inventoriesData?.inventories || [];
-  const totalPages = inventoriesData?.totalPages || 0;
-
-  // Mutation hooks for adding and updating the cart
-  const [addToCart] = useAddToCartMutation();
-  const [updateCart] = useUpdateCartMutation();
-
-  const handleSearchChange = (event) => {
-    setSearchQuery(event.target.value);
-    setCurrentPage(1);
-  };
-
-  const handlePreviousPage = () => {
-    if (currentPage > 1) {
-      setCurrentPage((prevPage) => prevPage - 1);
-    }
-  };
-
-  const handleNextPage = () => {
-    if (currentPage < totalPages) {
-      setCurrentPage((prevPage) => prevPage + 1);
-    }
-  };
-
-  const addItemToCart = async (inventory) => {
-    try {
-      const cartData = {
-        carts: [
-          {
-            inventoryId: inventory.id,
-            quantity: 1,
-            productName: inventory.inventoryName,
-            status: true,
-          },
-        ],
-      };
-
-      await addToCart(cartData).unwrap();
-      alert(`${inventory.inventoryName} added to cart`);
-    } catch (error) {
-      console.error("Error adding to cart:", error);
-    }
-  };
-
-  const updateItemInCart = async (inventory) => {
-    try {
-      await updateCart({
-        cartId: cartId,
-        cartCommand: "add",
-        carts: [
-          {
-            inventoryId: inventory.id,
-            quantity: inventory.quantity,
-            productName: inventory.inventoryName,
-            status: true,
-          },
-        ],
-      }).unwrap();
-
-      alert(`${inventory.inventoryName} updated in cart`);
-    } catch (error) {
-      console.error("Error updating cart:", error);
-    }
-  };
 
   const defaultImageUrl = "/suii.jpg";
 
@@ -155,6 +86,128 @@ const Shop = () => {
   useEffect(() => {
     fetchData();
   }, [fetchData]);
+
+  const handleSearchChange = (event) => {
+    debouncedSearch(event.target.value);
+  };
+
+  const handlePreviousPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage((prevPage) => prevPage - 1);
+    }
+  };
+
+  const handleNextPage = () => {
+    if (currentPage < totalPages) {
+      setCurrentPage((prevPage) => prevPage + 1);
+    }
+  };
+
+  const addToCart = async (inventory) => {
+    try {
+      const bearerToken = sessionStorage.getItem("access_token");
+      if (!bearerToken) {
+        throw new Error("No access token found in session storage");
+      }
+
+      const cartData = {
+        carts: [
+          {
+            inventoryId: inventory.id,
+            quantity: 1,
+            productName: inventory.inventoryName,
+            status: true,
+          },
+        ],
+      };
+
+      const url = `${BASE_URL}/api/Cart/AddToCart`;
+
+      const response = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "ngrok-skip-browser-warning": "69420",
+          Authorization: `Bearer ${bearerToken}`,
+        },
+        body: JSON.stringify(cartData),
+      });
+      console.log(cartData);
+      if (!response.ok) {
+        const responseBody = await response.text();
+        throw new Error(
+          `HTTP error! Status: ${response.status}, Response: ${responseBody}`
+        );
+      }
+
+      const responseData = await response.json();
+      setCart(responseData.cartDetails || []);
+      setCartId(responseData.cartId);
+      setIsCartEmpty(false);
+
+      setAlertMessage(`${inventory.inventoryName} added to cart`);
+      setTimeout(() => {
+        setAlertMessage(null);
+      }, 2000);
+    } catch (error) {
+      console.error("Error adding to cart:", error);
+      setError(
+        `An error occurred while adding to the cart: ${error.message}. Please try again later.`
+      );
+    }
+  };
+
+  const updateCart = async (inventory) => {
+    try {
+      const bearerToken = sessionStorage.getItem("access_token");
+      if (!bearerToken) {
+        throw new Error("No access token found in session storage");
+      }
+
+      const url = `${BASE_URL}/api/Cart/UpdateCart`;
+
+      const response = await fetch(url, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          "ngrok-skip-browser-warning": "69420",
+          Authorization: `Bearer ${bearerToken}`,
+        },
+        body: JSON.stringify({
+          cartId: cartId,
+          cartCommand: "add",
+          carts: [
+            {
+              inventoryId: inventory.id,
+              quantity: inventory.quantity,
+              productName: inventory.inventoryName,
+              status: true,
+            },
+          ],
+        }),
+      });
+
+      if (!response.ok) {
+        const responseBody = await response.text();
+        throw new Error(
+          `HTTP error! Status: ${response.status}, Response: ${responseBody}`
+        );
+      }
+
+      const responseData = await response.json();
+      setCart(responseData.cartDetails || []);
+
+      setAlertMessage(`${inventory.inventoryName} updated in cart`);
+      setTimeout(() => {
+        setAlertMessage(null);
+      }, 2000);
+    } catch (error) {
+      console.error("Error updating cart:", error);
+      setError(
+        `An error occurred while updating the cart: ${error.message}. Please try again later.`
+      );
+    }
+  };
 
   return (
     <div className="bg-[#]">

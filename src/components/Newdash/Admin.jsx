@@ -19,6 +19,7 @@ const Admin = () => {
   // create a sales rep
   const createSalesRep = async (event) => {
     event.preventDefault();
+
     console.log("Create User button clicked!"); // Debugging
 
     try {

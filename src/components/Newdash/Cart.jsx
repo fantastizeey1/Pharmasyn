@@ -1,231 +1,166 @@
 import React, { useState, useEffect, useCallback, useRef } from "react";
-import axios from "axios";
-import { BASE_URL } from "../../config";
 import Dashheader from "./Dashheader";
 import Discoverus from "../Landingpage/Discoverus";
 import Footer from "../Landingpage/Footer";
 import Btn from "../Landingpage/Btn";
-import useCart from "../Dash/useCart";
 import { FiTrash } from "react-icons/fi";
 import useDebounce from "./UseDeounce";
 import { NavLink, Link, useLocation, useNavigate } from "react-router-dom";
 
+import { useDispatch, useSelector } from "react-redux";
+import {
+  useFetchCartQuery,
+  useClearCartMutation,
+  useUpdateCartMutation,
+  useDeleteItemFromCartMutation,
+} from "@/Features/cart/cartApi";
+import {
+  setCart,
+  updateCartItem,
+  removeCartItem,
+  clearCart,
+  updateItemQuantity,
+  deleteItem,
+  setError,
+  setTotal,
+} from "@/Features/cart/cartSlice";
+
 const Cart = () => {
+  const dispatch = useDispatch();
+  const cartItems = useSelector((state) => state.cart.items || []);
+
+  const total = useSelector((state) => state.cart.total);
   const [cart, setCart] = useState([]);
   const [cartIds, setCartIds] = useState([]);
   const [cartCount, setCartCount] = useState(0);
-  const [error, setError] = useState(null);
-  const [total, setTotal] = useState(0);
+
   const [quantity, setQuantity] = useState({});
   const [selectedItems, setSelectedItems] = useState([]);
   const navigate = useNavigate();
 
+  const { data, error, isLoading } = useFetchCartQuery();
+  const [clearCartApi] = useClearCartMutation();
+  const [createOrderApi] = useCreateOrderMutation();
+  const [updateCartApi] = useUpdateCartMutation();
+  const [deleteItemFromCartApi] = useDeleteItemFromCartMutation();
+
+  const debouncedQuantity = useDebounce(quantity, 2000);
+
+  const totalAmount = useSelector((state) => state.cart.total);
+
   const prevDebouncedQuantity = useRef({});
 
-  const fetchCart = useCallback(async () => {
-    try {
-      const bearerToken = sessionStorage.getItem("access_token");
-      if (!bearerToken) throw new Error("No access token found");
-
-      const response = await axios.get(
-        `${BASE_URL}/api/Cart/GetCart?isCustomer=true`,
-        {
-          headers: {
-            "ngrok-skip-browser-warning": "69420",
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${bearerToken}`,
-          },
-        }
-      );
-
-      setCart(response.data.cartResponse || []);
-      setCartCount(response.data.cartCount || 0);
-      setCartIds(response.data.cartResponse.map((item) => item.cartId));
-      sessionStorage.setItem("cartData", JSON.stringify(response.data));
-    } catch (error) {
-      setError(`Error fetching cart data: ${error.message}`);
+  React.useEffect(() => {
+    if (data) {
+      dispatch(setCart(data.cartData));
+      sessionStorage.setItem("cartData", JSON.stringify(data));
     }
-  }, []);
+  }, [data, dispatch]);
 
   useEffect(() => {
-    fetchCart();
-  }, [fetchCart]);
+    if (data?.cartData?.length) {
+      setCart(data.cartData);
+    }
+  }, [data]);
 
+  // Function to handle clearing the cart
   const handleEmptyCart = useCallback(async () => {
     try {
-      const bearerToken = sessionStorage.getItem("access_token");
-      if (!bearerToken) throw new Error("No access token found");
+      if (!data?.cartData?.length) {
+        console.log("Cart is already empty.");
+        return;
+      }
 
-      await axios.post(
-        `${BASE_URL}/api/Cart/RemoveFromCart`,
-        {
-          cartId: cartIds[0],
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${bearerToken}`,
-          },
-        }
-      );
+      // Call the mutation with the first item's cartId
+      await clearCartApi(data.cartData[0].cartId).unwrap();
 
-      setCart([]);
+      // Dispatch action to clear the local Redux state
+      dispatch(clearCart());
     } catch (error) {
-      setError(`Error clearing cart: ${error.message}`);
+      console.error(`Error clearing cart: ${error.message}`);
+      dispatch(setError(`Failed to clear cart: ${error.message}`)); // Update error message for clarity
     }
-  }, [cartIds]);
+  }, [data.cartData, clearCartApi, dispatch]);
 
+  // Handle empty cart button click
+  const handleEmptyCartClick = async () => {
+    await handleEmptyCart();
+  };
+
+  // Function to handle quantity change of the cart
   const handleQuantityChange = (inventoryId, newQuantity) => {
-    console.log(`Quantity changed: ${inventoryId}, ${newQuantity}`);
-    // Update state, converting to number only if it's not an empty string
     setQuantity((prev) => ({
       ...prev,
       [inventoryId]: newQuantity === "" ? undefined : Number(newQuantity),
     }));
   };
 
-  // Ensure the updateCart function and other related functions use the correct inventoryId
-  const updateCart = useCallback(
-    async (inventoryId, newQuantity) => {
-      try {
-        console.log(
-          `Updating cart: inventoryId=${inventoryId}, newQuantity=${newQuantity}`
-        );
-        const updatedCart = [...cart];
-        let itemToUpdate = null;
-        let cartIndex = null;
-        let detailIndex = null;
+  // Function to handle updating the cart
+  const handleUpdateCart = async (inventoryId, newQuantity) => {
+    try {
+      // Create an updated cart structure based on current data and new quantity
+      const updatedCart = [...data.cartData]; // Make a copy of current cart data
+      let itemToUpdate = null;
+      let cartIndex = null;
+      let detailIndex = null;
 
-        // Find the item to update
-        for (let i = 0; i < updatedCart.length; i++) {
-          const cartItem = updatedCart[i];
-          if (cartItem.cartDetails) {
-            for (let j = 0; j < cartItem.cartDetails.length; j++) {
-              if (cartItem.cartDetails[j].inventoryId === inventoryId) {
-                itemToUpdate = cartItem.cartDetails[j];
-                cartIndex = i;
-                detailIndex = j;
-                break;
-              }
+      // Find the item to update in updatedCart
+      for (let i = 0; i < updatedCart.length; i++) {
+        const cartItem = updatedCart[i];
+        if (cartItem.cartDetails) {
+          for (let j = 0; j < cartItem.cartDetails.length; j++) {
+            if (cartItem.cartDetails[j].inventoryId === inventoryId) {
+              itemToUpdate = cartItem.cartDetails[j];
+              cartIndex = i;
+              detailIndex = j;
+              break;
             }
           }
-          if (itemToUpdate) break;
         }
-
-        if (!itemToUpdate) {
-          throw new Error("Item to update not found.");
-        }
-
-        if (newQuantity <= 0) {
-          // Remove item if quantity is <= 0
-          updatedCart[cartIndex].cartDetails.splice(detailIndex, 1);
-        } else {
-          // Update item quantity
-          itemToUpdate.quantity = newQuantity;
-        }
-
-        console.log("Updated Cart:", JSON.stringify(updatedCart));
-
-        const bearerToken = sessionStorage.getItem("access_token");
-        if (!bearerToken) throw new Error("No access token found");
-
-        console.log(
-          "Payload:",
-          JSON.stringify([
-            {
-              cartId: updatedCart[cartIndex].cartId,
-              cartCommand: null,
-              carts: updatedCart[cartIndex].cartDetails.map((detail) => ({
-                inventoryId: detail.inventoryId,
-                quantity: detail.quantity,
-                productName: detail.productName,
-                status: true,
-              })),
-            },
-          ])
-        );
-
-        await axios.put(
-          `${BASE_URL}/api/Cart/UpdateCart`,
-          [
-            {
-              cartId: updatedCart[cartIndex].cartId,
-              cartCommand: null,
-              carts: updatedCart[cartIndex].cartDetails.map((detail) => ({
-                inventoryId: detail.inventoryId,
-                quantity: detail.quantity,
-                productName: detail.productName,
-                status: true,
-              })),
-            },
-          ],
-          {
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${bearerToken}`,
-            },
-          }
-        );
-
-        console.log("Cart updated successfully");
-        setCart(updatedCart);
-      } catch (error) {
-        console.error(`Error updating cart: ${error.message}`);
-        setError(`Error updating cart: ${error.message}`);
+        if (itemToUpdate) break;
       }
-    },
-    [cart]
-  );
+
+      if (!itemToUpdate) {
+        throw new Error("Item to update not found.");
+      }
+
+      if (newQuantity <= 0) {
+        // Remove item if quantity is <= 0
+        updatedCart[cartIndex].cartDetails.splice(detailIndex, 1);
+      } else {
+        // Update item quantity
+        updatedCart[cartIndex].cartDetails[detailIndex].quantity = newQuantity;
+      }
+
+      console.log("Updated Cart:", JSON.stringify(updatedCart));
+
+      // Call the mutation with the updated cart data
+      await updateCartApi(updatedCart).unwrap();
+
+      console.log("Cart updated successfully");
+
+      // Dispatch action to update local Redux state with new cart data
+      dispatch(setCart(updatedCart));
+    } catch (error) {
+      console.error(`Error updating cart: ${error.message}`);
+      dispatch(setError(`Error updating item: ${error.message}`));
+    }
+  };
 
   useEffect(() => {
-    const calculateTotal = () => {
-      const totalAmount = cart
-        .reduce((total, cartItem) => {
-          const itemTotal = cartItem.cartDetails.reduce((itemTotal, item) => {
-            const price = parseFloat(item.unitPrice);
-            return itemTotal + item.quantity * (price || 0);
-          }, 0);
-          return total + itemTotal;
-        }, 0)
-        .toFixed(2);
-      setTotal(totalAmount);
-    };
+    const changedQuantities = Object.entries(debouncedQuantity).filter(
+      ([key, value]) => prevDebouncedQuantity.current[key] !== value
+    );
 
-    calculateTotal();
-  }, [cart]);
-
-  const debouncedQuantity = useDebounce(quantity, 2000);
-
-  useEffect(() => {
-    const newQuantities = Object.entries(debouncedQuantity);
-    const prevQuantities = Object.entries(prevDebouncedQuantity.current);
-
-    if (
-      newQuantities.length === prevQuantities.length &&
-      newQuantities.every(
-        ([key, value]) => prevDebouncedQuantity.current[key] === value
-      )
-    ) {
-      // Quantities haven't changed, do not update
-      return;
+    if (changedQuantities.length > 0) {
+      changedQuantities.forEach(([inventoryId, newQuantity]) => {
+        handleUpdateCart(Number(inventoryId), newQuantity);
+      });
+      prevDebouncedQuantity.current = { ...debouncedQuantity };
     }
+  }, [debouncedQuantity, handleUpdateCart]);
 
-    if (Object.keys(debouncedQuantity).length > 0) {
-      console.log("Debounced Quantity:", debouncedQuantity);
-      Object.entries(debouncedQuantity).forEach(
-        ([inventoryId, newQuantity]) => {
-          console.log(
-            `Triggering updateCart for inventoryId=${inventoryId}, newQuantity=${newQuantity}`
-          );
-          updateCart(Number(inventoryId), newQuantity);
-        }
-      );
-    }
-
-    // Update prevDebouncedQuantity to the current debouncedQuantity
-    prevDebouncedQuantity.current = { ...debouncedQuantity };
-  }, [debouncedQuantity, updateCart]);
-
+  // Function to handle selecting items
   const handleSelectItem = (index) => {
     setSelectedItems((prev) =>
       prev.includes(index)
@@ -234,134 +169,59 @@ const Cart = () => {
     );
   };
 
-  const handleEmptyCartClick = async () => {
-    await handleEmptyCart();
-  };
-
-  const handleDelete = async (inventoryId) => {
-    console.log(`Attempting to delete item with inventoryId: ${inventoryId}`); // Debug log
+  // Function to handle deleting an item
+  const handleDeleteItem = async (inventoryId) => {
     try {
-      const updatedCart = [...cart];
-      let itemToDelete = null;
-      let cartIndex = null;
-      let detailIndex = null;
-
-      // Find the item to delete
-      for (let i = 0; i < updatedCart.length; i++) {
-        const cartItem = updatedCart[i];
-        if (cartItem.cartDetails) {
-          for (let j = 0; j < cartItem.cartDetails.length; j++) {
-            if (cartItem.cartDetails[j].inventoryId === inventoryId) {
-              itemToDelete = cartItem.cartDetails[j];
-              cartIndex = i;
-              detailIndex = j;
-              break;
-            }
-          }
-        }
-        if (itemToDelete) break;
-      }
-
-      if (!itemToDelete) {
-        throw new Error("Item to delete not found.");
-      }
-
-      // Set the status to false
-      itemToDelete.status = false;
-
-      const bearerToken = sessionStorage.getItem("access_token");
-      if (!bearerToken) throw new Error("No access token found");
-
-      console.log(
-        "Payload:",
-        JSON.stringify([
-          {
-            cartId: updatedCart[cartIndex].cartId,
-            cartCommand: null,
-            carts: updatedCart[cartIndex].cartDetails.map((detail) => ({
-              inventoryId: detail.inventoryId,
-              quantity: detail.quantity,
-              productName: detail.productName,
-              status: detail.status,
-            })),
-          },
-        ])
-      );
-
-      await axios.put(
-        `${BASE_URL}/api/Cart/UpdateCart`,
-        [
-          {
-            cartId: updatedCart[cartIndex].cartId,
-            cartCommand: null,
-            carts: updatedCart[cartIndex].cartDetails.map((detail) => ({
-              inventoryId: detail.inventoryId,
-              quantity: detail.quantity,
-              productName: detail.productName,
-              status: detail.status,
-            })),
-          },
-        ],
-        {
-          headers: {
-            "ngrok-skip-browser-warning": "69420",
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${bearerToken}`,
-          },
-        }
-      );
-
-      console.log("Cart updated successfully");
-
-      // Filter out items with status set to false
-      const newCart = updatedCart
-        .map((cartItem) => ({
-          ...cartItem,
-          cartDetails: cartItem.cartDetails.filter(
-            (detail) => detail.status !== false
-          ),
-        }))
-        .filter((cartItem) => cartItem.cartDetails.length > 0);
-
-      setCart(newCart);
+      await deleteItemFromCartApi(inventoryId).unwrap(); // Call mutation to delete item
+      console.log("Item deleted successfully");
     } catch (error) {
-      console.error(`Error removing item from cart: ${error.message}`); // Debug log
-      setError(`Error removing item from cart: ${error.message}`);
+      console.error(`Error removing item from cart: ${error.message}`);
+      dispatch(setError(`Error removing item from cart: ${error.message}`));
     }
   };
 
-  const handleCheckout = async (cart) => {
+  // Function to handle checkout
+  const handleCheckout = async () => {
     const bearerToken = sessionStorage.getItem("access_token");
-    if (!bearerToken) {
-      console.error("No access token found");
+    if (!bearerToken || !data?.cartData?.length) {
+      console.error("No access token or cart data found");
       return;
     }
 
-    const payload = cart.map((item) => ({
+    // Prepare payload for checkout
+    const payload = data.cartData.map((item) => ({
       cartId: item.cartId,
       approvalStatus: 2,
     }));
 
     try {
-      await axios.post(`${BASE_URL}/api/Order/CreateOrder`, payload, {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${bearerToken}`,
-        },
-      });
+      await createOrderApi(payload).unwrap(); // Call the mutation with payload
       console.log("Order created successfully");
+
+      // Navigate to invoice or confirmation page
       navigate("/Invoice");
-      handleEmptyCart();
+
+      // Clear the cart after successful checkout
+      await clearCartApi().unwrap();
     } catch (error) {
       console.error(`Error creating order: ${error.message}`);
-      setError(`Error creating order: ${error.message}`);
+      dispatch(setError(`Error creating order: ${error.message}`));
     }
   };
 
+  // Handle checkout button click
   const handleCheckoutClick = () => {
-    handleCheckout(cart);
-    console.log("the click");
+    handleCheckout(
+      data.cartData.filter((_, index) => selectedItems.includes(index))
+    ); // Only pass selected items to checkout
+    console.log("Checkout button clicked");
   };
+
+  // Handle loading state
+  if (isLoading) return <div>Loading...</div>;
+
+  // Handle error state
+  if (error) return <div>Error fetching cart data: {error.message}</div>;
 
   return (
     <div className="max-w-[100%]">
@@ -456,7 +316,7 @@ const Cart = () => {
             </div>
           </div>
         </div>
-        {cart.length === 0 ? (
+        {cartItems.length === 0 ? (
           <div className="flex justify-center items-center flex-col maybe">
             <img
               src="/cartempty.png"
@@ -506,32 +366,10 @@ const Cart = () => {
                             value={quantity[item.inventoryId] || item.quantity}
                             onChange={(e) => {
                               const newValue = e.target.value;
-
-                              // Check if the new value is empty or a valid number
                               if (newValue === "" || newValue >= 0) {
                                 handleQuantityChange(
                                   item.inventoryId,
-                                  newValue === "" ? "" : Number(newValue)
-                                );
-                              }
-                            }}
-                          />
-                          <input
-                            type="number"
-                            min="0"
-                            className="border border-black/50 w-16"
-                            value={
-                              quantity[item.inventoryId] !== undefined
-                                ? quantity[item.inventoryId]
-                                : ""
-                            }
-                            onChange={(e) => {
-                              const newValue = e.target.value;
-                              // Allow for empty string to clear the input and for valid numbers
-                              if (newValue === "" || Number(newValue) >= 0) {
-                                handleQuantityChange(
-                                  item.inventoryId,
-                                  newValue
+                                  newValue ? Number(newValue) : ""
                                 );
                               }
                             }}
@@ -544,7 +382,7 @@ const Cart = () => {
                           console.log(
                             `Delete button clicked for inventoryId: ${item.inventoryId}`
                           ); // Debug log
-                          handleDelete(item.inventoryId);
+                          handleDeleteItem(item.inventoryId);
                         }}
                         className="ml-auto text-red-500"
                       >
@@ -558,7 +396,9 @@ const Cart = () => {
               <div className="shadow-xl p-7 pt-10 w-[400px] rounded-xl">
                 <div className="flex justify-between items-center mb-4">
                   <p className="text-[16px] text-[#0C0C0C]/90">Total</p>
-                  <p className="text-[16px] text-[#0C0C0C]/90">₦{total}</p>
+                  <p className="text-[16px] text-[#0C0C0C]/90">
+                    ₦{totalAmount}
+                  </p>
                 </div>
                 <p className="text-[16px] text-[#0C0C0C]/90">
                   Taxes and shipping calculated at checkout
